@@ -387,7 +387,118 @@ const DRIVER_DATA = {
   },
 };
 
-// ─── READINESS SCORE ──────────────────────────────────────────────────────────
+// ─── ORGANIC EDITORIAL (Chartmetric — editorial placements not pitched by Symphonic) ───
+const ORGANIC_EDITORIAL = {
+  "Neon Pulse":     [ { playlist:"Synthwave Central",    dsp:"Spotify",       followers:320000,  date:d(-18), note:"Algorithmic add" }, { playlist:"Electronic Essentials", dsp:"Apple Music", followers:180000, date:d(-30) } ],
+  "Luna Vega":      [ { playlist:"Fuego Latino",         dsp:"Spotify",       followers:2100000, date:d(-9),  note:"Algorithmic add" }, { playlist:"Latin Hits",             dsp:"Amazon Music",followers:540000, date:d(-22) }, { playlist:"Top Latin",              dsp:"Tidal",       followers:210000, date:d(-14) } ],
+  "The Marble Way": [ { playlist:"Indie Rock Now",       dsp:"Spotify",       followers:890000,  date:d(-25) }, { playlist:"New Noise",                dsp:"Apple Music", followers:420000, date:d(-11) } ],
+  "Cassidy Blue":   [ { playlist:"RNB X",                dsp:"Spotify",       followers:1400000, date:d(-7),  note:"Algorithmic add" }, { playlist:"Soul Kitchen",           dsp:"Tidal",       followers:88000,  date:d(-19) } ],
+  "Fjord & Echo":   [ { playlist:"Folk Roots",           dsp:"Spotify",       followers:240000,  date:d(-28) } ],
+  "SABLE":          [ { playlist:"Pop Sauce",            dsp:"Spotify",       followers:1200000, date:d(-8),  note:"Algorithmic add" }, { playlist:"New Bangers",            dsp:"Apple Music", followers:890000, date:d(-12) }, { playlist:"Breaking Pop",           dsp:"Amazon Music",followers:340000, date:d(-20) } ],
+  "Marco Salinas":  [ { playlist:"Latin Romántico",      dsp:"Spotify",       followers:760000,  date:d(-15) }, { playlist:"Baladas en Español",      dsp:"Apple Music", followers:310000, date:d(-22) } ],
+  "Drift Theory":   [ { playlist:"Deep Focus",           dsp:"Spotify",       followers:3200000, date:d(-10), note:"Algorithmic add" }, { playlist:"Ambient Chill",          dsp:"Apple Music", followers:420000, date:d(-28) } ],
+  "Halo James":     [ { playlist:"Rap Caviar",           dsp:"Spotify",       followers:14000000,date:d(-5),  note:"Algorithmic add" }, { playlist:"Hip Hop Central",        dsp:"Amazon Music",followers:1200000,date:d(-18) } ],
+  "Viveka":         [ { playlist:"Gothic Indie",         dsp:"Spotify",       followers:380000,  date:d(-14) }, { playlist:"Alt Vibes",               dsp:"Apple Music", followers:560000, date:d(-21) } ],
+  "The Sundowners": [ { playlist:"Country Roads",        dsp:"Spotify",       followers:890000,  date:d(-20) }, { playlist:"Outlaw Country",          dsp:"Apple Music", followers:240000, date:d(-30) } ],
+  "Mira Echeverría":[ { playlist:"Flamenco Puro",        dsp:"Spotify",       followers:440000,  date:d(-12) }, { playlist:"España Vibrante",         dsp:"Apple Music", followers:280000, date:d(-19) }, { playlist:"World Music Picks",       dsp:"Tidal",       followers:95000,  date:d(-25) } ],
+  "Pale Forest":    [ { playlist:"Bedroom Pop",          dsp:"Spotify",       followers:620000,  date:d(-22) } ],
+  "Solène":         [ { playlist:"Café de Paris",        dsp:"Spotify",       followers:510000,  date:d(-16) }, { playlist:"French Hits",             dsp:"Apple Music", followers:180000, date:d(-24) } ],
+  "CRYPT0":         [ { playlist:"Underground Rap",      dsp:"Spotify",       followers:280000,  date:d(-13) } ],
+  "Tidal Mass":     [ { playlist:"Post Rock Forever",    dsp:"Spotify",       followers:190000,  date:d(-17) }, { playlist:"Cinematic Instrumentals", dsp:"Apple Music", followers:340000, date:d(-29) } ],
+  "Glass Meridian": [ { playlist:"Defected Radio",       dsp:"Spotify",       followers:680000,  date:d(-6),  note:"Algorithmic add" }, { playlist:"House Music All Night", dsp:"Apple Music", followers:420000, date:d(-18) }, { playlist:"Dance Hits",             dsp:"Amazon Music",followers:890000, date:d(-11) } ],
+  "Cedar & Stone":  [ { playlist:"Americana Today",      dsp:"Spotify",       followers:310000,  date:d(-24) } ],
+  "Flor de Noche":  [ { playlist:"Boleros para el Alma", dsp:"Spotify",       followers:390000,  date:d(-20) }, { playlist:"Romantico Latino",        dsp:"Apple Music", followers:220000, date:d(-28) } ],
+  "Yuki Tanaka":    [ { playlist:"J-Pop Now",            dsp:"Spotify",       followers:540000,  date:d(-11) }, { playlist:"Anime Hits",              dsp:"Apple Music", followers:760000, date:d(-18), note:"Algorithmic add" } ],
+};
+
+// ─── USER GENERATED PLAYLISTS (Chartmetric) ───────────────────────────────────
+const UGC_PLAYLISTS = {
+  "Neon Pulse":     [ { playlist:"Synthwave Drive",      dsp:"Spotify", followers:28000,  curator:"nightdrive_fx",  date:d(-10) }, { playlist:"80s Vibes Forever",    dsp:"Spotify", followers:14000, curator:"retrowaver",    date:d(-22) }, { playlist:"Best of Synthwave",    dsp:"Apple Music", followers:8400, curator:"synthfan1984", date:d(-30) } ],
+  "Luna Vega":      [ { playlist:"Reggaeton para Bailar",dsp:"Spotify", followers:94000,  curator:"latinamix",      date:d(-5)  }, { playlist:"Perreo 2025",          dsp:"Spotify", followers:61000, curator:"fuego_dj",      date:d(-12) }, { playlist:"Bad Bunny Vibes",      dsp:"Spotify", followers:48000, curator:"urbano_fan",    date:d(-19) }, { playlist:"Latin Party Mix",      dsp:"Apple Music", followers:22000, curator:"fiesta_mx",   date:d(-27) } ],
+  "The Marble Way": [ { playlist:"Indie UK Gems",        dsp:"Spotify", followers:18000,  curator:"ukindie_fan",    date:d(-15) }, { playlist:"Post-Punk Revival",    dsp:"Spotify", followers:12000, curator:"punklives",     date:d(-28) } ],
+  "Cassidy Blue":   [ { playlist:"Late Night R&B",       dsp:"Spotify", followers:74000,  curator:"rnbvibes_",      date:d(-8)  }, { playlist:"Neo Soul Essentials",  dsp:"Spotify", followers:52000, curator:"soulfullady",   date:d(-16) }, { playlist:"Midnight Mood",        dsp:"Apple Music", followers:19000, curator:"nightmode_7", date:d(-24) } ],
+  "Fjord & Echo":   [ { playlist:"Rainy Day Folk",       dsp:"Spotify", followers:31000,  curator:"cozyday_music",  date:d(-18) }, { playlist:"NPR Tiny Desk Picks",  dsp:"Spotify", followers:24000, curator:"tinydeskfan",   date:d(-30) } ],
+  "SABLE":          [ { playlist:"POP BOPS 2025",        dsp:"Spotify", followers:210000, curator:"popqueen99",     date:d(-4)  }, { playlist:"Workout Anthems",      dsp:"Spotify", followers:180000,curator:"gymrat_pl",     date:d(-11) }, { playlist:"Feel Good Hits",       dsp:"Apple Music", followers:95000, curator:"goodvibes_am",date:d(-18) }, { playlist:"Charli XCX Fans",      dsp:"Spotify", followers:64000, curator:"xcx_universe",date:d(-25) } ],
+  "Marco Salinas":  [ { playlist:"Noches de Telenovela", dsp:"Spotify", followers:43000,  curator:"telenovela_mx",  date:d(-12) }, { playlist:"Baladas de Amor",      dsp:"Spotify", followers:38000, curator:"amorlatino",    date:d(-24) } ],
+  "Drift Theory":   [ { playlist:"Study & Focus",        dsp:"Spotify", followers:420000, curator:"studybeats",     date:d(-7)  }, { playlist:"Ambient Sleep",        dsp:"Spotify", followers:380000,curator:"sleepwell_pl",  date:d(-14) }, { playlist:"Lo-Fi Chillout",       dsp:"Apple Music", followers:120000,curator:"chillzone_am",date:d(-22) } ],
+  "Halo James":     [ { playlist:"Trap Nation Fan",      dsp:"Spotify", followers:88000,  curator:"trapnationfan",  date:d(-9)  }, { playlist:"Street Rap 2025",      dsp:"Spotify", followers:72000, curator:"streetcodes",   date:d(-17) }, { playlist:"Nike Running Mix",     dsp:"Spotify", followers:55000, curator:"run_withme",    date:d(-26) } ],
+  "Viveka":         [ { playlist:"Lana Del Rey Fans",    dsp:"Spotify", followers:96000,  curator:"ldr_universe",   date:d(-11) }, { playlist:"Dark Aesthetics",      dsp:"Spotify", followers:64000, curator:"darkaesthetic",  date:d(-20) }, { playlist:"Netflix Mood",         dsp:"Spotify", followers:48000, curator:"netflixviber",  date:d(-28) } ],
+  "The Sundowners": [ { playlist:"Country Roads Trip",   dsp:"Spotify", followers:58000,  curator:"roadtrip_cntry", date:d(-16) }, { playlist:"Outlaw & Whiskey",     dsp:"Spotify", followers:34000, curator:"whiskeynights",  date:d(-27) } ],
+  "Mira Echeverría":[ { playlist:"Rosalia Fans",         dsp:"Spotify", followers:72000,  curator:"rosaliafan_es",  date:d(-9)  }, { playlist:"Flamenco Moderno",     dsp:"Spotify", followers:44000, curator:"flamenco2025",   date:d(-18) }, { playlist:"Spanish Vibes",        dsp:"Apple Music", followers:28000, curator:"espana_mix",   date:d(-25) } ],
+  "Pale Forest":    [ { playlist:"Sad Girl Autumn",      dsp:"Spotify", followers:89000,  curator:"sadgirlhours",   date:d(-14) }, { playlist:"Cozy Indie Folk",      dsp:"Spotify", followers:42000, curator:"cozyhours",     date:d(-26) } ],
+  "Solène":         [ { playlist:"French Mood",          dsp:"Spotify", followers:36000,  curator:"paris_vibes",    date:d(-13) }, { playlist:"Fashion Week Playlist",dsp:"Spotify", followers:28000, curator:"runway2025",    date:d(-22) } ],
+  "CRYPT0":         [ { playlist:"Underground Legends",  dsp:"Spotify", followers:24000,  curator:"hiphopheads",    date:d(-10) }, { playlist:"Boom Bap Classics",    dsp:"Spotify", followers:18000, curator:"boombapdad",    date:d(-25) } ],
+  "Tidal Mass":     [ { playlist:"Post Rock Marathon",   dsp:"Spotify", followers:22000,  curator:"postrocklives",  date:d(-19) }, { playlist:"Cinematic Study",      dsp:"Spotify", followers:31000, curator:"filmscores",    date:d(-30) } ],
+  "Glass Meridian": [ { playlist:"Ibiza 2025",           dsp:"Spotify", followers:160000, curator:"ibizasounds",    date:d(-5)  }, { playlist:"House Workout",        dsp:"Spotify", followers:120000,curator:"gymhouse_dj",   date:d(-13) }, { playlist:"ADE Picks",            dsp:"Spotify", followers:84000, curator:"ade_music",     date:d(-21) } ],
+  "Cedar & Stone":  [ { playlist:"Desert Road Trip",     dsp:"Spotify", followers:27000,  curator:"southwest_mix",  date:d(-20) } ],
+  "Flor de Noche":  [ { playlist:"Boleros para Mama",    dsp:"Spotify", followers:48000,  curator:"familia_mx",     date:d(-15) }, { playlist:"Romantic Spanish",     dsp:"Spotify", followers:32000, curator:"romantico_fm",   date:d(-27) } ],
+  "Yuki Tanaka":    [ { playlist:"Anime OST Fan Mix",    dsp:"Spotify", followers:96000,  curator:"animefan2025",   date:d(-8)  }, { playlist:"J-Pop Obsession",      dsp:"Spotify", followers:54000, curator:"jpopworld",     date:d(-17) }, { playlist:"TikTok Japan Hits",    dsp:"Spotify", followers:38000, curator:"tiktokjp",     date:d(-24) } ],
+};
+
+// ─── SIMILAR ARTIST PICKUPS (Chartmetric — pitch intel) ───────────────────────
+const SIMILAR_ARTIST_PICKUPS = {
+  "Neon Pulse":     [ { artist:"Gunship",                playlist:"Synthwave Spectrum",      dsp:"Spotify",     followers:480000,   type:"Editorial" }, { artist:"FM-84",                  playlist:"80s Electronic",          dsp:"Apple Music", followers:220000,   type:"Editorial" }, { artist:"Carpenter Brut",         playlist:"Electronic Rising",       dsp:"Spotify",     followers:1100000,  type:"Editorial" } ],
+  "Luna Vega":      [ { artist:"Karol G",                playlist:"Viva Latino",             dsp:"Spotify",     followers:9200000,  type:"Editorial" }, { artist:"Becky G",                playlist:"Tusa Reggaeton Mix",      dsp:"Spotify",     followers:3400000,  type:"Editorial" }, { artist:"Nicki Nicole",           playlist:"New Music Friday LATAM",  dsp:"Spotify",     followers:2100000,  type:"Editorial" }, { artist:"Bad Bunny",              playlist:"Hot Latin",               dsp:"Spotify",     followers:6800000,  type:"Editorial" } ],
+  "The Marble Way": [ { artist:"Fontaines D.C.",         playlist:"Alt Now",                 dsp:"Apple Music", followers:890000,   type:"Editorial" }, { artist:"Yard Act",               playlist:"New Music Friday UK",     dsp:"Spotify",     followers:4100000,  type:"Editorial" }, { artist:"IDLES",                  playlist:"Punk & Hardcore",         dsp:"Spotify",     followers:540000,   type:"Editorial" } ],
+  "Cassidy Blue":   [ { artist:"SZA",                    playlist:"R&B X",                   dsp:"Spotify",     followers:4600000,  type:"Editorial" }, { artist:"Ari Lennox",             playlist:"Soul Storm",              dsp:"Spotify",     followers:1200000,  type:"Editorial" }, { artist:"Summer Walker",          playlist:"R&B Radar",               dsp:"Spotify",     followers:2800000,  type:"Editorial" }, { artist:"Jhene Aiko",             playlist:"The Get Up",              dsp:"Apple Music", followers:1600000,  type:"Editorial" } ],
+  "Fjord & Echo":   [ { artist:"Iron & Wine",            playlist:"Folk & Friends",          dsp:"Spotify",     followers:640000,   type:"Editorial" }, { artist:"Mandolin Orange",        playlist:"Americana Roots",         dsp:"Spotify",     followers:380000,   type:"Editorial" } ],
+  "SABLE":          [ { artist:"Charli XCX",             playlist:"Pop Rising",              dsp:"Spotify",     followers:4200000,  type:"Editorial" }, { artist:"Caroline Polachek",      playlist:"Breaking Pop",            dsp:"Apple Music", followers:890000,   type:"Editorial" }, { artist:"Rina Sawayama",          playlist:"New Pop UK",              dsp:"Spotify",     followers:1800000,  type:"Editorial" }, { artist:"Carly Rae Jepsen",       playlist:"Pop All Day",             dsp:"Apple Music", followers:2100000,  type:"Editorial" } ],
+  "Marco Salinas":  [ { artist:"Alejandro Sanz",         playlist:"Exitos Espana",           dsp:"Spotify",     followers:1900000,  type:"Editorial" }, { artist:"Luis Fonsi",             playlist:"Latino Mix",              dsp:"Spotify",     followers:5400000,  type:"Editorial" }, { artist:"Pablo Alboran",          playlist:"Baladas Romanticas",      dsp:"Spotify",     followers:1200000,  type:"Editorial" } ],
+  "Drift Theory":   [ { artist:"Brian Eno",              playlist:"Ambient Chill",           dsp:"Spotify",     followers:3200000,  type:"Editorial" }, { artist:"Nils Frahm",             playlist:"Piano in the Background", dsp:"Spotify",     followers:2800000,  type:"Editorial" }, { artist:"Hammock",                playlist:"Deep Sleep",              dsp:"Spotify",     followers:1900000,  type:"Editorial" } ],
+  "Halo James":     [ { artist:"Pusha T",                playlist:"Rap Caviar",              dsp:"Spotify",     followers:14000000, type:"Editorial" }, { artist:"Freddie Gibbs",          playlist:"Most Necessary",          dsp:"Spotify",     followers:4800000,  type:"Editorial" }, { artist:"Boldy James",            playlist:"Underground Rap",         dsp:"Spotify",     followers:680000,   type:"Editorial" } ],
+  "Viveka":         [ { artist:"Lana Del Rey",           playlist:"Melancholic Hits",        dsp:"Spotify",     followers:2400000,  type:"Editorial" }, { artist:"Weyes Blood",            playlist:"Dreamy Vibes",            dsp:"Apple Music", followers:640000,   type:"Editorial" }, { artist:"Chelsea Wolfe",          playlist:"Dark Atmosphere",         dsp:"Spotify",     followers:380000,   type:"Editorial" } ],
+  "The Sundowners": [ { artist:"Sturgill Simpson",       playlist:"Country Roads",           dsp:"Spotify",     followers:890000,   type:"Editorial" }, { artist:"Tyler Childers",         playlist:"Outlaw Country",          dsp:"Spotify",     followers:1200000,  type:"Editorial" }, { artist:"Jason Isbell",           playlist:"Americana Roots",         dsp:"Apple Music", followers:540000,   type:"Editorial" } ],
+  "Mira Echeverria":[ { artist:"Rosalia",                playlist:"Viva Espana",             dsp:"Spotify",     followers:2800000,  type:"Editorial" }, { artist:"Maria Jose Llergo",      playlist:"Flamenco Fusion",         dsp:"Spotify",     followers:420000,   type:"Editorial" }, { artist:"Lola Indigo",            playlist:"Pop Baleares",            dsp:"Apple Music", followers:880000,   type:"Editorial" } ],
+  "Pale Forest":    [ { artist:"Hand Habits",            playlist:"Indie Folk Chill",        dsp:"Spotify",     followers:480000,   type:"Editorial" }, { artist:"Gia Margaret",           playlist:"Bedroom Pop",             dsp:"Spotify",     followers:620000,   type:"Editorial" } ],
+  "Solene":         [ { artist:"Angele",                 playlist:"French Hits",             dsp:"Spotify",     followers:1400000,  type:"Editorial" }, { artist:"Christine and the Queens",playlist:"Tendance France",        dsp:"Apple Music", followers:680000,   type:"Editorial" } ],
+  "CRYPT0":         [ { artist:"Mach-Hommy",             playlist:"Underground Rap",         dsp:"Spotify",     followers:280000,   type:"Editorial" }, { artist:"Your Old Droog",         playlist:"Rap Underground",         dsp:"Spotify",     followers:190000,   type:"Editorial" } ],
+  "Tidal Mass":     [ { artist:"Mogwai",                 playlist:"Post Rock Marathon",      dsp:"Spotify",     followers:480000,   type:"Editorial" }, { artist:"Explosions in the Sky",  playlist:"Cinematic Instrumentals", dsp:"Apple Music", followers:860000,   type:"Editorial" }, { artist:"God Is An Astronaut",    playlist:"Space Rock",              dsp:"Spotify",     followers:240000,   type:"Editorial" } ],
+  "Glass Meridian": [ { artist:"Bicep",                  playlist:"Mint",                    dsp:"Spotify",     followers:3200000,  type:"Editorial" }, { artist:"Fred again..",           playlist:"New Music Friday",        dsp:"Spotify",     followers:4800000,  type:"Editorial" }, { artist:"Peggy Gou",              playlist:"Dance Rising",            dsp:"Spotify",     followers:2100000,  type:"Editorial" }, { artist:"Four Tet",               playlist:"Electronic Avenues",      dsp:"Spotify",     followers:1600000,  type:"Editorial" } ],
+  "Cedar & Stone":  [ { artist:"Hiss Golden Messenger",  playlist:"Americana Today",         dsp:"Spotify",     followers:310000,   type:"Editorial" }, { artist:"Strand of Oaks",         playlist:"Singer-Songwriter",       dsp:"Apple Music", followers:180000,   type:"Editorial" } ],
+  "Flor de Noche":  [ { artist:"Natalia Lafourcade",     playlist:"Latin Pop Favorites",     dsp:"Spotify",     followers:2800000,  type:"Editorial" }, { artist:"Mon Laferte",            playlist:"Nueva Cancion",           dsp:"Spotify",     followers:1400000,  type:"Editorial" } ],
+  "Yuki Tanaka":    [ { artist:"Kyary Pamyu Pamyu",      playlist:"J-Pop Now",               dsp:"Spotify",     followers:540000,   type:"Editorial" }, { artist:"CHAI",                   playlist:"Anime Hits",              dsp:"Apple Music", followers:760000,   type:"Editorial" }, { artist:"Perfume",                playlist:"J-Dance",                 dsp:"Spotify",     followers:420000,   type:"Editorial" } ],
+};
+
+// ─── SYMPHONIC SCORE ──────────────────────────────────────────────────────────
+function symphonicScore(r) {
+  const d = DRIVER_DATA[r.artist] || {};
+  const artistPickups = PICKUPS.filter(p => p.artist === r.artist);
+
+  // 1. Symphonic Pickup History (0–25)
+  const fp       = artistPickups.filter(p => p.type === "1st Party").length;
+  const tp       = artistPickups.filter(p => p.type === "3rd Party").length;
+  const cover    = artistPickups.some(p => p.cover) ? 5 : 0;
+  const pickups  = Math.min(25, fp * 4 + tp * 2 + cover);
+
+  // 2. Spotify Monthly Listeners / Audience Reach (0–20)
+  const audience = r.spotifyML > 0
+    ? Math.min(20, Math.round((Math.log10(r.spotifyML) / Math.log10(6000000)) * 20))
+    : 0;
+
+  // 3. Social Audience — weighted across platforms (0–20)
+  const weighted = (r.igFollowers || 0) * 1.0 + (d.tiktok || 0) * 1.2 +
+    (d.youtube || 0) * 0.8 + (d.twitter || 0) * 0.5 + (d.soundcloud || 0) * 0.3;
+  const social   = Math.min(20, Math.round((weighted / 4500000) * 20));
+
+  // 4. Marketing Drive Quality (0–20)
+  const driverPts = Math.min(12, (d.drivers?.length || 0) * 3);
+  const pressPts  = d.confirmedPress ? 4 : 0;
+  const adPts     = d.adDetails ? 4 : 0;
+  const drive     = Math.min(20, driverPts + pressPts + adPts);
+
+  // 5. Release Consistency (0–15)
+  const consistency = Math.round((d.releaseConsistency || 0) / 100 * 15);
+
+  const total = pickups + audience + social + drive + consistency;
+  return { total, breakdown: { pickups, audience, social, drive, consistency } };
+}
+
+function scoreColor(s) {
+  if (s >= 80) return C.green;
+  if (s >= 65) return C.cyan;
+  if (s >= 50) return C.gold;
+  return C.pink;
+}
 
 // ─── DAYS UNTIL ───────────────────────────────────────────────────────────────
 function daysUntil(dateStr) {
@@ -484,12 +595,30 @@ const DRIVER_COLORS = {
   "Brand Partnership": "#ff9f43",
 };
 
-function ArtistPanel({ r, onClose }) {
-  const [activeTab, setActiveTab] = useState("overview");
+const HISTORY_TIMEFRAMES = [
+  { label:"30D",  days:30  },
+  { label:"90D",  days:90  },
+  { label:"6M",   days:180 },
+  { label:"1Y",   days:365 },
+  { label:"All",  days:null },
+];
+
+function ArtistPanel({ r, onClose, onViewProfile }) {
+  const [activeTab,       setActiveTab]       = useState("overview");
+  const [historyTimeframe,setHistoryTimeframe] = useState("1Y");
   const d = DRIVER_DATA[r.artist] || {};
   const artistPickups = PICKUPS.filter(p => p.artist === r.artist)
     .sort((a, b) => new Date(b.dateSent) - new Date(a.dateSent));
   const fmtN = n => n >= 1000000 ? (n/1000000).toFixed(1)+"M" : n >= 1000 ? Math.round(n/1000)+"K" : n;
+
+  const tfDays   = HISTORY_TIMEFRAMES.find(t => t.label === historyTimeframe)?.days ?? null;
+  const cutoff   = tfDays ? new Date(T.getTime() - tfDays * 86400000) : null;
+  const inWindow = dateStr => !cutoff || new Date(dateStr) >= cutoff;
+  const sc = symphonicScore(r);
+  const scCol = scoreColor(sc.total);
+  const organicEditorial = ORGANIC_EDITORIAL[r.artist] || [];
+  const ugcPlaylists     = UGC_PLAYLISTS[r.artist] || [];
+  const similarPickups   = SIMILAR_ARTIST_PICKUPS[r.artist] || [];
 
   const storyScore = Math.min(100,
     (d.story ? 25 : 0) + (d.similarArtists ? 20 : 0) +
@@ -524,9 +653,37 @@ function ArtistPanel({ r, onClose }) {
 
       {/* ── Persistent header ─────────────────────────────────────── */}
       <div style={{ flexShrink:0, paddingBottom:16 }}>
-        <button onClick={onClose} style={{ position:"absolute", top:16, right:16, background:"rgba(255,255,255,0.06)", border:"none", color:C.muted, width:28, height:28, borderRadius:6, fontSize:14, display:"flex", alignItems:"center", justifyContent:"center", cursor:"pointer", zIndex:1 }}>✕</button>
-        <div style={{ fontSize:20, fontWeight:800, marginBottom:6, paddingRight:40 }}>
-          {r.artist} <span style={{ color:C.muted, fontWeight:400 }}>—</span> <span style={{ color:C.cyan }}>{r.release}</span>
+        <div style={{ position:"absolute", top:16, right:16, display:"flex", gap:6, zIndex:1 }}>
+          {onViewProfile && (
+            <button onClick={onViewProfile} style={{ background:"rgba(0,217,255,0.1)", border:`1px solid rgba(0,217,255,0.3)`, color:C.cyan, borderRadius:6, fontSize:10, fontWeight:700, letterSpacing:"0.08em", textTransform:"uppercase", padding:"0 10px", height:28, cursor:"pointer", fontFamily:"'DM Mono',monospace", whiteSpace:"nowrap" }}>Full Profile →</button>
+          )}
+          <button onClick={onClose} style={{ background:"rgba(255,255,255,0.06)", border:"none", color:C.muted, width:28, height:28, borderRadius:6, fontSize:14, display:"flex", alignItems:"center", justifyContent:"center", cursor:"pointer" }}>✕</button>
+        </div>
+        <div style={{ display:"flex", alignItems:"flex-start", justifyContent:"space-between", marginBottom:6, paddingRight:40 }}>
+          <div style={{ fontSize:20, fontWeight:800 }}>
+            {r.artist} <span style={{ color:C.muted, fontWeight:400 }}>—</span> <span style={{ color:C.cyan }}>{r.release}</span>
+          </div>
+          {/* Symphonic Score badge */}
+          <div style={{ flexShrink:0, textAlign:"center", background:`${scCol}14`, border:`1px solid ${scCol}44`, borderRadius:10, padding:"6px 12px", marginLeft:10 }}>
+            <div style={{ fontSize:9, fontWeight:700, letterSpacing:"0.14em", textTransform:"uppercase", color:scCol, fontFamily:"'DM Mono',monospace", marginBottom:2 }}>SYM SCORE</div>
+            <div style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:32, fontWeight:800, color:scCol, lineHeight:1, letterSpacing:"0.04em" }}>{sc.total}</div>
+          </div>
+        </div>
+        {/* Score breakdown chips */}
+        <div style={{ display:"flex", gap:5, flexWrap:"wrap", marginBottom:10 }}>
+          {[
+            { label:"Pickups",  value: sc.breakdown.pickups,     max:25, color: C.green },
+            { label:"Audience", value: sc.breakdown.audience,    max:20, color: C.cyan },
+            { label:"Social",   value: sc.breakdown.social,      max:20, color: "#E1306C" },
+            { label:"Drive",    value: sc.breakdown.drive,       max:20, color: C.orange },
+            { label:"Consist.", value: sc.breakdown.consistency, max:15, color: C.gold },
+          ].map(({ label, value, max, color }) => (
+            <div key={label} style={{ background:`${color}10`, border:`1px solid ${color}30`, borderRadius:7, padding:"3px 8px", display:"flex", alignItems:"center", gap:5 }}>
+              <span style={{ fontSize:9, color, fontWeight:700, fontFamily:"'DM Mono',monospace", letterSpacing:"0.08em", textTransform:"uppercase" }}>{label}</span>
+              <span style={{ fontSize:11, fontWeight:800, color, fontFamily:"'DM Mono',monospace" }}>{value}</span>
+              <span style={{ fontSize:9, color:"rgba(255,255,255,0.2)", fontFamily:"'DM Mono',monospace" }}>/{max}</span>
+            </div>
+          ))}
         </div>
         <div style={{ display:"flex", gap:6, flexWrap:"wrap", marginBottom:14 }}>
           <Pill label={r.priority} color={PRIORITY_COLORS[r.priority]||C.cyan} />
@@ -774,58 +931,461 @@ function ArtistPanel({ r, onClose }) {
 
         {/* ── HISTORY ───────────────────────────────────────────── */}
         {activeTab === "history" && (
-          <div>
-            <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:12 }}>
-              <div style={{ fontSize:9, fontWeight:700, letterSpacing:"0.12em", textTransform:"uppercase", color:C.muted, fontFamily:"'DM Mono',monospace" }}>Symphonic Pickups — All Time</div>
-              <span style={{ fontSize:10, fontFamily:"'DM Mono',monospace", color:C.muted, background:"rgba(255,255,255,0.05)", borderRadius:99, padding:"2px 10px" }}>{artistPickups.length} total</span>
-            </div>
-            {artistPickups.length === 0 ? (
-              <div style={{ fontSize:12, color:C.dim, padding:"10px 0" }}>No pickups on record for this artist.</div>
-            ) : (
-              <table style={{ width:"100%", borderCollapse:"collapse" }}>
-                <thead>
-                  <tr style={{ borderBottom:`1px solid ${C.border}` }}>
-                    {["Playlist","DSP","Date","Type","Cover"].map(h => (
-                      <th key={h} style={{ textAlign:"left", padding:"6px 10px", fontSize:9, fontWeight:700, letterSpacing:"0.12em", textTransform:"uppercase", color:C.muted, fontFamily:"'DM Mono',monospace" }}>{h}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {artistPickups.map((p, i) => (
-                    <tr key={i} style={{ borderBottom:`1px solid rgba(255,255,255,0.03)` }}>
-                      <td style={{ padding:"8px 10px", fontSize:12, fontWeight:600, color:"rgba(255,255,255,0.85)" }}>{p.playlist}</td>
-                      <td style={{ padding:"8px 10px" }}>
-                        <span style={{ background:`${DSP_COLORS[p.dsp]||C.cyan}18`, color:DSP_COLORS[p.dsp]||C.cyan, border:`1px solid ${DSP_COLORS[p.dsp]||C.cyan}33`, borderRadius:99, padding:"2px 8px", fontSize:10, fontWeight:700, whiteSpace:"nowrap" }}>{p.dsp}</span>
-                      </td>
-                      <td style={{ padding:"8px 10px", fontSize:11, color:C.muted, fontFamily:"'DM Mono',monospace", whiteSpace:"nowrap" }}>{fmtDate(p.dateSent)}</td>
-                      <td style={{ padding:"8px 10px" }}>
-                        <span style={{ color: p.type==="1st Party" ? C.green : C.gold, fontSize:11, fontWeight:700 }}>{p.type}</span>
-                      </td>
-                      <td style={{ padding:"8px 10px", textAlign:"center" }}>
-                        {p.cover ? <span style={{ color:C.green, fontWeight:700 }}>✓</span> : <span style={{ color:C.dim }}>—</span>}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
+          <div style={{ display:"flex", flexDirection:"column", gap:20 }}>
 
-            {/* Organic placements — Songstats */}
-            <div style={{ marginTop:20, paddingTop:16, borderTop:`1px solid ${C.border}` }}>
-              <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:12 }}>
-                <div style={{ fontSize:9, fontWeight:700, letterSpacing:"0.12em", textTransform:"uppercase", color:C.muted, fontFamily:"'DM Mono',monospace" }}>Organic Playlist Placements</div>
-                <span style={{ fontSize:9, fontFamily:"'DM Mono',monospace", color:C.cyan, background:"rgba(0,217,255,0.07)", border:`1px solid rgba(0,217,255,0.2)`, borderRadius:99, padding:"2px 10px", letterSpacing:"0.1em" }}>VIA SONGSTATS</span>
-              </div>
-              <div style={{ background:"rgba(0,217,255,0.03)", border:`1px dashed rgba(0,217,255,0.15)`, borderRadius:12, padding:"16px", display:"flex", alignItems:"center", justifyContent:"space-between", gap:12 }}>
-                <div>
-                  <div style={{ fontSize:12, color:"rgba(255,255,255,0.5)", marginBottom:3 }}>Non-Symphonic editorial placements will appear here</div>
-                  <div style={{ fontSize:11, color:C.dim }}>Connect Songstats API to surface organic DSP pickups</div>
-                </div>
-                <div style={{ flexShrink:0, background:"rgba(255,255,255,0.04)", border:`1px solid ${C.border}`, borderRadius:8, padding:"5px 12px", fontSize:9, fontWeight:700, color:C.dim, letterSpacing:"0.12em", textTransform:"uppercase", fontFamily:"'DM Mono',monospace" }}>Coming Soon</div>
-              </div>
+            {/* ── Timeframe filter ── */}
+            <div style={{ display:"flex", gap:4, background:"rgba(255,255,255,0.04)", borderRadius:8, padding:3, alignSelf:"flex-start" }}>
+              {HISTORY_TIMEFRAMES.map(tf => (
+                <button key={tf.label} onClick={() => setHistoryTimeframe(tf.label)} style={{
+                  padding:"4px 12px", fontSize:10, fontWeight:700, letterSpacing:"0.08em",
+                  textTransform:"uppercase", border:"none", borderRadius:6, cursor:"pointer",
+                  background: historyTimeframe === tf.label ? C.surface : "transparent",
+                  color:       historyTimeframe === tf.label ? "#fff"    : C.muted,
+                  boxShadow:   historyTimeframe === tf.label ? "0 1px 4px rgba(0,0,0,0.4)" : "none",
+                  transition:"all 0.15s", fontFamily:"'DM Mono',monospace",
+                }}>{tf.label}</button>
+              ))}
             </div>
+
+            {/* 1 ── SYMPHONIC PITCHED EDITORIAL */}
+            <div>
+              <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:10 }}>
+                <div style={{ fontSize:9, fontWeight:700, letterSpacing:"0.12em", textTransform:"uppercase", color:C.green, fontFamily:"'DM Mono',monospace" }}>Symphonic Pitched Editorial</div>
+                <div style={{ display:"flex", alignItems:"center", gap:6 }}>
+                  <span style={{ fontSize:9, fontFamily:"'DM Mono',monospace", color:C.green, background:"rgba(57,217,138,0.08)", border:`1px solid rgba(57,217,138,0.2)`, borderRadius:99, padding:"2px 10px", letterSpacing:"0.1em" }}>AIRTABLE</span>
+                  <span style={{ fontSize:10, fontFamily:"'DM Mono',monospace", color:C.muted, background:"rgba(255,255,255,0.05)", borderRadius:99, padding:"2px 10px" }}>{artistPickups.filter(p => inWindow(p.dateSent)).length} of {artistPickups.length} total</span>
+                </div>
+              </div>
+              {artistPickups.filter(p => inWindow(p.dateSent)).length === 0 ? (
+                <div style={{ fontSize:12, color:C.dim, padding:"10px 0" }}>{artistPickups.length > 0 ? "No pickups in this time window." : "No Symphonic pitched placements on record."}</div>
+              ) : (
+                <table style={{ width:"100%", borderCollapse:"collapse" }}>
+                  <thead>
+                    <tr style={{ borderBottom:`1px solid ${C.border}` }}>
+                      {["Playlist","DSP","Date","Type","Cover"].map(h => (
+                        <th key={h} style={{ textAlign:"left", padding:"6px 10px", fontSize:9, fontWeight:700, letterSpacing:"0.12em", textTransform:"uppercase", color:C.muted, fontFamily:"'DM Mono',monospace" }}>{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {artistPickups.filter(p => inWindow(p.dateSent)).map((p, i) => (
+                      <tr key={i} style={{ borderBottom:`1px solid rgba(255,255,255,0.03)` }}>
+                        <td style={{ padding:"8px 10px", fontSize:12, fontWeight:600, color:"rgba(255,255,255,0.85)" }}>{p.playlist}</td>
+                        <td style={{ padding:"8px 10px" }}>
+                          <span style={{ background:`${DSP_COLORS[p.dsp]||C.cyan}18`, color:DSP_COLORS[p.dsp]||C.cyan, border:`1px solid ${DSP_COLORS[p.dsp]||C.cyan}33`, borderRadius:99, padding:"2px 8px", fontSize:10, fontWeight:700, whiteSpace:"nowrap" }}>{p.dsp}</span>
+                        </td>
+                        <td style={{ padding:"8px 10px", fontSize:11, color:C.muted, fontFamily:"'DM Mono',monospace", whiteSpace:"nowrap" }}>{fmtDate(p.dateSent)}</td>
+                        <td style={{ padding:"8px 10px" }}>
+                          <span style={{ color: p.type==="1st Party" ? C.green : C.gold, fontSize:11, fontWeight:700 }}>{p.type}</span>
+                        </td>
+                        <td style={{ padding:"8px 10px", textAlign:"center" }}>
+                          {p.cover ? <span style={{ color:C.green, fontWeight:700 }}>✓</span> : <span style={{ color:C.dim }}>—</span>}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+
+            {/* 2 ── EXTERNAL EDITORIAL (Chartmetric) */}
+            <div style={{ paddingTop:16, borderTop:`1px solid ${C.border}` }}>
+              <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:10 }}>
+                <div style={{ fontSize:9, fontWeight:700, letterSpacing:"0.12em", textTransform:"uppercase", color:C.cyan, fontFamily:"'DM Mono',monospace" }}>External Editorial — Organic</div>
+                <div style={{ display:"flex", alignItems:"center", gap:6 }}>
+                  <span style={{ fontSize:9, fontFamily:"'DM Mono',monospace", color:C.cyan, background:"rgba(0,217,255,0.07)", border:`1px solid rgba(0,217,255,0.2)`, borderRadius:99, padding:"2px 10px", letterSpacing:"0.1em" }}>CHARTMETRIC</span>
+                  <span style={{ fontSize:10, fontFamily:"'DM Mono',monospace", color:C.muted, background:"rgba(255,255,255,0.05)", borderRadius:99, padding:"2px 10px" }}>{organicEditorial.filter(p => inWindow(p.date)).length} of {organicEditorial.length} placements</span>
+                </div>
+              </div>
+              {organicEditorial.filter(p => inWindow(p.date)).length === 0 ? (
+                <div style={{ fontSize:12, color:C.dim, padding:"10px 0" }}>{organicEditorial.length > 0 ? "No placements in this time window." : "No external editorial placements detected."}</div>
+              ) : (
+                <div style={{ display:"flex", flexDirection:"column", gap:6 }}>
+                  {organicEditorial.filter(p => inWindow(p.date)).map((p, i) => (
+                    <div key={i} style={{ display:"flex", alignItems:"center", gap:10, padding:"7px 10px", background:"rgba(255,255,255,0.02)", borderRadius:8, border:`1px solid rgba(255,255,255,0.05)` }}>
+                      <div style={{ flex:1, fontSize:12, fontWeight:600, color:"rgba(255,255,255,0.85)" }}>{p.playlist}</div>
+                      <span style={{ background:`${DSP_COLORS[p.dsp]||C.cyan}18`, color:DSP_COLORS[p.dsp]||C.cyan, border:`1px solid ${DSP_COLORS[p.dsp]||C.cyan}33`, borderRadius:99, padding:"2px 8px", fontSize:10, fontWeight:700, whiteSpace:"nowrap" }}>{p.dsp}</span>
+                      <div style={{ fontSize:10, color:C.muted, fontFamily:"'DM Mono',monospace", whiteSpace:"nowrap" }}>{fmtN(p.followers)} followers</div>
+                      <div style={{ fontSize:10, color:C.dim, fontFamily:"'DM Mono',monospace", whiteSpace:"nowrap" }}>{fmtDate(p.date)}</div>
+                      {p.note && <span style={{ fontSize:9, color:C.gold, background:"rgba(255,184,0,0.08)", border:`1px solid rgba(255,184,0,0.2)`, borderRadius:99, padding:"1px 7px", whiteSpace:"nowrap" }}>{p.note}</span>}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* 3 ── USER GENERATED PLAYLISTS (Chartmetric) */}
+            <div style={{ paddingTop:16, borderTop:`1px solid ${C.border}` }}>
+              <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:10 }}>
+                <div style={{ fontSize:9, fontWeight:700, letterSpacing:"0.12em", textTransform:"uppercase", color:C.purple, fontFamily:"'DM Mono',monospace" }}>User Generated Playlists</div>
+                <div style={{ display:"flex", alignItems:"center", gap:6 }}>
+                  <span style={{ fontSize:9, fontFamily:"'DM Mono',monospace", color:C.cyan, background:"rgba(0,217,255,0.07)", border:`1px solid rgba(0,217,255,0.2)`, borderRadius:99, padding:"2px 10px", letterSpacing:"0.1em" }}>CHARTMETRIC</span>
+                  <span style={{ fontSize:10, fontFamily:"'DM Mono',monospace", color:C.muted, background:"rgba(255,255,255,0.05)", borderRadius:99, padding:"2px 10px" }}>{ugcPlaylists.filter(p => inWindow(p.date)).length} of {ugcPlaylists.length} playlists</span>
+                </div>
+              </div>
+              {ugcPlaylists.filter(p => inWindow(p.date)).length === 0 ? (
+                <div style={{ fontSize:12, color:C.dim, padding:"10px 0" }}>{ugcPlaylists.length > 0 ? "No UGC playlists in this time window." : "No UGC playlist data available."}</div>
+              ) : (
+                <div style={{ display:"flex", flexDirection:"column", gap:6 }}>
+                  {ugcPlaylists.filter(p => inWindow(p.date)).map((p, i) => (
+                    <div key={i} style={{ display:"flex", alignItems:"center", gap:10, padding:"7px 10px", background:"rgba(255,255,255,0.02)", borderRadius:8, border:`1px solid rgba(255,255,255,0.05)` }}>
+                      <div style={{ flex:1 }}>
+                        <div style={{ fontSize:12, fontWeight:600, color:"rgba(255,255,255,0.85)" }}>{p.playlist}</div>
+                        <div style={{ fontSize:10, color:C.dim, marginTop:1 }}>by {p.curator}</div>
+                      </div>
+                      <span style={{ background:`${DSP_COLORS[p.dsp]||C.cyan}18`, color:DSP_COLORS[p.dsp]||C.cyan, border:`1px solid ${DSP_COLORS[p.dsp]||C.cyan}33`, borderRadius:99, padding:"2px 8px", fontSize:10, fontWeight:700, whiteSpace:"nowrap" }}>{p.dsp}</span>
+                      <div style={{ fontSize:10, color:C.muted, fontFamily:"'DM Mono',monospace", whiteSpace:"nowrap" }}>{fmtN(p.followers)} followers</div>
+                      <div style={{ fontSize:10, color:C.dim, fontFamily:"'DM Mono',monospace", whiteSpace:"nowrap" }}>{fmtDate(p.date)}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* 4 ── SIMILAR ARTIST PITCH INTEL (Chartmetric) */}
+            <div style={{ paddingTop:16, borderTop:`1px solid ${C.border}` }}>
+              <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:6 }}>
+                <div style={{ fontSize:9, fontWeight:700, letterSpacing:"0.12em", textTransform:"uppercase", color:C.gold, fontFamily:"'DM Mono',monospace" }}>Similar Artist Pitch Intel</div>
+                <span style={{ fontSize:9, fontFamily:"'DM Mono',monospace", color:C.cyan, background:"rgba(0,217,255,0.07)", border:`1px solid rgba(0,217,255,0.2)`, borderRadius:99, padding:"2px 10px", letterSpacing:"0.1em" }}>CHARTMETRIC</span>
+              </div>
+              <div style={{ fontSize:11, color:C.dim, marginBottom:10, lineHeight:1.5 }}>
+                Playlists that similar artists have landed on — use as direct pitch targets.
+              </div>
+              {similarPickups.length === 0 ? (
+                <div style={{ fontSize:12, color:C.dim, padding:"10px 0" }}>No similar artist data available.</div>
+              ) : (
+                <div style={{ display:"flex", flexDirection:"column", gap:6 }}>
+                  {similarPickups.map((p, i) => (
+                    <div key={i} style={{ display:"flex", alignItems:"center", gap:10, padding:"7px 10px", background:"rgba(255,184,0,0.03)", borderRadius:8, border:`1px solid rgba(255,184,0,0.1)` }}>
+                      <div style={{ flex:1 }}>
+                        <div style={{ fontSize:12, fontWeight:600, color:"rgba(255,255,255,0.85)" }}>{p.playlist}</div>
+                        <div style={{ fontSize:10, color:C.gold, marginTop:1 }}>via {p.artist}</div>
+                      </div>
+                      <span style={{ background:`${DSP_COLORS[p.dsp]||C.cyan}18`, color:DSP_COLORS[p.dsp]||C.cyan, border:`1px solid ${DSP_COLORS[p.dsp]||C.cyan}33`, borderRadius:99, padding:"2px 8px", fontSize:10, fontWeight:700, whiteSpace:"nowrap" }}>{p.dsp}</span>
+                      <div style={{ fontSize:10, color:C.muted, fontFamily:"'DM Mono',monospace", whiteSpace:"nowrap" }}>{fmtN(p.followers)} followers</div>
+                      <span style={{ fontSize:9, fontWeight:700, color:C.gold, background:"rgba(255,184,0,0.08)", border:`1px solid rgba(255,184,0,0.2)`, borderRadius:99, padding:"1px 7px", whiteSpace:"nowrap" }}>Pitch Target</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
           </div>
         )}
+
+      </div>
+    </div>
+  );
+}
+
+// ─── NAV CONFIG ───────────────────────────────────────────────────────────────
+const NavIc = ({ d }) => (
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{flexShrink:0}}>
+    {d.map((p,i) => <path key={i} d={p} />)}
+  </svg>
+);
+const NAV_ITEMS = [
+  { id:"command",     label:"Command Center", icon:<NavIc d={["M3 3h7v7H3z","M14 3h7v7h-7z","M3 14h7v7H3z","M14 14h7v7h-7z"]} /> },
+  { id:"releases",    label:"Releases",       icon:<NavIc d={["M3 6h18","M3 12h18","M3 18h18"]} /> },
+  { id:"performance", label:"Performance",    icon:<NavIc d={["M18 20V10","M12 20V4","M6 20v-6"]} /> },
+  { id:"artists",     label:"Artists",        icon:<NavIc d={["M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2","M23 21v-2a4 4 0 0 0-3-3.87","M16 3.13a4 4 0 0 1 0 7.75"]} />, soon:true },
+  { id:"campaigns",   label:"Campaigns",      icon:<NavIc d={["M22 12h-4l-3 9L9 3l-3 9H2"]} />, soon:true },
+];
+
+// ─── ARTIST PROFILE PAGE ──────────────────────────────────────────────────────
+function ArtistProfilePage({ release, onBack }) {
+  const [historyTimeframe, setHistoryTimeframe] = useState("1Y");
+  const d               = DRIVER_DATA[release.artist] || {};
+  const artistPickups   = PICKUPS.filter(p => p.artist === release.artist).sort((a,b) => new Date(b.dateSent)-new Date(a.dateSent));
+  const organicEditorial = ORGANIC_EDITORIAL[release.artist] || [];
+  const ugcPlaylists    = UGC_PLAYLISTS[release.artist] || [];
+  const similarPickups  = SIMILAR_ARTIST_PICKUPS[release.artist] || [];
+  const sc              = symphonicScore(release);
+  const scCol           = scoreColor(sc.total);
+  const fmtN            = n => n>=1000000?(n/1000000).toFixed(1)+"M":n>=1000?Math.round(n/1000)+"K":n;
+  const tfDays          = HISTORY_TIMEFRAMES.find(t=>t.label===historyTimeframe)?.days??null;
+  const cutoff          = tfDays ? new Date(T.getTime()-tfDays*86400000) : null;
+  const inWindow        = dateStr => !cutoff || new Date(dateStr) >= cutoff;
+
+  const HistSection = ({ label, source, sourceColor, count, total, children }) => (
+    <div style={{ paddingTop:16, borderTop:`1px solid ${C.border}` }}>
+      <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:10 }}>
+        <div style={{ fontSize:9, fontWeight:700, letterSpacing:"0.12em", textTransform:"uppercase", color:sourceColor, fontFamily:"'DM Mono',monospace" }}>{label}</div>
+        <div style={{ display:"flex", alignItems:"center", gap:6 }}>
+          <span style={{ fontSize:9, fontFamily:"'DM Mono',monospace", color:C.cyan, background:"rgba(0,217,255,0.07)", border:`1px solid rgba(0,217,255,0.2)`, borderRadius:99, padding:"2px 10px", letterSpacing:"0.1em" }}>{source}</span>
+          <span style={{ fontSize:10, fontFamily:"'DM Mono',monospace", color:C.muted, background:"rgba(255,255,255,0.05)", borderRadius:99, padding:"2px 10px" }}>{count}{total != null && ` of ${total}`}</span>
+        </div>
+      </div>
+      {children}
+    </div>
+  );
+
+  const EmptyRow = ({ msg }) => <div style={{ fontSize:12, color:C.dim, padding:"10px 0" }}>{msg}</div>;
+
+  const PlRow = ({ p, fields }) => (
+    <div style={{ display:"flex", alignItems:"center", gap:10, padding:"7px 10px", background:"rgba(255,255,255,0.02)", borderRadius:8, border:`1px solid rgba(255,255,255,0.05)`, marginBottom:5 }}>
+      {fields}
+    </div>
+  );
+
+  return (
+    <div style={{ padding:"28px 36px 80px", animation:"fadeUp 0.25s ease" }}>
+
+      {/* Back */}
+      <button onClick={onBack} style={{ background:"rgba(255,255,255,0.06)", border:`1px solid ${C.border}`, color:C.muted, borderRadius:7, padding:"5px 14px", fontSize:11, fontWeight:700, letterSpacing:"0.08em", cursor:"pointer", marginBottom:22, display:"flex", alignItems:"center", gap:6 }}>
+        <span style={{ fontSize:14 }}>←</span> Back to Releases
+      </button>
+
+      {/* Hero header */}
+      <div style={{ display:"flex", alignItems:"flex-start", justifyContent:"space-between", marginBottom:28, gap:20 }}>
+        <div style={{ flex:1 }}>
+          <div style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:54, letterSpacing:"0.04em", lineHeight:1, color:"#fff" }}>{release.artist}</div>
+          <div style={{ fontSize:18, color:C.cyan, marginTop:6, fontWeight:600 }}>{release.release}</div>
+          <div style={{ display:"flex", gap:6, flexWrap:"wrap", marginTop:12 }}>
+            <Pill label={release.priority} color={PRIORITY_COLORS[release.priority]||C.cyan} />
+            <Pill label={release.genre}    color={GENRE_COLORS[release.genre]||C.cyan} />
+            <Pill label={release.format}   color={C.dim} />
+            <Pill label={fmtDate(release.date)} color={C.gold} />
+            {release.ei && <Pill label="EI" color={C.green} />}
+            {release.override?.map(o => <Pill key={o} label={o} color={C.purple} />)}
+          </div>
+          {/* Score chips */}
+          <div style={{ display:"flex", gap:5, flexWrap:"wrap", marginTop:12 }}>
+            {[
+              { label:"Pickups",  value:sc.breakdown.pickups,     max:25, color:C.green   },
+              { label:"Audience", value:sc.breakdown.audience,    max:20, color:C.cyan    },
+              { label:"Social",   value:sc.breakdown.social,      max:20, color:"#E1306C" },
+              { label:"Drive",    value:sc.breakdown.drive,       max:20, color:C.orange  },
+              { label:"Consist.", value:sc.breakdown.consistency, max:15, color:C.gold    },
+            ].map(({ label, value, max, color }) => (
+              <div key={label} style={{ background:`${color}10`, border:`1px solid ${color}30`, borderRadius:7, padding:"3px 8px", display:"flex", alignItems:"center", gap:5 }}>
+                <span style={{ fontSize:9, color, fontWeight:700, fontFamily:"'DM Mono',monospace", letterSpacing:"0.08em", textTransform:"uppercase" }}>{label}</span>
+                <span style={{ fontSize:11, fontWeight:800, color, fontFamily:"'DM Mono',monospace" }}>{value}</span>
+                <span style={{ fontSize:9, color:"rgba(255,255,255,0.2)", fontFamily:"'DM Mono',monospace" }}>/{max}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Big score badge */}
+        <div style={{ flexShrink:0, textAlign:"center", background:`${scCol}10`, border:`1px solid ${scCol}40`, borderRadius:16, padding:"20px 32px" }}>
+          <div style={{ fontSize:9, fontWeight:700, letterSpacing:"0.16em", textTransform:"uppercase", color:scCol, fontFamily:"'DM Mono',monospace", marginBottom:4 }}>SYM SCORE</div>
+          <div style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:88, fontWeight:800, color:scCol, lineHeight:1, letterSpacing:"0.03em" }}>{sc.total}</div>
+          <div style={{ fontSize:9, color:`${scCol}99`, fontFamily:"'DM Mono',monospace", marginTop:4 }}>out of 100</div>
+        </div>
+      </div>
+
+      {/* 2-col layout */}
+      <div style={{ display:"grid", gridTemplateColumns:"360px 1fr", gap:24 }}>
+
+        {/* ── LEFT: Pitch + Social ── */}
+        <div style={{ display:"flex", flexDirection:"column", gap:16 }}>
+
+          {/* Story */}
+          {d.story && (
+            <Card>
+              <SectionLabel>What's the Story</SectionLabel>
+              <div style={{ fontSize:12, color:"rgba(255,255,255,0.8)", lineHeight:1.65 }}>{d.story}</div>
+            </Card>
+          )}
+
+          {/* Drivers + DSP Tools */}
+          <Card>
+            <SectionLabel>Marketing Drivers</SectionLabel>
+            <div style={{ display:"flex", gap:6, flexWrap:"wrap", marginBottom: d.dspTools?.length > 0 ? 14 : 0 }}>
+              {(d.drivers||[]).map(dr => (
+                <span key={dr} style={{ background:`${DRIVER_COLORS[dr]||C.cyan}18`, color:DRIVER_COLORS[dr]||C.cyan, border:`1px solid ${DRIVER_COLORS[dr]||C.cyan}44`, borderRadius:99, padding:"3px 10px", fontSize:10, fontWeight:700 }}>{dr}</span>
+              ))}
+            </div>
+            {d.dspTools?.length > 0 && (
+              <>
+                <SectionLabel>DSP Tools</SectionLabel>
+                <div style={{ display:"flex", gap:6, flexWrap:"wrap" }}>
+                  {d.dspTools.map(t => (
+                    <span key={t} style={{ background:"rgba(57,217,138,0.08)", color:C.green, border:`1px solid rgba(57,217,138,0.25)`, borderRadius:99, padding:"3px 10px", fontSize:10, fontWeight:700 }}>{t}</span>
+                  ))}
+                </div>
+              </>
+            )}
+          </Card>
+
+          {/* Similar Artists + Mood */}
+          <Card>
+            {d.similarArtists && (
+              <>
+                <SectionLabel>Similar Artists / FFO</SectionLabel>
+                <div style={{ fontSize:12, color:"rgba(255,255,255,0.7)", marginBottom:14, lineHeight:1.5 }}>{d.similarArtists}</div>
+              </>
+            )}
+            {(d.mood?.length > 0 || d.songStyles?.length > 0) && (
+              <div style={{ display:"flex", gap:16, flexWrap:"wrap" }}>
+                {d.mood?.length > 0 && (
+                  <div>
+                    <SectionLabel>Mood</SectionLabel>
+                    <div style={{ display:"flex", gap:5 }}>
+                      {d.mood.map(m => <span key={m} style={{ background:"rgba(180,92,255,0.12)", color:C.purple, border:`1px solid rgba(180,92,255,0.3)`, borderRadius:99, padding:"2px 9px", fontSize:10, fontWeight:600 }}>{m}</span>)}
+                    </div>
+                  </div>
+                )}
+                {d.songStyles?.length > 0 && (
+                  <div>
+                    <SectionLabel>Song Style</SectionLabel>
+                    <div style={{ display:"flex", gap:5 }}>
+                      {d.songStyles.map(s => <span key={s} style={{ background:"rgba(255,255,255,0.06)", color:"rgba(255,255,255,0.6)", border:`1px solid rgba(255,255,255,0.1)`, borderRadius:99, padding:"2px 9px", fontSize:10 }}>{s}</span>)}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </Card>
+
+          {/* Social Following */}
+          <Card>
+            <SectionLabel>Social & Audience</SectionLabel>
+            <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8, marginBottom:12 }}>
+              {[
+                { label:"Spotify ML",  value:release.spotifyML, color:DSP_COLORS.Spotify },
+                { label:"Instagram",   value:release.igFollowers, color:"#E1306C" },
+                { label:"TikTok",      value:d.tiktok,   color:"#69C9D0" },
+                { label:"YouTube",     value:d.youtube,  color:"#FF0000" },
+                { label:"Twitter/X",   value:d.twitter,  color:"#1DA1F2" },
+                { label:"SoundCloud",  value:d.soundcloud,color:"#ff5500" },
+              ].filter(p=>p.value).map(p => (
+                <div key={p.label} style={{ background:`${p.color}12`, border:`1px solid ${p.color}30`, borderRadius:8, padding:"8px 10px" }}>
+                  <div style={{ fontSize:9, color:C.muted, marginBottom:2 }}>{p.label}</div>
+                  <div style={{ fontSize:15, fontWeight:800, color:p.color, fontFamily:"'Bebas Neue',sans-serif", letterSpacing:"0.03em" }}>{fmtN(p.value)}</div>
+                </div>
+              ))}
+            </div>
+            {d.socialActivity && <div style={{ fontSize:11, color:"rgba(255,255,255,0.5)", lineHeight:1.5, fontStyle:"italic" }}>{d.socialActivity}</div>}
+          </Card>
+
+          {/* Shows + Press */}
+          {(d.upcomingShows || d.confirmedPress || d.adDetails) && (
+            <Card>
+              {d.upcomingShows && (
+                <div style={{ marginBottom: d.confirmedPress || d.adDetails ? 14 : 0 }}>
+                  <SectionLabel>Upcoming Shows</SectionLabel>
+                  <div style={{ fontSize:12, color:"rgba(255,255,255,0.7)", lineHeight:1.5 }}>{d.upcomingShows}</div>
+                </div>
+              )}
+              {d.confirmedPress && (
+                <div style={{ marginBottom: d.adDetails ? 14 : 0 }}>
+                  <SectionLabel>Confirmed Press</SectionLabel>
+                  <div style={{ fontSize:12, color:"rgba(255,255,255,0.7)", lineHeight:1.5 }}>{d.confirmedPress}</div>
+                </div>
+              )}
+              {d.adDetails && (
+                <div>
+                  <SectionLabel>Ad Campaign</SectionLabel>
+                  <div style={{ fontSize:12, color:"rgba(255,255,255,0.7)", lineHeight:1.5 }}>{d.adDetails}</div>
+                </div>
+              )}
+            </Card>
+          )}
+        </div>
+
+        {/* ── RIGHT: History ── */}
+        <Card style={{ alignSelf:"flex-start" }}>
+          <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:16 }}>
+            <SectionLabel>Placement History</SectionLabel>
+            {/* Timeframe filter */}
+            <div style={{ display:"flex", gap:3, background:"rgba(255,255,255,0.04)", borderRadius:7, padding:3 }}>
+              {HISTORY_TIMEFRAMES.map(tf => (
+                <button key={tf.label} onClick={() => setHistoryTimeframe(tf.label)} style={{
+                  padding:"3px 10px", fontSize:10, fontWeight:700, letterSpacing:"0.08em",
+                  textTransform:"uppercase", border:"none", borderRadius:5, cursor:"pointer",
+                  background: historyTimeframe===tf.label ? C.surface : "transparent",
+                  color:       historyTimeframe===tf.label ? "#fff"    : C.muted,
+                  boxShadow:   historyTimeframe===tf.label ? "0 1px 4px rgba(0,0,0,0.4)" : "none",
+                  transition:"all 0.15s", fontFamily:"'DM Mono',monospace",
+                }}>{tf.label}</button>
+              ))}
+            </div>
+          </div>
+
+          {/* 1 — Symphonic Pitched */}
+          <HistSection label="Symphonic Pitched Editorial" source="AIRTABLE" sourceColor={C.green}
+            count={`${artistPickups.filter(p=>inWindow(p.dateSent)).length} of ${artistPickups.length} total`} total={null}>
+            {artistPickups.filter(p=>inWindow(p.dateSent)).length === 0
+              ? <EmptyRow msg={artistPickups.length>0?"No pickups in this time window.":"No Symphonic pitched placements on record."} />
+              : <table style={{ width:"100%", borderCollapse:"collapse", marginTop:6 }}>
+                  <thead><tr style={{ borderBottom:`1px solid ${C.border}` }}>
+                    {["Playlist","DSP","Date","Type","Cover"].map(h=>(
+                      <th key={h} style={{ textAlign:"left", padding:"5px 10px", fontSize:9, fontWeight:700, letterSpacing:"0.12em", textTransform:"uppercase", color:C.muted, fontFamily:"'DM Mono',monospace" }}>{h}</th>
+                    ))}
+                  </tr></thead>
+                  <tbody>
+                    {artistPickups.filter(p=>inWindow(p.dateSent)).map((p,i) => (
+                      <tr key={i} style={{ borderBottom:`1px solid rgba(255,255,255,0.03)` }}>
+                        <td style={{ padding:"7px 10px", fontSize:12, fontWeight:600, color:"rgba(255,255,255,0.85)" }}>{p.playlist}</td>
+                        <td style={{ padding:"7px 10px" }}><span style={{ background:`${DSP_COLORS[p.dsp]||C.cyan}18`, color:DSP_COLORS[p.dsp]||C.cyan, border:`1px solid ${DSP_COLORS[p.dsp]||C.cyan}33`, borderRadius:99, padding:"2px 8px", fontSize:10, fontWeight:700, whiteSpace:"nowrap" }}>{p.dsp}</span></td>
+                        <td style={{ padding:"7px 10px", fontSize:11, color:C.muted, fontFamily:"'DM Mono',monospace", whiteSpace:"nowrap" }}>{fmtDate(p.dateSent)}</td>
+                        <td style={{ padding:"7px 10px" }}><span style={{ color:p.type==="1st Party"?C.green:C.gold, fontSize:11, fontWeight:700 }}>{p.type}</span></td>
+                        <td style={{ padding:"7px 10px", textAlign:"center" }}>{p.cover?<span style={{color:C.green,fontWeight:700}}>✓</span>:<span style={{color:C.dim}}>—</span>}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+            }
+          </HistSection>
+
+          {/* 2 — External Editorial */}
+          <HistSection label="External Editorial — Organic" source="CHARTMETRIC" sourceColor={C.cyan}
+            count={`${organicEditorial.filter(p=>inWindow(p.date)).length} of ${organicEditorial.length}`} total={null}>
+            {organicEditorial.filter(p=>inWindow(p.date)).length === 0
+              ? <EmptyRow msg={organicEditorial.length>0?"No placements in this time window.":"No external editorial placements detected."} />
+              : organicEditorial.filter(p=>inWindow(p.date)).map((p,i) => (
+                  <PlRow key={i} p={p} fields={<>
+                    <div style={{flex:1,fontSize:12,fontWeight:600,color:"rgba(255,255,255,0.85)"}}>{p.playlist}</div>
+                    <span style={{background:`${DSP_COLORS[p.dsp]||C.cyan}18`,color:DSP_COLORS[p.dsp]||C.cyan,border:`1px solid ${DSP_COLORS[p.dsp]||C.cyan}33`,borderRadius:99,padding:"2px 8px",fontSize:10,fontWeight:700,whiteSpace:"nowrap"}}>{p.dsp}</span>
+                    <div style={{fontSize:10,color:C.muted,fontFamily:"'DM Mono',monospace",whiteSpace:"nowrap"}}>{fmtN(p.followers)} followers</div>
+                    <div style={{fontSize:10,color:C.dim,fontFamily:"'DM Mono',monospace",whiteSpace:"nowrap"}}>{fmtDate(p.date)}</div>
+                    {p.note&&<span style={{fontSize:9,color:C.gold,background:"rgba(255,184,0,0.08)",border:`1px solid rgba(255,184,0,0.2)`,borderRadius:99,padding:"1px 7px",whiteSpace:"nowrap"}}>{p.note}</span>}
+                  </>} />
+                ))
+            }
+          </HistSection>
+
+          {/* 3 — UGC */}
+          <HistSection label="User Generated Playlists" source="CHARTMETRIC" sourceColor={C.purple}
+            count={`${ugcPlaylists.filter(p=>inWindow(p.date)).length} of ${ugcPlaylists.length}`} total={null}>
+            {ugcPlaylists.filter(p=>inWindow(p.date)).length === 0
+              ? <EmptyRow msg={ugcPlaylists.length>0?"No UGC playlists in this time window.":"No UGC playlist data available."} />
+              : ugcPlaylists.filter(p=>inWindow(p.date)).map((p,i) => (
+                  <PlRow key={i} p={p} fields={<>
+                    <div style={{flex:1}}>
+                      <div style={{fontSize:12,fontWeight:600,color:"rgba(255,255,255,0.85)"}}>{p.playlist}</div>
+                      <div style={{fontSize:10,color:C.dim,marginTop:1}}>by {p.curator}</div>
+                    </div>
+                    <span style={{background:`${DSP_COLORS[p.dsp]||C.cyan}18`,color:DSP_COLORS[p.dsp]||C.cyan,border:`1px solid ${DSP_COLORS[p.dsp]||C.cyan}33`,borderRadius:99,padding:"2px 8px",fontSize:10,fontWeight:700,whiteSpace:"nowrap"}}>{p.dsp}</span>
+                    <div style={{fontSize:10,color:C.muted,fontFamily:"'DM Mono',monospace",whiteSpace:"nowrap"}}>{fmtN(p.followers)} followers</div>
+                    <div style={{fontSize:10,color:C.dim,fontFamily:"'DM Mono',monospace",whiteSpace:"nowrap"}}>{fmtDate(p.date)}</div>
+                  </>} />
+                ))
+            }
+          </HistSection>
+
+          {/* 4 — Similar Artist Intel */}
+          <HistSection label="Similar Artist Pitch Intel" source="CHARTMETRIC" sourceColor={C.gold}
+            count={`${similarPickups.length} targets`} total={null}>
+            <div style={{ fontSize:11, color:C.dim, marginBottom:8, lineHeight:1.5 }}>Playlists similar artists have landed on — direct pitch targets.</div>
+            {similarPickups.length === 0
+              ? <EmptyRow msg="No similar artist data available." />
+              : similarPickups.map((p,i) => (
+                  <PlRow key={i} p={p} fields={<>
+                    <div style={{flex:1}}>
+                      <div style={{fontSize:12,fontWeight:600,color:"rgba(255,255,255,0.85)"}}>{p.playlist}</div>
+                      <div style={{fontSize:10,color:C.gold,marginTop:1}}>via {p.artist}</div>
+                    </div>
+                    <span style={{background:`${DSP_COLORS[p.dsp]||C.cyan}18`,color:DSP_COLORS[p.dsp]||C.cyan,border:`1px solid ${DSP_COLORS[p.dsp]||C.cyan}33`,borderRadius:99,padding:"2px 8px",fontSize:10,fontWeight:700,whiteSpace:"nowrap"}}>{p.dsp}</span>
+                    <div style={{fontSize:10,color:C.muted,fontFamily:"'DM Mono',monospace",whiteSpace:"nowrap"}}>{fmtN(p.followers)} followers</div>
+                    <span style={{fontSize:9,fontWeight:700,color:C.gold,background:"rgba(255,184,0,0.08)",border:`1px solid rgba(255,184,0,0.2)`,borderRadius:99,padding:"1px 7px",whiteSpace:"nowrap"}}>Pitch Target</span>
+                  </>} />
+                ))
+            }
+          </HistSection>
+        </Card>
 
       </div>
     </div>
@@ -836,6 +1396,7 @@ function ArtistPanel({ r, onClose }) {
 export default function Dashboard() {
   const [tab, setTab] = useState("command");
   const [selectedRelease, setSelectedRelease] = useState(null);
+  const [profileTarget, setProfileTarget] = useState(null);
 
   // Releases filter + sort state
   const [filterPriority,  setFilterPriority]  = useState("all");
@@ -885,16 +1446,18 @@ export default function Dashboard() {
     return ["This Week","Week 2","Week 3","Week 4+"].map(w => weeks[w]||{ week:w, p1:0, p2:0, p3:0 });
   }, []);
 
-  const TABS = [
-    { id:"command",    label:"Command Center" },
-    { id:"releases",  label:"Releases" },
-    { id:"performance",label:"Performance" },
-  ];
-
   const insightColors = { urgent:{ bg:"rgba(255,61,127,0.08)", border:"rgba(255,61,127,0.25)", icon:C.pink }, warning:{ bg:"rgba(255,184,0,0.07)", border:"rgba(255,184,0,0.22)", icon:C.gold }, positive:{ bg:"rgba(57,217,138,0.07)", border:"rgba(57,217,138,0.22)", icon:C.green } };
 
+  const navItemStyle = (id) => ({
+    display:"flex", alignItems:"center", gap:10, padding:"9px 14px", borderRadius:9,
+    background: tab===id ? "rgba(0,217,255,0.1)" : "transparent",
+    border: tab===id ? `1px solid rgba(0,217,255,0.2)` : "1px solid transparent",
+    color: tab===id ? C.cyan : C.muted, fontSize:12, fontWeight:600, letterSpacing:"0.03em",
+    cursor:"pointer", transition:"all 0.15s", width:"100%", textAlign:"left", fontFamily:"inherit",
+  });
+
   return (
-    <div style={{ minHeight:"100vh", background:C.bg, color:"#fff", fontFamily:"'DM Sans','Helvetica Neue',sans-serif" }}>
+    <div style={{ minHeight:"100vh", background:C.bg, color:"#fff", fontFamily:"'DM Sans','Helvetica Neue',sans-serif", display:"flex" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700;9..40,800&family=Bebas+Neue&family=DM+Mono:wght@400;500&display=swap');
         *{box-sizing:border-box;margin:0;padding:0}
@@ -906,36 +1469,60 @@ export default function Dashboard() {
         @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.25}}
         @keyframes slideIn{from{transform:translateX(100%)}to{transform:translateX(0)}}
         .release-row:hover{background:rgba(0,217,255,0.04)!important;cursor:pointer}
+        .nav-item:hover{background:rgba(255,255,255,0.04)!important;color:rgba(255,255,255,0.75)!important}
       `}</style>
 
-      {/* ── NAV ── */}
-      <div style={{ borderBottom:`1px solid ${C.border}`, padding:"0 32px", background:C.bg, position:"sticky", top:0, zIndex:50 }}>
-        <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", height:54 }}>
-          <div style={{ display:"flex", alignItems:"center", gap:14 }}>
-            <div style={{ position:"relative", width:8, height:8 }}>
-              <div style={{ position:"absolute", inset:0, borderRadius:"50%", background:C.cyan, boxShadow:`0 0 10px ${C.cyan}` }} />
-              <div style={{ position:"absolute", inset:-4, borderRadius:"50%", background:C.cyan, opacity:0.12, animation:"pulse 2s ease infinite" }} />
-            </div>
-            <span style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:19, letterSpacing:"0.15em" }}>SYMPHONIC</span>
-            <span style={{ fontSize:10, color:C.dim, letterSpacing:"0.1em", textTransform:"uppercase", fontFamily:"'DM Mono',monospace" }}>/ Marketing Intelligence</span>
+      {/* ── LEFT SIDEBAR ── */}
+      <div style={{ width:220, flexShrink:0, background:C.surface, borderRight:`1px solid ${C.border}`, display:"flex", flexDirection:"column", position:"fixed", top:0, left:0, bottom:0, zIndex:50, padding:"20px 12px" }}>
+        {/* Logo */}
+        <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:28, paddingLeft:4 }}>
+          <div style={{ position:"relative", width:8, height:8, flexShrink:0 }}>
+            <div style={{ position:"absolute", inset:0, borderRadius:"50%", background:C.cyan, boxShadow:`0 0 10px ${C.cyan}` }} />
+            <div style={{ position:"absolute", inset:-4, borderRadius:"50%", background:C.cyan, opacity:0.12, animation:"pulse 2s ease infinite" }} />
           </div>
-          <div style={{ display:"flex" }}>
-            {TABS.map(t => (
-              <button key={t.id} onClick={()=>{ setTab(t.id); setSelectedRelease(null); }} style={{
-                background: tab===t.id ? "rgba(0,217,255,0.07)" : "none",
-                border:"none", borderBottom: tab===t.id ? `2px solid ${C.cyan}` : "2px solid transparent",
-                color: tab===t.id ? C.cyan : C.muted, fontSize:11, fontWeight:700,
-                letterSpacing:"0.1em", textTransform:"uppercase", padding:"0 22px", height:54, transition:"all 0.15s",
-              }}>{t.label}</button>
-            ))}
+          <div>
+            <div style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:17, letterSpacing:"0.15em", lineHeight:1 }}>SYMPHONIC</div>
+            <div style={{ fontSize:8, color:C.dim, letterSpacing:"0.1em", textTransform:"uppercase", fontFamily:"'DM Mono',monospace", marginTop:2 }}>Marketing Intel</div>
           </div>
-          <div style={{ display:"flex", alignItems:"center", gap:10 }}>
-            <span style={{ fontFamily:"'DM Mono',monospace", fontSize:10, color:C.dim }}>May 17, 2025</span>
-            <div style={{ background:"rgba(57,217,138,0.1)", border:"1px solid rgba(57,217,138,0.25)", color:C.green, borderRadius:6, padding:"3px 10px", fontSize:9, fontWeight:700, letterSpacing:"0.1em" }}>● DEMO DATA</div>
-          </div>
+        </div>
+
+        {/* Nav items */}
+        <nav style={{ display:"flex", flexDirection:"column", gap:3 }}>
+          {NAV_ITEMS.map(item => (
+            item.soon ? (
+              <div key={item.id} style={{ ...navItemStyle(item.id), opacity:0.4, cursor:"default" }}>
+                {item.icon}
+                <span>{item.label}</span>
+                <span style={{ marginLeft:"auto", fontSize:8, fontFamily:"'DM Mono',monospace", background:"rgba(255,255,255,0.08)", border:"1px solid rgba(255,255,255,0.1)", borderRadius:4, padding:"1px 5px", letterSpacing:"0.06em", color:C.muted }}>SOON</span>
+              </div>
+            ) : (
+              <button key={item.id} className="nav-item" style={navItemStyle(item.id)}
+                onClick={() => { setTab(item.id); setSelectedRelease(null); setProfileTarget(null); }}>
+                {item.icon}
+                <span>{item.label}</span>
+              </button>
+            )
+          ))}
+        </nav>
+
+        {/* Back to list button when in artist profile */}
+        {tab === "artist-profile" && (
+          <button onClick={() => { setTab("releases"); setProfileTarget(null); }}
+            style={{ marginTop:12, display:"flex", alignItems:"center", gap:8, padding:"9px 14px", borderRadius:9, background:"rgba(255,255,255,0.04)", border:"1px solid transparent", color:C.muted, fontSize:11, fontWeight:600, cursor:"pointer", width:"100%", textAlign:"left", fontFamily:"inherit" }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+            Back to Releases
+          </button>
+        )}
+
+        {/* Bottom info */}
+        <div style={{ marginTop:"auto", borderTop:`1px solid ${C.border}`, paddingTop:14, display:"flex", flexDirection:"column", gap:6 }}>
+          <div style={{ background:"rgba(57,217,138,0.08)", border:"1px solid rgba(57,217,138,0.2)", color:C.green, borderRadius:6, padding:"4px 10px", fontSize:9, fontWeight:700, letterSpacing:"0.1em", textAlign:"center" }}>● DEMO DATA</div>
+          <div style={{ fontFamily:"'DM Mono',monospace", fontSize:9, color:C.dim, textAlign:"center" }}>May 17, 2025</div>
         </div>
       </div>
 
+      {/* ── MAIN CONTENT ── */}
+      <div style={{ flex:1, marginLeft:220, minWidth:0 }}>
       <div style={{ padding:"26px 32px 64px", animation:"fadeUp 0.25s ease" }} key={tab}>
 
         {/* ════════════════ COMMAND CENTER ════════════════ */}
@@ -966,6 +1553,66 @@ export default function Dashboard() {
                 );
               })}
             </div>
+
+            {/* ── Top Pitches leaderboard ── */}
+            {(() => {
+              const ranked = [...RELEASES]
+                .filter(r => daysUntil(r.date) >= 0 && daysUntil(r.date) <= 30)
+                .map(r => ({ r, sc: symphonicScore(r) }))
+                .sort((a, b) => b.sc.total - a.sc.total)
+                .slice(0, 7);
+              return (
+                <Card>
+                  <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:16 }}>
+                    <SectionLabel>Top Pitches — Next 30 Days</SectionLabel>
+                    <span style={{ fontSize:9, fontFamily:"'DM Mono',monospace", color:C.cyan, background:"rgba(0,217,255,0.07)", border:`1px solid rgba(0,217,255,0.2)`, borderRadius:99, padding:"2px 10px", letterSpacing:"0.1em" }}>BY SYMPHONIC SCORE</span>
+                  </div>
+                  <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
+                    {ranked.map(({ r, sc }, i) => {
+                      const col = scoreColor(sc.total);
+                      return (
+                        <div key={r.id} style={{ display:"flex", alignItems:"center", gap:12, padding:"8px 0", borderBottom: i < ranked.length-1 ? `1px solid ${C.border}` : "none" }}>
+                          {/* Rank */}
+                          <div style={{ width:22, textAlign:"center", fontFamily:"'Bebas Neue',sans-serif", fontSize:16, color: i===0?C.gold:i===1?"rgba(192,192,192,0.9)":i===2?"rgba(180,92,255,0.8)":C.dim, flexShrink:0 }}>{i+1}</div>
+                          {/* Score ring */}
+                          <div style={{ flexShrink:0, width:42, height:42, borderRadius:10, background:`${col}14`, border:`1px solid ${col}44`, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center" }}>
+                            <div style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:20, color:col, lineHeight:1, letterSpacing:"0.03em" }}>{sc.total}</div>
+                          </div>
+                          {/* Artist / release info */}
+                          <div style={{ flex:1, minWidth:0 }}>
+                            <div style={{ fontWeight:700, fontSize:13, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{r.artist}</div>
+                            <div style={{ fontSize:10, color:C.dim, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{r.release} · {fmtDate(r.date)}</div>
+                          </div>
+                          {/* Score bar + breakdown pills */}
+                          <div style={{ flexShrink:0, display:"flex", flexDirection:"column", gap:4, alignItems:"flex-end" }}>
+                            <div style={{ width:100, height:4, borderRadius:99, background:"rgba(255,255,255,0.06)", overflow:"hidden" }}>
+                              <div style={{ width:`${sc.total}%`, height:"100%", borderRadius:99, background:col }} />
+                            </div>
+                            <div style={{ display:"flex", gap:3 }}>
+                              {[
+                                { v: sc.breakdown.pickups,  label:"PU",  col: C.green },
+                                { v: sc.breakdown.audience, label:"ML",  col: C.cyan },
+                                { v: sc.breakdown.social,   label:"SOC", col:"#E1306C" },
+                                { v: sc.breakdown.drive,    label:"DRV", col: C.orange },
+                              ].map(b => (
+                                <div key={b.label} style={{ background:`${b.col}15`, border:`1px solid ${b.col}30`, borderRadius:4, padding:"1px 5px", display:"flex", gap:3, alignItems:"center" }}>
+                                  <span style={{ fontSize:8, color:`${b.col}cc`, fontFamily:"'DM Mono',monospace", letterSpacing:"0.06em" }}>{b.label}</span>
+                                  <span style={{ fontSize:9, fontWeight:800, color:b.col, fontFamily:"'DM Mono',monospace" }}>{b.v}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                          {/* Priority pill */}
+                          <div style={{ flexShrink:0 }}>
+                            <Pill label={r.priority.replace("Priority ","")} color={PRIORITY_COLORS[r.priority]||C.cyan} />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </Card>
+              );
+            })()}
 
             {/* Release volume by week */}
             <Card>
@@ -1067,7 +1714,7 @@ export default function Dashboard() {
             {/* Artist detail panel — Command Center inline */}
             {selectedRelease && (
               <div style={{ background:C.surface, border:`1px solid ${C.cyan}33`, borderRadius:16, padding:24, position:"relative" }}>
-                <ArtistPanel key={selectedRelease.id} r={selectedRelease} onClose={()=>setSelectedRelease(null)} />
+                <ArtistPanel key={selectedRelease.id} r={selectedRelease} onClose={()=>setSelectedRelease(null)} onViewProfile={()=>{ setProfileTarget(selectedRelease); setSelectedRelease(null); setTab("artist-profile"); }} />
               </div>
             )}
 
@@ -1100,6 +1747,7 @@ export default function Dashboard() {
             else if (sortBy === "priority") { va = ["Priority 1","Priority 2","Priority 3"].indexOf(a.priority); vb = ["Priority 1","Priority 2","Priority 3"].indexOf(b.priority); }
             else if (sortBy === "pickups")  { va = PICKUPS.filter(p=>p.artist===a.artist).length; vb = PICKUPS.filter(p=>p.artist===b.artist).length; }
             else if (sortBy === "ml")       { va = a.spotifyML; vb = b.spotifyML; }
+          else if (sortBy === "score")    { va = symphonicScore(a).total; vb = symphonicScore(b).total; }
             if (typeof va === "string") return sortDir === "asc" ? va.localeCompare(vb) : vb.localeCompare(va);
             return sortDir === "asc" ? va - vb : vb - va;
           });
@@ -1142,6 +1790,7 @@ export default function Dashboard() {
                   <option value="artist">Sort: Artist</option>
                   <option value="pickups">Sort: Pickups</option>
                   <option value="ml">Sort: Spotify ML</option>
+                  <option value="score">Sort: Score ↓</option>
                 </select>
                 <button onClick={()=>setSortDir(v=>v==="asc"?"desc":"asc")} style={{ ...selSty, padding:"5px 9px" }}>
                   {sortDir === "asc" ? "↑" : "↓"}
@@ -1156,7 +1805,7 @@ export default function Dashboard() {
                 <table>
                   <thead>
                     <tr style={{ borderBottom:`1px solid ${C.border}`, background:"rgba(255,255,255,0.02)" }}>
-                      {["Artist","Release","Genre","Date","Days","Priority","EI","Lead","Pickups","Links"].map(h=>(
+                      {["Artist","Release","Genre","Date","Days","Priority","EI","Lead","Pickups","Score","Links"].map(h=>(
                         <th key={h} style={{ textAlign:"left", padding:"10px 16px", color:C.muted, fontWeight:600, fontSize:9, letterSpacing:"0.12em", textTransform:"uppercase", fontFamily:"'DM Mono',monospace", whiteSpace:"nowrap" }}>{h}</th>
                       ))}
                     </tr>
@@ -1184,6 +1833,20 @@ export default function Dashboard() {
                           <td style={{ padding:"10px 16px", textAlign:"center" }}>{r.ei ? <span style={{color:C.green,fontWeight:700}}>✓</span> : <span style={{color:C.dim}}>—</span>}</td>
                           <td style={{ padding:"10px 16px", fontSize:11, color:C.muted, whiteSpace:"nowrap" }}>{r.lead}</td>
                           <td style={{ padding:"10px 16px", fontSize:12, color: pickupCount>0?C.green:C.dim, fontFamily:"'DM Mono',monospace", fontWeight:700 }}>{pickupCount > 0 ? pickupCount : "—"}</td>
+                          <td style={{ padding:"10px 16px" }}>
+                            {(() => {
+                              const sc = symphonicScore(r);
+                              const col = scoreColor(sc.total);
+                              return (
+                                <div style={{ display:"flex", alignItems:"center", gap:7 }}>
+                                  <div style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:19, fontWeight:800, color:col, lineHeight:1, letterSpacing:"0.04em" }}>{sc.total}</div>
+                                  <div style={{ width:34, height:4, borderRadius:99, background:"rgba(255,255,255,0.06)", overflow:"hidden" }}>
+                                    <div style={{ width:`${sc.total}%`, height:"100%", borderRadius:99, background:col }} />
+                                  </div>
+                                </div>
+                              );
+                            })()}
+                          </td>
                           <td style={{ padding:"10px 16px" }} onClick={e=>e.stopPropagation()}>
                             <div style={{ display:"flex", gap:5, alignItems:"center" }}>
                               {r.spotifyLink && (
@@ -1210,7 +1873,7 @@ export default function Dashboard() {
                       );
                     })}
                     {sorted.length === 0 && (
-                      <tr><td colSpan={10} style={{ padding:"28px 16px", textAlign:"center", color:C.dim, fontSize:12 }}>No releases match the current filters.</td></tr>
+                      <tr><td colSpan={11} style={{ padding:"28px 16px", textAlign:"center", color:C.dim, fontSize:12 }}>No releases match the current filters.</td></tr>
                     )}
                   </tbody>
                 </table>
@@ -1219,9 +1882,9 @@ export default function Dashboard() {
               {/* Slide-in detail panel */}
               {selectedRelease && (
                 <>
-                  <div onClick={()=>setSelectedRelease(null)} style={{ position:"fixed", inset:0, top:54, background:"rgba(7,8,15,0.6)", zIndex:100, backdropFilter:"blur(2px)" }} />
-                  <div style={{ position:"fixed", right:0, top:54, bottom:0, width:520, background:C.surface, borderLeft:`1px solid rgba(0,217,255,0.18)`, zIndex:101, display:"flex", flexDirection:"column", padding:24, animation:"slideIn 0.22s cubic-bezier(0.16,1,0.3,1)" }}>
-                    <ArtistPanel key={selectedRelease.id} r={selectedRelease} onClose={()=>setSelectedRelease(null)} />
+                  <div onClick={()=>setSelectedRelease(null)} style={{ position:"fixed", inset:0, background:"rgba(7,8,15,0.6)", zIndex:100, backdropFilter:"blur(2px)" }} />
+                  <div style={{ position:"fixed", right:0, top:0, bottom:0, width:520, background:C.surface, borderLeft:`1px solid rgba(0,217,255,0.18)`, zIndex:101, display:"flex", flexDirection:"column", padding:24, animation:"slideIn 0.22s cubic-bezier(0.16,1,0.3,1)" }}>
+                    <ArtistPanel key={selectedRelease.id} r={selectedRelease} onClose={()=>setSelectedRelease(null)} onViewProfile={()=>{ setProfileTarget(selectedRelease); setSelectedRelease(null); setTab("artist-profile"); }} />
                   </div>
                 </>
               )}
@@ -1306,6 +1969,13 @@ export default function Dashboard() {
 
           </div>
         )}
+
+        {/* ════════════════ ARTIST PROFILE ════════════════ */}
+        {tab==="artist-profile" && profileTarget && (
+          <ArtistProfilePage r={profileTarget} onBack={()=>{ setTab("releases"); setProfileTarget(null); }} />
+        )}
+
+      </div>
       </div>
     </div>
   );
