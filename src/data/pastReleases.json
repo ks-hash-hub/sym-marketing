@@ -1,0 +1,143 @@
+{
+  "Neon Pulse": [
+    { "upc":"824296101001", "release":"Voltage Drive",    "format":"Single", "date":"2024-11-14", "genre":"Electronic",
+      "drivers":["Social Media Campaign","Ad Campaign"],
+      "pickups":[
+        { "playlist":"Synthwave Spectrum",    "dsp":"Spotify",     "type":"1st Party", "cover":false, "dateSent":"2024-11-11" },
+        { "playlist":"Electronic Rising",     "dsp":"Spotify",     "type":"1st Party", "cover":false, "dateSent":"2024-11-09" },
+        { "playlist":"80s Electronic",        "dsp":"Apple Music", "type":"3rd Party", "cover":false, "dateSent":"2024-11-07" }
+      ]},
+    { "upc":"824296100882", "release":"Phantom Grid EP",  "format":"EP",     "date":"2024-06-20", "genre":"Electronic",
+      "drivers":["Touring","Ad Campaign"],
+      "pickups":[
+        { "playlist":"New Music Friday",      "dsp":"Spotify",     "type":"1st Party", "cover":true,  "dateSent":"2024-06-17" },
+        { "playlist":"Chill Electronic",      "dsp":"Spotify",     "type":"3rd Party", "cover":false, "dateSent":"2024-06-15" }
+      ]},
+    { "upc":"824296100211", "release":"Signal Drift",     "format":"Single", "date":"2023-09-05", "genre":"Electronic",
+      "drivers":["Social Media Campaign"],
+      "pickups":[
+        { "playlist":"Electronic Avenues",    "dsp":"Spotify",     "type":"1st Party", "cover":false, "dateSent":"2023-09-02" }
+      ]}
+  ],
+  "Luna Vega": [
+    { "upc":"824296201001", "release":"Fuego",            "format":"Single", "date":"2024-10-18", "genre":"Latin",
+      "drivers":["Radio Campaign","Social Media Campaign","Touring"],
+      "pickups":[
+        { "playlist":"Viva Latino",           "dsp":"Spotify",     "type":"1st Party", "cover":true,  "dateSent":"2024-10-15" },
+        { "playlist":"Hot Latin",             "dsp":"Spotify",     "type":"1st Party", "cover":false, "dateSent":"2024-10-14" },
+        { "playlist":"Latin Hits",            "dsp":"Amazon Music","type":"1st Party", "cover":false, "dateSent":"2024-10-12" },
+        { "playlist":"Perreo Mix",            "dsp":"Spotify",     "type":"3rd Party", "cover":false, "dateSent":"2024-10-10" }
+      ]},
+    { "upc":"824296200744", "release":"Noche en Miami",   "format":"EP",     "date":"2024-03-22", "genre":"Latin",
+      "drivers":["Radio Campaign","Touring"],
+      "pickups":[
+        { "playlist":"New Music Friday LATAM","dsp":"Spotify",     "type":"1st Party", "cover":false, "dateSent":"2024-03-19" },
+        { "playlist":"Reggaeton Fuego",       "dsp":"Spotify",     "type":"3rd Party", "cover":false, "dateSent":"2024-03-17" }
+      ]}
+  ],
+  "SABLE": [
+    { "upc":"824296601001", "release":"Chrome Butterfly", "format":"Single", "date":"2024-12-06", "genre":"Pop",
+      "drivers":["Social Media Campaign","Press Campaign","Ad Campaign"],
+      "pickups":[
+        { "playlist":"Pop Rising",            "dsp":"Spotify",     "type":"1st Party", "cover":true,  "dateSent":"2024-12-03" },
+        { "playlist":"New Pop UK",            "dsp":"Spotify",     "type":"1st Party", "cover":false, "dateSent":"2024-12-01" },
+        { "playlist":"Breaking Pop",          "dsp":"Apple Music", "type":"1st Party", "cover":false, "dateSent":"2024-11-29" },
+        { "playlist":"Pop All Day",           "dsp":"Apple Music", "type":"3rd Party", "cover":false, "dateSent":"2024-11-27" },
+        { "playlist":"New Music Friday",      "dsp":"Spotify",     "type":"1st Party", "cover":false, "dateSent":"2024-11-25" }
+      ]},
+    { "upc":"824296600512", "release":"Neon Skin",        "format":"EP",     "date":"2024-07-11", "genre":"Pop",
+      "drivers":["Ad Campaign","Social Media Campaign"],
+      "pickups":[
+        { "playlist":"Pop Bops",              "dsp":"Spotify",     "type":"1st Party", "cover":false, "dateSent":"2024-07-08" },
+        { "playlist":"Workout Anthems",       "dsp":"Spotify",     "type":"3rd Party", "cover":false, "dateSent":"2024-07-06" }
+      ]},
+    { "upc":"824296600101", "release":"Static Girl",      "format":"Single", "date":"2023-11-30", "genre":"Pop",
+      "drivers":["Press Campaign"],
+      "pickups":[
+        { "playlist":"New Music Friday",      "dsp":"Spotify",     "type":"1st Party", "cover":false, "dateSent":"2023-11-27" }
+      ]}
+  ],
+  "Mira Echeverría": [
+    { "upc":"824296182185", "release":"Raíces",           "format":"Album",  "date":"2024-09-13", "genre":"Latin",
+      "drivers":["Press Campaign","Touring","Social Media Campaign"],
+      "pickups":[
+        { "playlist":"Viva España",           "dsp":"Spotify",     "type":"1st Party", "cover":true,  "dateSent":"2024-09-10" },
+        { "playlist":"Flamenco Fusion",       "dsp":"Spotify",     "type":"1st Party", "cover":false, "dateSent":"2024-09-08" },
+        { "playlist":"World Music Picks",     "dsp":"Apple Music", "type":"1st Party", "cover":false, "dateSent":"2024-09-06" },
+        { "playlist":"Latin Pop Favorites",   "dsp":"Spotify",     "type":"3rd Party", "cover":false, "dateSent":"2024-09-04" }
+      ]},
+    { "upc":"824296181901", "release":"Alma de Noche",    "format":"Single", "date":"2024-02-14", "genre":"Latin",
+      "drivers":["Social Media Campaign"],
+      "pickups":[
+        { "playlist":"New Music Friday LATAM","dsp":"Spotify",     "type":"1st Party", "cover":false, "dateSent":"2024-02-11" },
+        { "playlist":"Romantico Latino",      "dsp":"Apple Music", "type":"3rd Party", "cover":false, "dateSent":"2024-02-09" }
+      ]},
+    { "upc":"824296181544", "release":"Duende",           "format":"EP",     "date":"2023-05-19", "genre":"Latin",
+      "drivers":["Press Campaign","Touring"],
+      "pickups":[
+        { "playlist":"Flamenco Puro",         "dsp":"Spotify",     "type":"1st Party", "cover":false, "dateSent":"2023-05-16" }
+      ]}
+  ],
+  "Glass Meridian": [
+    { "upc":"824296701001", "release":"Mirror Pool",      "format":"EP",     "date":"2024-11-01", "genre":"Electronic",
+      "drivers":["Ad Campaign","Social Media Campaign","Sync Placement"],
+      "pickups":[
+        { "playlist":"Mint",                  "dsp":"Spotify",     "type":"1st Party", "cover":true,  "dateSent":"2024-10-29" },
+        { "playlist":"Electronic Rising",     "dsp":"Spotify",     "type":"1st Party", "cover":false, "dateSent":"2024-10-27" },
+        { "playlist":"Dance Rising",          "dsp":"Spotify",     "type":"1st Party", "cover":false, "dateSent":"2024-10-25" },
+        { "playlist":"House Music All Night", "dsp":"Apple Music", "type":"1st Party", "cover":false, "dateSent":"2024-10-23" },
+        { "playlist":"Ibiza 2024",            "dsp":"Spotify",     "type":"3rd Party", "cover":false, "dateSent":"2024-10-21" }
+      ]},
+    { "upc":"824296700612", "release":"Fracture",         "format":"Single", "date":"2024-05-17", "genre":"Electronic",
+      "drivers":["Touring","Ad Campaign"],
+      "pickups":[
+        { "playlist":"New Music Friday",      "dsp":"Spotify",     "type":"1st Party", "cover":false, "dateSent":"2024-05-14" },
+        { "playlist":"Deep House Collective", "dsp":"Spotify",     "type":"3rd Party", "cover":false, "dateSent":"2024-05-12" }
+      ]}
+  ],
+  "Halo James": [
+    { "upc":"824296901001", "release":"Cold Chain",       "format":"Single", "date":"2024-10-25", "genre":"Hip-Hop",
+      "drivers":["Social Media Campaign","Ad Campaign"],
+      "pickups":[
+        { "playlist":"Rap Caviar",            "dsp":"Spotify",     "type":"1st Party", "cover":false, "dateSent":"2024-10-22" },
+        { "playlist":"Most Necessary",        "dsp":"Spotify",     "type":"1st Party", "cover":false, "dateSent":"2024-10-20" },
+        { "playlist":"Trap Nation",           "dsp":"YouTube Music","type":"3rd Party","cover":false, "dateSent":"2024-10-18" }
+      ]},
+    { "upc":"824296900701", "release":"Signal Loss EP",   "format":"EP",     "date":"2024-04-12", "genre":"Hip-Hop",
+      "drivers":["Radio Campaign","Social Media Campaign"],
+      "pickups":[
+        { "playlist":"New Music Friday",      "dsp":"Spotify",     "type":"1st Party", "cover":true,  "dateSent":"2024-04-09" },
+        { "playlist":"Hip Hop Central",       "dsp":"Amazon Music","type":"1st Party", "cover":false, "dateSent":"2024-04-07" },
+        { "playlist":"Street Rap 2024",       "dsp":"Spotify",     "type":"3rd Party", "cover":false, "dateSent":"2024-04-05" }
+      ]}
+  ],
+  "Cassidy Blue": [
+    { "upc":"824296401001", "release":"Velvet Hours",     "format":"Single", "date":"2024-08-09", "genre":"R&B",
+      "drivers":["Press Campaign","Social Media Campaign"],
+      "pickups":[
+        { "playlist":"R&B X",                 "dsp":"Spotify",     "type":"1st Party", "cover":true,  "dateSent":"2024-08-06" },
+        { "playlist":"Soul Storm",            "dsp":"Spotify",     "type":"1st Party", "cover":false, "dateSent":"2024-08-04" },
+        { "playlist":"Late Night R&B",        "dsp":"Apple Music", "type":"3rd Party", "cover":false, "dateSent":"2024-08-02" }
+      ]},
+    { "upc":"824296400312", "release":"Indigo Fade",      "format":"Single", "date":"2023-12-01", "genre":"R&B",
+      "drivers":["Social Media Campaign"],
+      "pickups":[
+        { "playlist":"R&B Radar",             "dsp":"Spotify",     "type":"1st Party", "cover":false, "dateSent":"2023-11-28" }
+      ]}
+  ],
+  "Viveka": [
+    { "upc":"824296501001", "release":"Widow's Peak",     "format":"EP",     "date":"2024-09-27", "genre":"Pop",
+      "drivers":["Press Campaign","Ad Campaign","Social Media Campaign"],
+      "pickups":[
+        { "playlist":"TIDAL Rising",          "dsp":"Tidal",       "type":"1st Party", "cover":true,  "dateSent":"2024-09-24" },
+        { "playlist":"Dark Aesthetics",       "dsp":"Spotify",     "type":"3rd Party", "cover":false, "dateSent":"2024-09-22" },
+        { "playlist":"Pop All Day",           "dsp":"Apple Music", "type":"1st Party", "cover":false, "dateSent":"2024-09-20" },
+        { "playlist":"Melancholic Hits",      "dsp":"Spotify",     "type":"3rd Party", "cover":false, "dateSent":"2024-09-18" }
+      ]},
+    { "upc":"824296500601", "release":"Pale Blue Signal", "format":"Single", "date":"2024-02-23", "genre":"Pop",
+      "drivers":["Press Campaign"],
+      "pickups":[
+        { "playlist":"Breaking Pop",          "dsp":"Apple Music", "type":"1st Party", "cover":false, "dateSent":"2024-02-20" }
+      ]}
+  ]
+}

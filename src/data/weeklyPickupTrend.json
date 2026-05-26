@@ -1,0 +1,16 @@
+[
+  { "week":"W1 Feb", "pickups":8,  "firstParty":5, "thirdParty":3 },
+  { "week":"W2 Feb", "pickups":11, "firstParty":7, "thirdParty":4 },
+  { "week":"W3 Feb", "pickups":9,  "firstParty":6, "thirdParty":3 },
+  { "week":"W4 Feb", "pickups":14, "firstParty":9, "thirdParty":5 },
+  { "week":"W1 Mar", "pickups":12, "firstParty":8, "thirdParty":4 },
+  { "week":"W2 Mar", "pickups":17, "firstParty":10,"thirdParty":7 },
+  { "week":"W3 Mar", "pickups":15, "firstParty":9, "thirdParty":6 },
+  { "week":"W4 Mar", "pickups":21, "firstParty":13,"thirdParty":8 },
+  { "week":"W1 Apr", "pickups":18, "firstParty":11,"thirdParty":7 },
+  { "week":"W2 Apr", "pickups":24, "firstParty":15,"thirdParty":9 },
+  { "week":"W3 Apr", "pickups":20, "firstParty":12,"thirdParty":8 },
+  { "week":"W4 Apr", "pickups":28, "firstParty":18,"thirdParty":10},
+  { "week":"W1 May", "pickups":25, "firstParty":16,"thirdParty":9 },
+  { "week":"W2 May", "pickups":30, "firstParty":19,"thirdParty":11}
+]
