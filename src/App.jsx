@@ -212,7 +212,8 @@ export default function App() {
                     {ranked.map(({ r, sc }, i) => {
                       const col = scoreColor(sc.total);
                       const days = daysUntil(r.date);
-                      const d = DRIVER_DATA[r.artist] || {};
+                      const hasDriverEntry = !!(DRIVER_DATA[r.artist] || DRIVER_DATA[r.upc]);
+                      const d = DRIVER_DATA[r.artist] || DRIVER_DATA[r.upc] || {};
                       return (
                         <div key={r.id} onClick={() => { setProfileTarget(r); setTab("artist-profile"); }}
                           style={{ display:"flex", alignItems:"center", gap:10, padding:"7px 8px", borderRadius:8,
@@ -243,7 +244,9 @@ export default function App() {
                                 {days===0?"TODAY":days===1?"TOMORROW":`${days}d`}
                               </div>
                             </div>
-                            {!d.story && <span style={{ fontSize:8, color:C.gold }}>⚠ no story</span>}
+                            {!hasDriverEntry
+                              ? <span style={{ fontSize:8, color:"#FF6B6B", fontWeight:700 }}>⚠ NO SUBMISSION</span>
+                              : !d.story && <span style={{ fontSize:8, color:C.gold }}>⚠ no story</span>}
                           </div>
                         </div>
                       );
@@ -289,7 +292,8 @@ export default function App() {
                                 const sc = symphonicScore(r);
                                 const col = scoreColor(sc.total);
                                 const days = daysUntil(r.date);
-                                const d = DRIVER_DATA[r.artist] || {};
+                                const hasDriverEntry2 = !!(DRIVER_DATA[r.artist] || DRIVER_DATA[r.upc]);
+                                const d = DRIVER_DATA[r.artist] || DRIVER_DATA[r.upc] || {};
                                 const dotColor = r.priority==="Priority 1"?C.pink:r.priority==="Priority 2"?C.gold:C.cyan;
                                 return (
                                   <div key={r.id} onClick={() => { setProfileTarget(r); setTab("artist-profile"); }}
@@ -309,7 +313,9 @@ export default function App() {
                                       <div style={{ fontSize:10, color: days<=3?C.pink:C.muted, fontFamily:"'DM Mono',monospace" }}>
                                         {days===0?"TODAY":days===1?"TMR":`${days}d`}
                                       </div>
-                                      {!d.story && <span style={{ fontSize:10, color:C.gold }}>⚠</span>}
+                                      {!hasDriverEntry2
+                                        ? <span style={{ fontSize:9, color:"#FF6B6B", fontWeight:700 }}>⚠</span>
+                                        : !d.story && <span style={{ fontSize:10, color:C.gold }}>⚠</span>}
                                     </div>
                                   </div>
                                 );
@@ -434,7 +440,8 @@ export default function App() {
                     {sorted.map((r,i) => {
                       const days = daysUntil(r.date);
                       const pickupCount = PICKUPS.filter(p => p.artist === r.artist).length;
-                      const hasStory = !!(DRIVER_DATA[r.artist]||{}).story;
+                      const hasDriverEntry3 = !!(DRIVER_DATA[r.artist] || DRIVER_DATA[r.upc]);
+                      const hasStory = !!(DRIVER_DATA[r.artist]||DRIVER_DATA[r.upc]||{}).story;
                       return (
                         <tr key={r.id} className="release-row" onClick={()=>setSelectedRelease(r)}
                           style={{ borderBottom:`1px solid rgba(255,255,255,0.03)`, background: i%2 ? "rgba(255,255,255,0.012)" : "transparent" }}>
@@ -444,7 +451,9 @@ export default function App() {
                           </td>
                           <td style={{ padding:"10px 16px", maxWidth:160, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>
                             <span style={{ fontSize:11, color:C.muted }}>{r.release}</span>
-                            {!hasStory && <span style={{ marginLeft:5, fontSize:9, color:C.gold, fontWeight:700 }}>⚠</span>}
+                            {!hasDriverEntry3
+                              ? <span style={{ marginLeft:5, fontSize:9, color:"#FF6B6B", fontWeight:700 }}>⚠</span>
+                              : !hasStory && <span style={{ marginLeft:5, fontSize:9, color:C.gold, fontWeight:700 }}>⚠</span>}
                           </td>
                           <td style={{ padding:"10px 16px" }}><Pill label={r.genre} color={GENRE_COLORS[r.genre]||C.cyan} /></td>
                           <td style={{ padding:"10px 16px", fontSize:12, color:C.gold, fontWeight:600, fontFamily:"'DM Mono',monospace", whiteSpace:"nowrap" }}>{fmtDate(r.date)}</td>

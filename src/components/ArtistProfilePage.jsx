@@ -21,13 +21,30 @@ export default function ArtistProfilePage({ release, onBack }) {
   const [releasesOpen,     setReleasesOpen]     = useState(false);
   useEffect(() => { window.scrollTo(0, 0); }, [release.id]);
 
-  const d              = DRIVER_DATA[release.artist] || {};
+  const hasDriverEntry = !!(DRIVER_DATA[release.artist] || DRIVER_DATA[release.upc]);
+  const d              = DRIVER_DATA[release.artist] || DRIVER_DATA[release.upc] || {};
   const artistPickups  = PICKUPS.filter(p => p.artist === release.artist)
                                 .sort((a,b) => new Date(b.dateSent)-new Date(a.dateSent));
   const pastReleases   = PAST_RELEASES[release.artist] || [];
   const organicEd      = ORGANIC_EDITORIAL[release.artist] || [];
   const ugcPlaylists   = UGC_PLAYLISTS[release.artist] || [];
   const similarPickups = SIMILAR_ARTIST_PICKUPS[release.artist] || [];
+
+  // ── Feature #6: Performance history ────────────────────────────────────────
+  const sortedPast     = [...pastReleases].sort((a,b) => new Date(b.date)-new Date(a.date));
+  const maxPickups     = Math.max(1, artistPickups.length, ...sortedPast.map(pr => pr.pickups?.length||0));
+  const lastPickups    = sortedPast[0]?.pickups?.length ?? null;
+  const pickupDelta    = lastPickups !== null ? artistPickups.length - lastPickups : null;
+
+  // ── Feature #7: Playlist targets from similar artist pickups ───────────────
+  const playlistTargets = Object.values(
+    similarPickups.reduce((acc, p) => {
+      const key = p.playlist;
+      if (!acc[key]) acc[key] = { playlist:p.playlist, dsp:p.dsp, followers:p.followers, artists:[] };
+      if (!acc[key].artists.includes(p.artist)) acc[key].artists.push(p.artist);
+      return acc;
+    }, {})
+  ).sort((a,b) => b.artists.length - a.artists.length).slice(0, 12);
   const sc             = symphonicScore(release);
   const scCol          = scoreColor(sc.total);
   const tfDays         = HISTORY_TIMEFRAMES.find(t=>t.label===historyTimeframe)?.days ?? null;
@@ -252,10 +269,86 @@ export default function ArtistProfilePage({ release, onBack }) {
               </div>
             ))}
           </div>
+
+          {/* ── Feature #6: Performance History ── */}
+          {(sortedPast.length > 0 || artistPickups.length > 0) && (
+            <div style={{ marginTop:24, paddingTop:20, borderTop:`1px solid ${C.border}` }}>
+              <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:12 }}>
+                <div style={{ fontSize:9, fontWeight:700, letterSpacing:"0.14em", textTransform:"uppercase", color:C.muted, fontFamily:"'DM Mono',monospace" }}>Pickup History</div>
+                {pickupDelta !== null && (
+                  <div style={{
+                    fontSize:10, fontWeight:700, fontFamily:"'DM Mono',monospace",
+                    color: pickupDelta > 0 ? C.green : pickupDelta < 0 ? "#FF6B6B" : C.muted,
+                    background: pickupDelta > 0 ? "rgba(57,217,138,0.1)" : pickupDelta < 0 ? "rgba(255,107,107,0.1)" : "rgba(255,255,255,0.05)",
+                    border: `1px solid ${pickupDelta > 0 ? "rgba(57,217,138,0.3)" : pickupDelta < 0 ? "rgba(255,107,107,0.3)" : "rgba(255,255,255,0.1)"}`,
+                    borderRadius:99, padding:"2px 10px",
+                  }}>
+                    {pickupDelta > 0 ? `+${pickupDelta}` : pickupDelta} vs last
+                  </div>
+                )}
+              </div>
+
+              {/* Current release row */}
+              <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:6 }}>
+                <div style={{ width:8, height:8, borderRadius:"50%", background:C.cyan, flexShrink:0 }} />
+                <div style={{ flex:1, minWidth:0 }}>
+                  <div style={{ fontSize:10, fontWeight:700, color:"rgba(255,255,255,0.9)", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>
+                    {release.release} <span style={{ fontSize:8, color:C.cyan, fontWeight:600, marginLeft:4 }}>CURRENT</span>
+                  </div>
+                </div>
+                <div style={{ width:80, height:6, borderRadius:99, background:"rgba(255,255,255,0.06)", overflow:"hidden", flexShrink:0 }}>
+                  <div style={{ width:`${Math.round((artistPickups.length/maxPickups)*100)}%`, height:"100%", borderRadius:99, background:C.cyan, minWidth: artistPickups.length>0?3:0 }} />
+                </div>
+                <div style={{ fontSize:10, fontFamily:"'DM Mono',monospace", color:C.cyan, fontWeight:700, width:18, textAlign:"right", flexShrink:0 }}>{artistPickups.length}</div>
+              </div>
+
+              {/* Past release rows */}
+              {sortedPast.map((pr, i) => {
+                const pCount = pr.pickups?.length || 0;
+                const barW = Math.round((pCount/maxPickups)*100);
+                const age = Math.floor((T.getTime()-new Date(pr.date).getTime())/86400000);
+                const ageStr = age < 365 ? `${Math.floor(age/30)}mo` : `${Math.floor(age/365)}yr`;
+                return (
+                  <div key={i} style={{ display:"flex", alignItems:"center", gap:8, marginBottom:5 }}>
+                    <div style={{ width:8, height:8, borderRadius:"50%", background:"rgba(255,255,255,0.15)", flexShrink:0 }} />
+                    <div style={{ flex:1, minWidth:0 }}>
+                      <div style={{ fontSize:10, color:C.muted, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>
+                        {pr.release} <span style={{ fontSize:8, color:C.dim }}>· {ageStr} ago</span>
+                      </div>
+                    </div>
+                    <div style={{ width:80, height:6, borderRadius:99, background:"rgba(255,255,255,0.06)", overflow:"hidden", flexShrink:0 }}>
+                      <div style={{ width:`${barW}%`, height:"100%", borderRadius:99, background:"rgba(255,255,255,0.25)", minWidth:pCount>0?3:0 }} />
+                    </div>
+                    <div style={{ fontSize:10, fontFamily:"'DM Mono',monospace", color:C.dim, width:18, textAlign:"right", flexShrink:0 }}>{pCount}</div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
 
         {/* ── RIGHT — Detail cards ── */}
         <div style={{ padding:"28px 32px 32px", display:"flex", flexDirection:"column", gap:16 }}>
+
+          {/* ── Feature #2: No driver submission warning ── */}
+          {!hasDriverEntry && (
+            <div style={{ background:"rgba(255,107,107,0.07)", border:`1px solid rgba(255,107,107,0.35)`, borderRadius:14, padding:18 }}>
+              <div style={{ display:"flex", alignItems:"flex-start", gap:12 }}>
+                <div style={{ fontSize:22, lineHeight:1, flexShrink:0, marginTop:1 }}>⚠</div>
+                <div>
+                  <div style={{ fontSize:12, fontWeight:700, color:"#FF6B6B", marginBottom:6, letterSpacing:"0.04em" }}>No Driver Submission on File</div>
+                  <div style={{ fontSize:11, color:"rgba(255,255,255,0.6)", lineHeight:1.6 }}>
+                    No pitching context has been submitted for this release. Story, similar artists, mood tags, and marketing drivers are all missing — this will significantly limit pitch effectiveness.
+                  </div>
+                  <div style={{ marginTop:10, display:"flex", gap:6, flexWrap:"wrap" }}>
+                    {["Story","Similar Artists","Mood Tags","Song Styles","Marketing Drivers"].map(item => (
+                      <span key={item} style={{ fontSize:9, fontWeight:700, color:"rgba(255,107,107,0.7)", background:"rgba(255,107,107,0.08)", border:"1px solid rgba(255,107,107,0.2)", borderRadius:99, padding:"2px 8px", fontFamily:"'DM Mono',monospace", textTransform:"uppercase", letterSpacing:"0.06em" }}>✗ {item}</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Story */}
           {d.story && (
@@ -361,6 +454,40 @@ export default function ArtistProfilePage({ release, onBack }) {
                     </div>
                   </div>
                 )}
+              </div>
+            </div>
+          )}
+
+          {/* ── Feature #7: Playlist Targets ── */}
+          {playlistTargets.length > 0 && (
+            <div style={{ background:C.surface, border:`1px solid ${C.border}`, borderRadius:14, padding:20 }}>
+              <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:6 }}>
+                <SectionLabel>Playlist Targets</SectionLabel>
+                <span style={{ fontSize:9, fontFamily:"'DM Mono',monospace", color:C.gold, background:"rgba(255,184,0,0.08)", border:`1px solid rgba(255,184,0,0.25)`, borderRadius:99, padding:"2px 10px" }}>{playlistTargets.length} playlists</span>
+              </div>
+              <p style={{ fontSize:10, color:C.dim, lineHeight:1.55, margin:"0 0 14px 0", fontStyle:"italic" }}>
+                Based on similar artists, these playlists have shown interest in this sound.
+              </p>
+              <div style={{ display:"flex", flexDirection:"column", gap:0 }}>
+                {playlistTargets.map((pt, i) => (
+                  <div key={i} style={{ display:"flex", alignItems:"center", gap:10, padding:"7px 0", borderBottom: i < playlistTargets.length-1 ? `1px solid rgba(255,255,255,0.03)` : "none" }}>
+                    {/* rank badge */}
+                    <div style={{ width:18, height:18, borderRadius:4, background: pt.artists.length >= 3 ? "rgba(255,184,0,0.15)" : pt.artists.length === 2 ? "rgba(0,217,255,0.1)" : "rgba(255,255,255,0.05)", border:`1px solid ${pt.artists.length >= 3 ? "rgba(255,184,0,0.35)" : pt.artists.length === 2 ? "rgba(0,217,255,0.25)" : "rgba(255,255,255,0.1)"}`, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
+                      <span style={{ fontFamily:"'DM Mono',monospace", fontSize:9, fontWeight:700, color: pt.artists.length >= 3 ? C.gold : pt.artists.length === 2 ? C.cyan : C.dim }}>{pt.artists.length}</span>
+                    </div>
+                    <div style={{ flex:1, minWidth:0 }}>
+                      <div style={{ fontSize:12, fontWeight:600, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{pt.playlist}</div>
+                      <div style={{ fontSize:10, color:C.muted, marginTop:1, display:"flex", gap:5, alignItems:"center" }}>
+                        <span style={{ color:DSP_COLORS[pt.dsp]||C.muted }}>{pt.dsp}</span>
+                        {pt.followers && <span>· {fmtN(pt.followers)} followers</span>}
+                        <span style={{ color:C.dim }}>· via {pt.artists.join(", ")}</span>
+                      </div>
+                    </div>
+                    <div style={{ fontSize:9, color:pt.artists.length>=3?C.gold:pt.artists.length===2?C.cyan:C.dim, fontFamily:"'DM Mono',monospace", fontWeight:700, flexShrink:0, whiteSpace:"nowrap" }}>
+                      {pt.artists.length} {pt.artists.length===1?"match":"matches"}
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           )}
