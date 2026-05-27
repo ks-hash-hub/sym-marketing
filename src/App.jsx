@@ -151,193 +151,180 @@ export default function App() {
       <div style={{ padding:"26px 32px 64px", animation:"fadeUp 0.25s ease" }} key={tab}>
 
         {/* ════════════════ COMMAND CENTER ════════════════ */}
-        {tab==="command" && (
-          <div style={{ display:"flex", flexDirection:"column", gap:22 }}>
+        {tab==="command" && (() => {
+          const ranked = [...RELEASES]
+            .filter(r => daysUntil(r.date) >= 0 && daysUntil(r.date) <= 30)
+            .map(r => ({ r, sc: symphonicScore(r) }))
+            .sort((a, b) => b.sc.total - a.sc.total);
 
-            <div style={{ display:"grid", gridTemplateColumns:"repeat(5,1fr)", gap:12 }}>
-              <KPI label="This Week" value={thisWeek.length} sub="releases dropping" color={C.gold} />
-              <KPI label="Priority 1" value={p1Releases.length} sub="top tier releases" color={C.pink} />
-              <KPI label="EI Flags" value={RELEASES.filter(r=>r.ei).length} sub="editorial inclusion" color={C.purple} />
-              <KPI label="Total Pickups" value={PICKUPS.length} sub="all time" color={C.green} />
-              <KPI label="Cover Slots" value={PICKUPS.filter(p=>p.cover).length} sub="this month" color={C.orange} />
-            </div>
+          const leads = [...new Set(thisWeek.map(r => r.lead))].sort();
+          const byLead = leads.map(lead => ({
+            lead,
+            releases: thisWeek
+              .filter(r => r.lead === lead)
+              .sort((a, b) => {
+                const po = { "Priority 1":0, "Priority 2":1, "Priority 3":2 };
+                return (po[a.priority]||9) - (po[b.priority]||9) || daysUntil(a.date) - daysUntil(b.date);
+              }),
+          }));
 
-            <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(300px,1fr))", gap:10 }}>
-              {insights.map((ins, i) => {
-                const style = insightColors[ins.type];
-                return (
-                  <div key={i} style={{ background:style.bg, border:`1px solid ${style.border}`, borderRadius:12, padding:"14px 16px", display:"flex", gap:12, alignItems:"flex-start" }}>
-                    <div style={{ fontSize:18, lineHeight:1, marginTop:1 }}>{ins.icon}</div>
-                    <div style={{ flex:1 }}>
-                      <div style={{ fontSize:12, fontWeight:700, color:"rgba(255,255,255,0.9)", marginBottom:3 }}>{ins.title}</div>
-                      <div style={{ fontSize:11, color:C.muted, lineHeight:1.5 }}>{ins.body}</div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+          return (
+            <div style={{ display:"flex", flexDirection:"column", gap:22 }}>
 
-            {/* Top Pitches leaderboard */}
-            {(() => {
-              const ranked = [...RELEASES]
-                .filter(r => daysUntil(r.date) >= 0 && daysUntil(r.date) <= 30)
-                .map(r => ({ r, sc: symphonicScore(r) }))
-                .sort((a, b) => b.sc.total - a.sc.total)
-                .slice(0, 7);
-              return (
+              {/* KPI bar */}
+              <div style={{ display:"grid", gridTemplateColumns:"repeat(5,1fr)", gap:12 }}>
+                <KPI label="This Week"    value={thisWeek.length}                       sub="releases dropping"    color={C.gold} />
+                <KPI label="Priority 1"  value={p1Releases.length}                     sub="top tier releases"    color={C.pink} />
+                <KPI label="EI Flags"    value={RELEASES.filter(r=>r.ei).length}        sub="editorial inclusion"  color={C.purple} />
+                <KPI label="Total Pickups" value={PICKUPS.length}                       sub="all time"             color={C.green} />
+                <KPI label="Cover Slots" value={PICKUPS.filter(p=>p.cover).length}     sub="this month"           color={C.orange} />
+              </div>
+
+              {/* 2-col: Priority Releases + This Week by Lead */}
+              <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:16, alignItems:"start" }}>
+
+                {/* Priority Releases — Next 30 Days */}
                 <Card>
                   <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:16 }}>
-                    <SectionLabel>Top Pitches — Next 30 Days</SectionLabel>
-                    <span style={{ fontSize:9, fontFamily:"'DM Mono',monospace", color:C.cyan, background:"rgba(0,217,255,0.07)", border:`1px solid rgba(0,217,255,0.2)`, borderRadius:99, padding:"2px 10px", letterSpacing:"0.1em" }}>BY SYMPHONIC SCORE</span>
+                    <SectionLabel>Priority Releases — Next 30 Days</SectionLabel>
+                    <span style={{ fontSize:9, fontFamily:"'DM Mono',monospace", color:C.cyan, background:"rgba(0,217,255,0.07)", border:`1px solid rgba(0,217,255,0.2)`, borderRadius:99, padding:"2px 10px", letterSpacing:"0.1em" }}>BY SCORE</span>
                   </div>
-                  <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
+                  <div style={{ display:"flex", flexDirection:"column", gap:6 }}>
                     {ranked.map(({ r, sc }, i) => {
                       const col = scoreColor(sc.total);
+                      const days = daysUntil(r.date);
+                      const d = DRIVER_DATA[r.artist] || {};
                       return (
-                        <div key={r.id} style={{ display:"flex", alignItems:"center", gap:12, padding:"8px 0", borderBottom: i < ranked.length-1 ? `1px solid ${C.border}` : "none" }}>
-                          <div style={{ width:22, textAlign:"center", fontFamily:"'Bebas Neue',sans-serif", fontSize:16, color: i===0?C.gold:i===1?"rgba(192,192,192,0.9)":i===2?"rgba(180,92,255,0.8)":C.dim, flexShrink:0 }}>{i+1}</div>
-                          <div style={{ flexShrink:0, width:42, height:42, borderRadius:10, background:`${col}14`, border:`1px solid ${col}44`, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center" }}>
-                            <div style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:20, color:col, lineHeight:1, letterSpacing:"0.03em" }}>{sc.total}</div>
+                        <div key={r.id} onClick={() => { setProfileTarget(r); setTab("artist-profile"); }}
+                          style={{ display:"flex", alignItems:"center", gap:10, padding:"7px 8px", borderRadius:8,
+                            borderBottom: i < ranked.length-1 ? `1px solid ${C.border}` : "none",
+                            cursor:"pointer", transition:"background 0.15s" }}
+                          onMouseEnter={e=>e.currentTarget.style.background="rgba(0,217,255,0.04)"}
+                          onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
+                          <div style={{ width:20, textAlign:"center", fontFamily:"'Bebas Neue',sans-serif", fontSize:14,
+                            color: i===0?C.gold:i===1?"rgba(192,192,192,0.8)":i===2?"rgba(180,92,255,0.7)":C.dim, flexShrink:0 }}>{i+1}</div>
+                          <div style={{ flexShrink:0, width:36, height:36, borderRadius:8, background:`${col}14`,
+                            border:`1px solid ${col}44`, display:"flex", alignItems:"center", justifyContent:"center" }}>
+                            <div style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:18, color:col, lineHeight:1 }}>{sc.total}</div>
                           </div>
                           <div style={{ flex:1, minWidth:0 }}>
-                            <div style={{ fontWeight:700, fontSize:13, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{r.artist}</div>
-                            <div style={{ fontSize:10, color:C.dim, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{r.release} · {fmtDate(r.date)}</div>
-                          </div>
-                          <div style={{ flexShrink:0, display:"flex", flexDirection:"column", gap:4, alignItems:"flex-end" }}>
-                            <div style={{ width:100, height:4, borderRadius:99, background:"rgba(255,255,255,0.06)", overflow:"hidden" }}>
-                              <div style={{ width:`${sc.total}%`, height:"100%", borderRadius:99, background:col }} />
+                            <div style={{ fontWeight:700, fontSize:12, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{r.artist}</div>
+                            <div style={{ fontSize:10, color:C.dim, display:"flex", gap:6, alignItems:"center", marginTop:1 }}>
+                              <span style={{ whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis", maxWidth:120 }}>{r.release}</span>
+                              {r.ei && <span style={{ color:C.green, fontWeight:700, fontSize:9 }}>EI</span>}
+                              {r.override?.length > 0 && <span style={{ color:C.purple, fontWeight:700, fontSize:9 }}>OVR</span>}
                             </div>
+                          </div>
+                          <div style={{ flexShrink:0, display:"flex", flexDirection:"column", gap:3, alignItems:"flex-end" }}>
                             <div style={{ display:"flex", gap:3 }}>
-                              {[
-                                { v: sc.breakdown.pickups,  label:"PU",  col: C.green },
-                                { v: sc.breakdown.audience, label:"ML",  col: C.cyan },
-                                { v: sc.breakdown.social,   label:"SOC", col:"#E1306C" },
-                                { v: sc.breakdown.drive,    label:"DRV", col: C.orange },
-                              ].map(b => (
-                                <div key={b.label} style={{ background:`${b.col}15`, border:`1px solid ${b.col}30`, borderRadius:4, padding:"1px 5px", display:"flex", gap:3, alignItems:"center" }}>
-                                  <span style={{ fontSize:8, color:`${b.col}cc`, fontFamily:"'DM Mono',monospace", letterSpacing:"0.06em" }}>{b.label}</span>
-                                  <span style={{ fontSize:9, fontWeight:800, color:b.col, fontFamily:"'DM Mono',monospace" }}>{b.v}</span>
-                                </div>
-                              ))}
+                              <div style={{ background:`${PRIORITY_COLORS[r.priority]||C.cyan}18`, border:`1px solid ${PRIORITY_COLORS[r.priority]||C.cyan}40`, borderRadius:4, padding:"1px 6px", fontSize:9, fontWeight:700, color:PRIORITY_COLORS[r.priority]||C.cyan, fontFamily:"'DM Mono',monospace" }}>
+                                {r.priority.replace("Priority ","P")}
+                              </div>
+                              <div style={{ background:"rgba(255,255,255,0.04)", border:"1px solid rgba(255,255,255,0.08)", borderRadius:4, padding:"1px 6px", fontSize:9, color:C.muted, fontFamily:"'DM Mono',monospace" }}>
+                                {days===0?"TODAY":days===1?"TOMORROW":`${days}d`}
+                              </div>
                             </div>
-                          </div>
-                          <div style={{ flexShrink:0 }}>
-                            <Pill label={r.priority.replace("Priority ","")} color={PRIORITY_COLORS[r.priority]||C.cyan} />
+                            {!d.story && <span style={{ fontSize:8, color:C.gold }}>⚠ no story</span>}
                           </div>
                         </div>
                       );
                     })}
                   </div>
                 </Card>
-              );
-            })()}
 
-            {/* Release volume by week */}
-            <Card>
-              <SectionLabel>Upcoming Release Volume by Week</SectionLabel>
-              <ResponsiveContainer width="100%" height={200}>
-                <BarChart data={releaseTimelineData} barSize={28}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-                  <XAxis dataKey="week" tick={{ fill:C.muted, fontSize:11 }} axisLine={false} tickLine={false} />
-                  <YAxis tick={{ fill:C.muted, fontSize:11 }} axisLine={false} tickLine={false} />
-                  <Tooltip contentStyle={TooltipStyle} cursor={{ fill:"rgba(255,255,255,0.03)" }} />
-                  <Legend wrapperStyle={{ fontSize:11, paddingTop:8 }} />
-                  <Bar dataKey="p1" name="Priority 1" stackId="a" fill={C.pink} radius={[0,0,0,0]} />
-                  <Bar dataKey="p2" name="Priority 2" stackId="a" fill={C.gold} />
-                  <Bar dataKey="p3" name="Priority 3" stackId="a" fill={C.cyan} radius={[4,4,0,0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </Card>
-
-            <Card>
-              <SectionLabel>Pickup Trend — Last 14 Weeks</SectionLabel>
-              <ResponsiveContainer width="100%" height={180}>
-                <AreaChart data={WEEKLY_PICKUP_TREND}>
-                  <defs>
-                    <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%"  stopColor={C.cyan}  stopOpacity={0.25} />
-                      <stop offset="95%" stopColor={C.cyan}  stopOpacity={0} />
-                    </linearGradient>
-                    <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%"  stopColor={C.green} stopOpacity={0.2} />
-                      <stop offset="95%" stopColor={C.green} stopOpacity={0} />
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-                  <XAxis dataKey="week" tick={{ fill:C.muted, fontSize:10 }} axisLine={false} tickLine={false} interval={1} />
-                  <YAxis tick={{ fill:C.muted, fontSize:10 }} axisLine={false} tickLine={false} />
-                  <Tooltip contentStyle={TooltipStyle} />
-                  <Area type="monotone" dataKey="pickups"     name="Total"       stroke={C.cyan}  fill="url(#g1)" strokeWidth={2} />
-                  <Area type="monotone" dataKey="firstParty"  name="1st Party"   stroke={C.green} fill="url(#g2)" strokeWidth={2} />
-                </AreaChart>
-              </ResponsiveContainer>
-            </Card>
-
-            {/* Priority 1 — this week cards */}
-            <div>
-              <SectionLabel>Priority 1 — Releasing This Week</SectionLabel>
-              <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(320px,1fr))", gap:14 }}>
-                {thisWeek.filter(r=>r.priority==="Priority 1").map(r => {
-                  const days = daysUntil(r.date);
-                  const allTimePickups = PICKUPS.filter(p => p.artist === r.artist);
-                  const hasHistory = allTimePickups.length > 0;
-                  const lastPickup = hasHistory ? [...allTimePickups].sort((a,b) => new Date(b.dateSent)-new Date(a.dateSent))[0] : null;
-                  const d = DRIVER_DATA[r.artist] || {};
-                  const hasStory = !!d.story;
-                  return (
-                    <div key={r.id} onClick={()=>setSelectedRelease(r)} style={{
-                      background: C.surface, border:`1px solid ${C.border}`, borderRadius:14,
-                      padding:"18px 20px", cursor:"pointer", transition:"border-color 0.18s",
-                    }}>
-                      <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:12 }}>
-                        <div>
-                          <div style={{ fontWeight:800, fontSize:15, marginBottom:3 }}>{r.artist}</div>
-                          <div style={{ fontSize:12, color:C.muted }}>{r.release}</div>
-                        </div>
-                        <div style={{ fontSize:11, fontWeight:700, color: days<=3 ? C.pink : C.gold }}>
-                          {days === 0 ? "TODAY" : days===1 ? "TOMORROW" : `${days}d`}
-                        </div>
-                      </div>
-                      <div style={{ display:"flex", gap:5, flexWrap:"wrap", marginBottom:10 }}>
-                        <Pill label={r.genre}     color={GENRE_COLORS[r.genre]||C.cyan} />
-                        <Pill label={r.territory} color={C.dim} />
-                        {r.ei && <Pill label="EI" color={C.green} />}
-                        {r.override?.map(o=><Pill key={o} label={o} color={C.purple} />)}
-                      </div>
-                      {hasHistory && (
-                        <div style={{ marginTop:6, background:"rgba(57,217,138,0.06)", border:`1px solid rgba(57,217,138,0.18)`, borderRadius:8, padding:"7px 10px", display:"flex", alignItems:"center", justifyContent:"space-between" }}>
-                          <span style={{ fontSize:11, color:C.green, fontWeight:700 }}>
-                            {allTimePickups.length} all-time pickup{allTimePickups.length !== 1 ? "s" : ""}
-                          </span>
-                          {lastPickup && (
-                            <span style={{ fontSize:10, color:C.muted }}>
-                              Last: <span style={{ color:"rgba(255,255,255,0.6)" }}>{lastPickup.playlist}</span> · {fmtDate(lastPickup.dateSent)}
-                            </span>
-                          )}
-                        </div>
-                      )}
-                      {!hasStory && (
-                        <div style={{ marginTop:6, fontSize:10, color:C.gold, fontWeight:700 }}>⚠ No pitch story submitted</div>
-                      )}
+                {/* This Week by Lead */}
+                <Card>
+                  <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:16 }}>
+                    <SectionLabel>This Week by Lead</SectionLabel>
+                    <span style={{ fontSize:9, fontFamily:"'DM Mono',monospace", color:C.muted, background:"rgba(255,255,255,0.04)", border:`1px solid ${C.border}`, borderRadius:99, padding:"2px 10px", letterSpacing:"0.06em" }}>{thisWeek.length} releases</span>
+                  </div>
+                  {byLead.length === 0 ? (
+                    <div style={{ color:C.muted, fontSize:13 }}>No releases this week.</div>
+                  ) : (
+                    <div style={{ display:"flex", flexDirection:"column", gap:18 }}>
+                      {byLead.map(({ lead, releases }) => {
+                        const p1c = releases.filter(r=>r.priority==="Priority 1").length;
+                        const p2c = releases.filter(r=>r.priority==="Priority 2").length;
+                        const p3c = releases.filter(r=>r.priority==="Priority 3").length;
+                        return (
+                          <div key={lead}>
+                            {/* Lead header */}
+                            <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:8 }}>
+                              <div style={{ width:30, height:30, borderRadius:"50%", background:`rgba(0,217,255,0.12)`,
+                                border:`1px solid rgba(0,217,255,0.3)`, display:"flex", alignItems:"center", justifyContent:"center",
+                                fontFamily:"'Bebas Neue',sans-serif", fontSize:15, color:C.cyan, flexShrink:0 }}>
+                                {lead.charAt(0)}
+                              </div>
+                              <div style={{ flex:1 }}>
+                                <div style={{ fontWeight:700, fontSize:13 }}>{lead}</div>
+                              </div>
+                              <div style={{ display:"flex", gap:4 }}>
+                                {p1c > 0 && <span style={{ fontSize:9, fontWeight:700, color:C.pink, background:`${C.pink}15`, border:`1px solid ${C.pink}30`, borderRadius:4, padding:"1px 6px", fontFamily:"'DM Mono',monospace" }}>P1 ×{p1c}</span>}
+                                {p2c > 0 && <span style={{ fontSize:9, fontWeight:700, color:C.gold, background:`${C.gold}15`, border:`1px solid ${C.gold}30`, borderRadius:4, padding:"1px 6px", fontFamily:"'DM Mono',monospace" }}>P2 ×{p2c}</span>}
+                                {p3c > 0 && <span style={{ fontSize:9, fontWeight:700, color:C.cyan, background:`${C.cyan}15`, border:`1px solid ${C.cyan}30`, borderRadius:4, padding:"1px 6px", fontFamily:"'DM Mono',monospace" }}>P3 ×{p3c}</span>}
+                              </div>
+                            </div>
+                            {/* Release rows */}
+                            <div style={{ display:"flex", flexDirection:"column", gap:4, paddingLeft:40 }}>
+                              {releases.map(r => {
+                                const sc = symphonicScore(r);
+                                const col = scoreColor(sc.total);
+                                const days = daysUntil(r.date);
+                                const d = DRIVER_DATA[r.artist] || {};
+                                const dotColor = r.priority==="Priority 1"?C.pink:r.priority==="Priority 2"?C.gold:C.cyan;
+                                return (
+                                  <div key={r.id} onClick={() => { setProfileTarget(r); setTab("artist-profile"); }}
+                                    style={{ display:"flex", alignItems:"center", gap:8, padding:"5px 8px", borderRadius:7,
+                                      background:"rgba(255,255,255,0.02)", border:`1px solid ${C.border}`, cursor:"pointer", transition:"background 0.15s" }}
+                                    onMouseEnter={e=>e.currentTarget.style.background="rgba(0,217,255,0.04)"}
+                                    onMouseLeave={e=>e.currentTarget.style.background="rgba(255,255,255,0.02)"}>
+                                    <div style={{ width:6, height:6, borderRadius:"50%", background:dotColor, flexShrink:0 }} />
+                                    <div style={{ flex:1, minWidth:0 }}>
+                                      <div style={{ fontWeight:700, fontSize:12, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{r.artist}</div>
+                                      <div style={{ fontSize:10, color:C.dim, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{r.release}</div>
+                                    </div>
+                                    <div style={{ flexShrink:0, display:"flex", gap:5, alignItems:"center" }}>
+                                      {r.ei && <span style={{ fontSize:9, fontWeight:700, color:C.green, background:`${C.green}15`, border:`1px solid ${C.green}30`, borderRadius:3, padding:"1px 4px" }}>EI</span>}
+                                      {r.override?.length > 0 && <span style={{ fontSize:9, fontWeight:700, color:C.purple, background:`${C.purple}15`, border:`1px solid ${C.purple}30`, borderRadius:3, padding:"1px 4px" }}>OVR</span>}
+                                      <div style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:17, color:col, lineHeight:1 }}>{sc.total}</div>
+                                      <div style={{ fontSize:10, color: days<=3?C.pink:C.muted, fontFamily:"'DM Mono',monospace" }}>
+                                        {days===0?"TODAY":days===1?"TMR":`${days}d`}
+                                      </div>
+                                      {!d.story && <span style={{ fontSize:10, color:C.gold }}>⚠</span>}
+                                    </div>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
-                  );
-                })}
-                {thisWeek.filter(r=>r.priority==="Priority 1").length===0 && (
-                  <div style={{ color:C.muted, fontSize:13 }}>No Priority 1 releases dropping this week.</div>
-                )}
+                  )}
+                </Card>
+
               </div>
+
+              {/* Release volume by week — full width */}
+              <Card>
+                <SectionLabel>Upcoming Release Volume by Week</SectionLabel>
+                <ResponsiveContainer width="100%" height={200}>
+                  <BarChart data={releaseTimelineData} barSize={28}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
+                    <XAxis dataKey="week" tick={{ fill:C.muted, fontSize:11 }} axisLine={false} tickLine={false} />
+                    <YAxis tick={{ fill:C.muted, fontSize:11 }} axisLine={false} tickLine={false} />
+                    <Tooltip contentStyle={TooltipStyle} cursor={{ fill:"rgba(255,255,255,0.03)" }} />
+                    <Legend wrapperStyle={{ fontSize:11, paddingTop:8 }} />
+                    <Bar dataKey="p1" name="Priority 1" stackId="a" fill={C.pink} radius={[0,0,0,0]} />
+                    <Bar dataKey="p2" name="Priority 2" stackId="a" fill={C.gold} />
+                    <Bar dataKey="p3" name="Priority 3" stackId="a" fill={C.cyan} radius={[4,4,0,0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </Card>
+
             </div>
-
-            {/* Artist detail panel — Command Center inline */}
-            {selectedRelease && (
-              <div style={{ background:C.surface, border:`1px solid ${C.cyan}33`, borderRadius:16, padding:24, position:"relative" }}>
-                <ArtistPanel key={selectedRelease.id} r={selectedRelease} onClose={()=>setSelectedRelease(null)}
-                  onViewProfile={()=>{ setProfileTarget(selectedRelease); setSelectedRelease(null); setTab("artist-profile"); }} />
-              </div>
-            )}
-
-          </div>
-        )}
+          );
+        })()}
 
         {/* ════════════════ RELEASES ════════════════ */}
         {tab==="releases" && (() => {
