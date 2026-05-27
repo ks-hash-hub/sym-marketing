@@ -9,10 +9,8 @@ import { C, DSP_COLORS, PRIORITY_COLORS, GENRE_COLORS, DRIVER_COLORS, NAV_ITEMS,
 import { daysUntil, fmtDate } from "./lib/utils.js";
 import { symphonicScore, scoreColor } from "./lib/scoreEngine.js";
 import { generateInsights } from "./lib/insightEngine.js";
+import { useAppData } from "./hooks/useAppData.js";
 
-import RELEASES from "./data/releases.json";
-import PICKUPS from "./data/pickups.json";
-import DRIVER_DATA from "./data/driverData.json";
 import WEEKLY_PICKUP_TREND from "./data/weeklyPickupTrend.json";
 
 import SectionLabel from "./components/SectionLabel.jsx";
@@ -39,28 +37,32 @@ export default function App() {
   const [sortBy,          setSortBy]           = useState("date");
   const [sortDir,         setSortDir]          = useState("asc");
 
+  // ── Live data (or JSON fallback) ──────────────────────────────────────────
+  const { releases: RELEASES, pickups: PICKUPS, driverData: DRIVER_DATA,
+          loading: dataLoading, isLive, error: dataError } = useAppData();
+
   const thisWeek   = RELEASES.filter(r => daysUntil(r.date) >= 0 && daysUntil(r.date) <= 7);
   const next30     = RELEASES.filter(r => daysUntil(r.date) >= 0 && daysUntil(r.date) <= 30);
   const p1Releases = RELEASES.filter(r => r.priority === "Priority 1");
-  const insights   = useMemo(() => generateInsights(RELEASES, PICKUPS), []);
+  const insights   = useMemo(() => generateInsights(RELEASES, PICKUPS), [RELEASES, PICKUPS]);
 
   const genreData = useMemo(() => {
     const c = {};
     RELEASES.forEach(r => { c[r.genre] = (c[r.genre]||0)+1; });
     return Object.entries(c).sort((a,b)=>b[1]-a[1]).map(([name,value])=>({ name, value, fill: GENRE_COLORS[name]||C.cyan }));
-  }, []);
+  }, [RELEASES]);
 
   const dspData = useMemo(() => {
     const c = {};
     PICKUPS.forEach(p => { c[p.dsp] = (c[p.dsp]||0)+1; });
     return Object.entries(c).sort((a,b)=>b[1]-a[1]).map(([name,value])=>({ name, value }));
-  }, []);
+  }, [PICKUPS]);
 
   const leadData = useMemo(() => {
     const c = {};
     PICKUPS.forEach(p => { c[p.lead] = (c[p.lead]||0)+1; });
     return Object.entries(c).sort((a,b)=>b[1]-a[1]).map(([name,value])=>({ name, value }));
-  }, []);
+  }, [PICKUPS]);
 
   const releaseTimelineData = useMemo(() => {
     const weeks = {};
@@ -73,9 +75,7 @@ export default function App() {
       else weeks[bucket].p3++;
     });
     return ["This Week","Week 2","Week 3","Week 4+"].map(w => weeks[w]||{ week:w, p1:0, p2:0, p3:0 });
-  }, []);
-
-  const insightColors = { urgent:{ bg:"rgba(255,61,127,0.08)", border:"rgba(255,61,127,0.25)", icon:C.pink }, warning:{ bg:"rgba(255,184,0,0.07)", border:"rgba(255,184,0,0.22)", icon:C.gold }, positive:{ bg:"rgba(57,217,138,0.07)", border:"rgba(57,217,138,0.22)", icon:C.green } };
+  }, [RELEASES]);
 
   const navItemStyle = (id) => ({
     display:"flex", alignItems:"center", gap:10, padding:"9px 14px", borderRadius:9,
@@ -141,8 +141,27 @@ export default function App() {
         )}
 
         <div style={{ marginTop:"auto", borderTop:`1px solid ${C.border}`, paddingTop:14, display:"flex", flexDirection:"column", gap:6 }}>
-          <div style={{ background:"rgba(57,217,138,0.08)", border:"1px solid rgba(57,217,138,0.2)", color:C.green, borderRadius:6, padding:"4px 10px", fontSize:9, fontWeight:700, letterSpacing:"0.1em", textAlign:"center" }}>● DEMO DATA</div>
-          <div style={{ fontFamily:"'DM Mono',monospace", fontSize:9, color:C.dim, textAlign:"center" }}>May 17, 2025</div>
+          {dataLoading ? (
+            <div style={{ background:"rgba(0,217,255,0.06)", border:"1px solid rgba(0,217,255,0.2)", color:C.cyan, borderRadius:6, padding:"4px 10px", fontSize:9, fontWeight:700, letterSpacing:"0.1em", textAlign:"center", animation:"pulse 1.5s ease infinite" }}>
+              ⟳ LOADING…
+            </div>
+          ) : isLive ? (
+            <div style={{ background:"rgba(0,217,255,0.08)", border:"1px solid rgba(0,217,255,0.25)", color:C.cyan, borderRadius:6, padding:"4px 10px", fontSize:9, fontWeight:700, letterSpacing:"0.1em", textAlign:"center" }}>
+              ● LIVE DATA
+            </div>
+          ) : (
+            <div style={{ background:"rgba(57,217,138,0.08)", border:"1px solid rgba(57,217,138,0.2)", color:C.green, borderRadius:6, padding:"4px 10px", fontSize:9, fontWeight:700, letterSpacing:"0.1em", textAlign:"center" }}>
+              ● DEMO DATA
+            </div>
+          )}
+          {dataError && (
+            <div style={{ fontSize:8, color:C.gold, textAlign:"center", fontFamily:"'DM Mono',monospace", padding:"0 4px" }} title={dataError}>
+              ⚠ fallback active
+            </div>
+          )}
+          <div style={{ fontFamily:"'DM Mono',monospace", fontSize:9, color:C.dim, textAlign:"center" }}>
+            {new Date().toLocaleDateString("en-US", { month:"short", day:"numeric", year:"numeric" })}
+          </div>
         </div>
       </div>
 
