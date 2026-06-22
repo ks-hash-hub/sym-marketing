@@ -678,89 +678,24 @@ steps:
 
 **Purpose:** Rank releases by marketing potential and prioritize resource allocation
 
-**Formula:**
-```
-Total Score = Pickup History (0-25)
-            + Audience Reach (0-20)
-            + Social Audience (0-20)
-            + Marketing Drive Quality (0-20)
-            + Release Consistency (0-15)
-```
+**Note:** Specific scoring calculations and weighting factors will be determined internally by the Symphonic marketing team based on proprietary data analysis and historical performance metrics.
 
-**Component Breakdown:**
+**Score Components (General Framework):**
+- **Pickup History:** Historical DSP editorial and curator placements
+- **Audience Reach:** Streaming platform monthly listeners and engagement metrics
+- **Social Audience:** Cross-platform social media following and engagement
+- **Marketing Drive Quality:** Submitted marketing drivers, press confirmations, ad campaigns
+- **Release Consistency:** Historical release cadence and momentum
 
-#### 1. Pickup History (0-25 points)
-```javascript
-const firstPartyCount = pickups.filter(p => p.type === "1st Party").length;
-const thirdPartyCount = pickups.filter(p => p.type === "3rd Party").length;
-const coverBonus = pickups.some(p => p.cover) ? 5 : 0;
+**Score Display:**
+- Scores range from 0-100
+- Color-coded priority indicators:
+  - Green (80+): High priority, strong potential
+  - Cyan (65-79): Good potential
+  - Gold (50-64): Moderate potential
+  - Pink (<50): Low priority, needs attention
 
-const pickupScore = Math.min(25, firstPartyCount * 4 + thirdPartyCount * 2 + coverBonus);
-```
-
-**Rationale:** 1st party DSP editorial placements are 2x more valuable than 3rd party curator placements. Cover slots are premium placements worth a 5-point bonus.
-
----
-
-#### 2. Audience Reach (0-20 points)
-```javascript
-const audienceScore = release.spotifyML > 0
-  ? Math.min(20, Math.round((Math.log10(release.spotifyML) / Math.log10(6000000)) * 20))
-  : 0;
-```
-
-**Rationale:** Log scale normalizes the wide range of Spotify ML values (1K to 6M+). 6M ML = max 20 points (top-tier artist).
-
----
-
-#### 3. Social Audience (0-20 points)
-```javascript
-const weightedFollowers = 
-  (release.igFollowers || 0) * 1.0 +
-  (driver.tiktok || 0) * 1.2 +
-  (driver.youtube || 0) * 0.8 +
-  (driver.twitter || 0) * 0.5 +
-  (driver.soundcloud || 0) * 0.3;
-
-const socialScore = Math.min(20, Math.round((weightedFollowers / 4500000) * 20));
-```
-
-**Rationale:** TikTok is weighted highest (1.2x) due to viral potential. Instagram is baseline (1.0x). Older platforms like Twitter and SoundCloud are lower priority.
-
----
-
-#### 4. Marketing Drive Quality (0-20 points)
-```javascript
-const driverPoints = Math.min(12, (driver.drivers?.length || 0) * 3);
-const pressPoints = driver.confirmedPress ? 4 : 0;
-const adPoints = driver.adDetails ? 4 : 0;
-
-const driveScore = Math.min(20, driverPoints + pressPoints + adPoints);
-```
-
-**Rationale:** Each marketing driver (tour, playlist pitch, PR campaign, etc.) is worth 3 points. Confirmed press and ad campaigns are worth 4 points each (harder to secure, higher impact).
-
----
-
-#### 5. Release Consistency (0-15 points)
-```javascript
-const consistencyScore = Math.round((driver.releaseConsistency || 0) / 100 * 15);
-```
-
-**Rationale:** Artists who release consistently (1 single every 4-6 weeks) build momentum. Score is normalized from 0-100% consistency metric.
-
----
-
-### Score Color Coding
-
-```javascript
-function scoreColor(score) {
-  if (score >= 80) return "#39d98a"; // Green: High priority, strong potential
-  if (score >= 65) return "#00d9ff"; // Cyan: Good potential
-  if (score >= 50) return "#ffb800"; // Gold: Moderate potential
-  return "#ff3d7f";                  // Pink: Low priority, needs attention
-}
-```
+**Implementation Note:** The scoring engine implementation (`src/lib/scoreEngine.js`) will be developed in collaboration with the marketing team to ensure alignment with business priorities and data availability.
 
 ---
 
