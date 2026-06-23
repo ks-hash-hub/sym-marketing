@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   AreaChart, Area, BarChart, Bar,
   PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
@@ -40,6 +40,24 @@ export default function App() {
   // ── Live data (or JSON fallback) ──────────────────────────────────────────
   const { releases: RELEASES, pickups: PICKUPS, driverData: DRIVER_DATA,
           loading: dataLoading, isLive, error: dataError } = useAppData();
+
+  // ── URL routing: /:upc → artist profile ───────────────────────────────────
+  useEffect(() => {
+    const upc = window.location.pathname.replace(/^\//, "").trim();
+    if (upc && RELEASES.length) {
+      const match = RELEASES.find(r => r.upc === upc || r.id === upc);
+      if (match) { setProfileTarget(match); setTab("artist-profile"); }
+    }
+  }, [RELEASES]);
+
+  useEffect(() => {
+    const onPop = () => {
+      const upc = window.location.pathname.replace(/^\//, "").trim();
+      if (!upc) { setTab("command"); setProfileTarget(null); }
+    };
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
 
   const thisWeek   = RELEASES.filter(r => daysUntil(r.date) >= 0 && daysUntil(r.date) <= 7);
   const next30     = RELEASES.filter(r => daysUntil(r.date) >= 0 && daysUntil(r.date) <= 30);
@@ -133,7 +151,7 @@ export default function App() {
         </nav>
 
         {tab === "artist-profile" && (
-          <button onClick={() => { setTab("releases"); setProfileTarget(null); }}
+          <button onClick={() => { setTab("releases"); setProfileTarget(null); window.history.pushState({}, "", "/"); }}
             style={{ marginTop:12, display:"flex", alignItems:"center", gap:8, padding:"9px 14px", borderRadius:9, background:"rgba(255,255,255,0.04)", border:"1px solid transparent", color:C.muted, fontSize:11, fontWeight:600, cursor:"pointer", width:"100%", textAlign:"left", fontFamily:"inherit" }}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
             Back to Releases
@@ -215,7 +233,7 @@ export default function App() {
                       const hasDriverEntry = !!(DRIVER_DATA[r.artist] || DRIVER_DATA[r.upc]);
                       const d = DRIVER_DATA[r.artist] || DRIVER_DATA[r.upc] || {};
                       return (
-                        <div key={r.id} onClick={() => { setProfileTarget(r); setTab("artist-profile"); }}
+                        <div key={r.id} onClick={() => { setProfileTarget(r); setTab("artist-profile"); window.history.pushState({}, "", `/${r.upc}`); }}
                           style={{ display:"flex", alignItems:"center", gap:10, padding:"7px 8px", borderRadius:8,
                             borderBottom: i < ranked.length-1 ? `1px solid ${C.border}` : "none",
                             cursor:"pointer", transition:"background 0.15s" }}
@@ -296,7 +314,7 @@ export default function App() {
                                 const d = DRIVER_DATA[r.artist] || DRIVER_DATA[r.upc] || {};
                                 const dotColor = r.priority==="Priority 1"?C.pink:r.priority==="Priority 2"?C.gold:C.cyan;
                                 return (
-                                  <div key={r.id} onClick={() => { setProfileTarget(r); setTab("artist-profile"); }}
+                                  <div key={r.id} onClick={() => { setProfileTarget(r); setTab("artist-profile"); window.history.pushState({}, "", `/${r.upc}`); }}
                                     style={{ display:"flex", alignItems:"center", gap:8, padding:"5px 8px", borderRadius:7,
                                       background:"rgba(255,255,255,0.02)", border:`1px solid ${C.border}`, cursor:"pointer", transition:"background 0.15s" }}
                                     onMouseEnter={e=>e.currentTarget.style.background="rgba(0,217,255,0.04)"}
@@ -514,7 +532,7 @@ export default function App() {
                   <div onClick={()=>setSelectedRelease(null)} style={{ position:"fixed", inset:0, background:"rgba(7,8,15,0.6)", zIndex:100, backdropFilter:"blur(2px)" }} />
                   <div style={{ position:"fixed", right:0, top:0, bottom:0, width:520, background:C.surface, borderLeft:`1px solid rgba(0,217,255,0.18)`, zIndex:101, display:"flex", flexDirection:"column", padding:24, animation:"slideIn 0.22s cubic-bezier(0.16,1,0.3,1)" }}>
                     <ArtistPanel key={selectedRelease.id} r={selectedRelease} onClose={()=>setSelectedRelease(null)}
-                      onViewProfile={()=>{ setProfileTarget(selectedRelease); setSelectedRelease(null); setTab("artist-profile"); }} />
+                      onViewProfile={()=>{ setProfileTarget(selectedRelease); setSelectedRelease(null); setTab("artist-profile"); window.history.pushState({}, "", `/${selectedRelease.upc}`); }} />
                   </div>
                 </>
               )}
@@ -601,7 +619,7 @@ export default function App() {
 
         {/* ════════════════ ARTIST PROFILE ════════════════ */}
         {tab==="artist-profile" && profileTarget && (
-          <ArtistProfilePage r={profileTarget} release={profileTarget} onBack={()=>{ setTab("releases"); setProfileTarget(null); }} />
+          <ArtistProfilePage r={profileTarget} release={profileTarget} onBack={()=>{ setTab("releases"); setProfileTarget(null); window.history.pushState({}, "", "/"); }} />
         )}
 
       </div>

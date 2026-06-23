@@ -1,0 +1,44 @@
+steps:
+  # Build the Docker image
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      - build
+      - -t
+      - us-central1-docker.pkg.dev/sym-marketing-intel/sym-marketing/app:$COMMIT_SHA
+      - -t
+      - us-central1-docker.pkg.dev/sym-marketing-intel/sym-marketing/app:latest
+      - .
+
+  # Push to Artifact Registry
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      - push
+      - --all-tags
+      - us-central1-docker.pkg.dev/sym-marketing-intel/sym-marketing/app
+
+  # Deploy to Cloud Run
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - sym-marketing
+      - --image=us-central1-docker.pkg.dev/sym-marketing-intel/sym-marketing/app:$COMMIT_SHA
+      - --region=us-central1
+      - --platform=managed
+      - --no-allow-unauthenticated
+      - --set-env-vars=VITE_AIRTABLE_TOKEN=$_AIRTABLE_TOKEN
+      - --memory=256Mi
+      - --cpu=1
+      - --min-instances=0
+      - --max-instances=3
+
+images:
+  - us-central1-docker.pkg.dev/sym-marketing-intel/sym-marketing/app:$COMMIT_SHA
+  - us-central1-docker.pkg.dev/sym-marketing-intel/sym-marketing/app:latest
+
+substitutions:
+  _AIRTABLE_TOKEN: ""
+
+options:
+  logging: CLOUD_LOGGING_ONLY
