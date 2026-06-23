@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Symphonic Marketing Intelligence — PRD</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg:     #0a0c10;
+    --card:   #161a22;
+    --border: rgba(255,255,255,0.08);
+    --cyan:   #00d9ff;
+    --gold:   #ffb800;
+    --green:  #39d98a;
+    --purple: #b45cff;
+    --pink:   #ff3f7a;
+    --orange: #ff8c42;
+    --muted:  rgba(255,255,255,0.45);
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; line-height: 1.6; }
+
+  /* NAV */
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(10,12,16,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 0 40px; height: 56px; display: flex; align-items: center; justify-content: space-between; }
+  .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 0.12em; color: var(--cyan); }
+  .nav-title { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.3); }
+  .nav-links { display: flex; gap: 24px; }
+  .nav-links a { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; font-family: 'DM Mono', monospace; cursor: pointer; }
+  .nav-links a:hover { color: #fff; }
+  .nav-links a.active { color: var(--cyan); border-bottom: 2px solid var(--cyan); padding-bottom: 2px; }
+
+  /* LAYOUT */
+  .container { max-width: 960px; margin: 0 auto; padding: 0 40px; }
+  section { padding: 80px 0 60px; }
+  #hero { min-height: 100vh; display: flex; align-items: center; padding-top: 56px; }
+
+  /* HERO */
+  .hero-tag { display: inline-flex; align-items: center; gap: 8px; font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--cyan); background: rgba(0,217,255,0.08); border: 1px solid rgba(0,217,255,0.25); border-radius: 99px; padding: 6px 16px; margin-bottom: 24px; }
+  .hero-tag::before { content:''; width:6px; height:6px; border-radius:50%; background:var(--cyan); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  /* SECTION HEADERS */
+  .sec-tag { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--cyan); margin-bottom: 10px; }
+  .sec-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(36px,5vw,54px); line-height: 1; letter-spacing: 0.03em; margin-bottom: 14px; }
+  .sec-sub { font-size: 15px; color: rgba(255,255,255,0.5); max-width: 620px; line-height: 1.75; margin-bottom: 40px; }
+
+  /* CARDS */
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 32px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px 24px; }
+  .card-full { grid-column: 1 / -1; }
+  .card-icon { font-size: 22px; margin-bottom: 12px; }
+  .card-label { font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 6px; }
+  .card-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; color: #fff; }
+  .card-body { font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.7; }
+
+  /* PHASE BADGE */
+  .phase-badge { display: inline-block; font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; border-radius: 99px; padding: 3px 12px; margin-bottom: 10px; }
+
+  /* TABLE */
+  .prd-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 32px; }
+  .prd-table th { font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); padding: 10px 16px; text-align: left; border-bottom: 1px solid var(--border); }
+  .prd-table td { padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.04); color: rgba(255,255,255,0.75); vertical-align: top; line-height: 1.6; }
+  .prd-table tr:last-child td { border-bottom: none; }
+  .prd-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* PILL */
+  .pill { display: inline-block; font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; border-radius: 99px; padding: 3px 10px; }
+
+  /* DIVIDER */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+
+  /* CALLOUT */
+  .callout { border-radius: 10px; padding: 18px 22px; margin: 24px 0; font-size: 13px; line-height: 1.7; }
+
+  /* USER STORY */
+  .story-block { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 18px 22px; margin-bottom: 12px; }
+  .story-role { font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cyan); margin-bottom: 6px; }
+  .story-text { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.7; }
+  .story-text strong { color: #fff; }
+
+  /* SCORE PILLARS */
+  .pillar-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin: 24px 0; }
+  .pillar { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px 14px; text-align: center; }
+  .pillar-name { font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .pillar-weight { font-family: 'Bebas Neue', sans-serif; font-size: 32px; line-height: 1; }
+  .pillar-pts { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  /* FOOTER */
+  footer { border-top: 1px solid var(--border); padding: 32px 40px; text-align: center; }
+  .footer-note { font-family: 'DM Mono', monospace; font-size: 10px; color: rgba(255,255,255,0.2); letter-spacing: 0.08em; line-height: 2; }
+</style>
+</head>
+<body>
+
+<!-- PASSWORD GATE -->
+<div id="pw-gate" style="position:fixed;inset:0;z-index:99999;background:#0a0c10;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif">
+  <div style="width:100%;max-width:380px;padding:24px;text-align:center">
+    <div style="font-family:'DM Mono',monospace;font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:rgba(0,217,255,0.7);margin-bottom:20px">SYMPHONIC INTERNAL</div>
+    <div style="font-size:22px;font-weight:800;color:#fff;margin-bottom:6px">Marketing Intelligence</div>
+    <div style="font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:28px">Product Requirements Document</div>
+    <input id="pw-input" type="password" placeholder="Enter password" onkeydown="if(event.key==='Enter')pwCheck()"
+      style="width:100%;padding:12px 16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#fff;font-size:14px;font-family:'Inter',sans-serif;outline:none;margin-bottom:10px" />
+    <div id="pw-error" style="font-size:12px;color:#ff3f7a;margin-bottom:10px;min-height:18px"></div>
+    <button onclick="pwCheck()" style="width:100%;padding:12px;background:#00d9ff;border:none;border-radius:8px;color:#000;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;letter-spacing:0.04em">ENTER →</button>
+  </div>
+</div>
+<script>
+  function pwCheck() {
+    if (document.getElementById('pw-input').value === 'sym_marketing_2026') {
+      document.getElementById('pw-gate').style.display = 'none';
+    } else {
+      document.getElementById('pw-error').textContent = 'Incorrect password.';
+      document.getElementById('pw-input').value = '';
+      document.getElementById('pw-input').focus();
+    }
+  }
+  document.getElementById('pw-input').focus();
+</script>
+
+<nav>
+  <div style="display:flex;align-items:center;gap:16px;cursor:pointer" onclick="showHero()">
+    <div class="nav-logo">SYMPHONIC</div>
+    <div class="nav-title">PRD — v1</div>
+  </div>
+  <div class="nav-links">
+    <a onclick="showSection('overview')">Overview</a>
+    <a onclick="showSection('users')">Users</a>
+    <a onclick="showSection('features')">Features</a>
+    <a onclick="showSection('score')">SYM Score</a>
+    <a onclick="showSection('phases')">Phases</a>
+    <a onclick="showSection('oos')">Out of Scope</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="container">
+    <div class="hero-tag">Product Requirements — v1 · June 2026</div>
+    <h1 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(54px,8vw,88px);line-height:0.95;letter-spacing:0.03em;margin-bottom:24px">
+      Symphonic<br><span style="color:var(--cyan)">Marketing</span><br>Intelligence.
+    </h1>
+    <p style="font-size:17px;color:rgba(255,255,255,0.55);max-width:580px;line-height:1.75;margin-bottom:36px">
+      A data-driven tool that gives Symphonic's marketing reps a clear, scored view of every priority release — so they pitch smarter, land more playlists, and spend less time guessing.
+    </p>
+    <div style="display:flex;gap:12px;flex-wrap:wrap">
+      <span class="pill" style="background:rgba(0,217,255,0.08);color:var(--cyan);border:1px solid rgba(0,217,255,0.25)">Internal Tool</span>
+      <span class="pill" style="background:rgba(57,217,138,0.08);color:var(--green);border:1px solid rgba(57,217,138,0.25)">Phase 1 — MVP</span>
+      <span class="pill" style="background:rgba(255,184,0,0.08);color:var(--gold);border:1px solid rgba(255,184,0,0.25)">Airtable + Web App</span>
+      <span class="pill" style="background:rgba(180,92,255,0.08);color:var(--purple);border:1px solid rgba(180,92,255,0.25)">Google Cloud Run</span>
+    </div>
+  </div>
+</section>
+
+<!-- OVERVIEW -->
+<section id="overview">
+  <div class="container">
+    <div class="sec-tag">01 — Overview</div>
+    <div class="sec-title">What we're building & why.</div>
+    <div class="sec-sub">The problem, the goal, and the value it creates for the team.</div>
+
+    <div class="card-grid">
+      <div class="card" style="border-color:rgba(255,80,80,0.2)">
+        <div class="card-icon">⚠️</div>
+        <div class="card-label" style="color:#ff5050">The Problem</div>
+        <div class="card-title">Reps are pitching blind</div>
+        <div class="card-body">Marketing reps have no unified view of a release's playlist potential. Insights are scattered across Airtable, Chartmetric, and email — there's no single score or signal that tells them how strong a pitch is before they send it.</div>
+      </div>
+      <div class="card" style="border-color:rgba(0,217,255,0.2)">
+        <div class="card-icon">🎯</div>
+        <div class="card-label" style="color:var(--cyan)">The Goal</div>
+        <div class="card-title">More playlists pitched. More playlists landed.</div>
+        <div class="card-body">Give reps a scored, data-backed view of every priority release so they know which releases to prioritize, which pitches are strong, and what's missing before they send. Stronger pitches = more editorial placements = more value for Symphonic artists.</div>
+      </div>
+      <div class="card" style="border-color:rgba(57,217,138,0.2)">
+        <div class="card-icon">📈</div>
+        <div class="card-label" style="color:var(--green)">The Value</div>
+        <div class="card-title">Symphonic's marketing arm gets more powerful</div>
+        <div class="card-body">A shared scoring model builds institutional knowledge. Reps know which signals matter. Leaders can see performance across the whole roster. Over time, the data gets better and so do the pitches.</div>
+      </div>
+    </div>
+
+    <div class="callout" style="background:rgba(0,217,255,0.05);border:1px solid rgba(0,217,255,0.15)">
+      <div style="font-family:'DM Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--cyan);margin-bottom:8px">North Star</div>
+      <div style="font-size:15px;font-weight:600;color:#fff;line-height:1.6">"More editorial playlists to pitch to. More editorial playlists to land on." — The goal is to make Symphonic's marketing team measurably more effective at getting releases in front of the right curators.</div>
+    </div>
+
+    <hr class="divider" />
+
+    <div class="sec-tag" style="margin-top:0">Where it lives</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:16px">
+      <div class="card" style="border-color:rgba(0,217,255,0.2);text-align:center;padding:28px 20px">
+        <div style="font-size:28px;margin-bottom:12px">📋</div>
+        <div style="font-family:'DM Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--cyan);margin-bottom:8px">Layer 1</div>
+        <div style="font-weight:700;margin-bottom:6px">Airtable Table</div>
+        <div style="font-size:12px;color:var(--muted)">Score columns in the release schedule. Sort, filter, build automations.</div>
+      </div>
+      <div class="card" style="border-color:rgba(255,184,0,0.2);text-align:center;padding:28px 20px">
+        <div style="font-size:28px;margin-bottom:12px">🧩</div>
+        <div style="font-family:'DM Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:8px">Layer 2</div>
+        <div style="font-weight:700;margin-bottom:6px">Airtable Extension</div>
+        <div style="font-size:12px;color:var(--muted)">Sidebar drawer with radar chart, score breakdown, and playlist targets.</div>
+      </div>
+      <div class="card" style="border-color:rgba(180,92,255,0.2);text-align:center;padding:28px 20px">
+        <div style="font-size:28px;margin-bottom:12px">🌐</div>
+        <div style="font-family:'DM Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--purple);margin-bottom:8px">Layer 3</div>
+        <div style="font-weight:700;margin-bottom:6px">Full Profile Page</div>
+        <div style="font-size:12px;color:var(--muted)">Complete intelligence view at labs.symphonic.com/[UPC].</div>
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <div class="sec-tag" style="margin-top:0">Success Metrics</div>
+    <table class="prd-table" style="margin-top:16px">
+      <thead>
+        <tr>
+          <th>Metric</th>
+          <th>What we measure</th>
+          <th>Target</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="font-weight:600;color:#fff">Adoption</td>
+          <td>% of reps using the extension weekly</td>
+          <td><span class="pill" style="background:rgba(0,217,255,0.08);color:var(--cyan);border:1px solid rgba(0,217,255,0.2)">80%+ within 60 days</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;color:#fff">Driver completeness</td>
+          <td>% of priority releases with a driver submission</td>
+          <td><span class="pill" style="background:rgba(0,217,255,0.08);color:var(--cyan);border:1px solid rgba(0,217,255,0.2)">Increase from baseline</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;color:#fff">Pitch quality</td>
+          <td>Editorial pickup rate on pitched releases</td>
+          <td><span class="pill" style="background:rgba(0,217,255,0.08);color:var(--cyan);border:1px solid rgba(0,217,255,0.2)">Tracked quarterly</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;color:#fff">Score coverage</td>
+          <td>% of priority releases with a SYM Score populated</td>
+          <td><span class="pill" style="background:rgba(0,217,255,0.08);color:var(--cyan);border:1px solid rgba(0,217,255,0.2)">100% nightly</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- USERS -->
+<section id="users">
+  <div class="container">
+    <div class="sec-tag">02 — Users</div>
+    <div class="sec-title">Who this is for.</div>
+    <div class="sec-sub">Internal tool first. The primary users are Symphonic marketing reps and their leads.</div>
+
+    <div class="card-grid">
+      <div class="card" style="border-color:rgba(0,217,255,0.2)">
+        <div class="card-icon">🎧</div>
+        <div class="card-label" style="color:var(--cyan)">Primary User</div>
+        <div class="card-title">Marketing Rep</div>
+        <div class="card-body">Works the release schedule daily in Airtable. Pitches editorial playlists, writes driver submissions, tracks pickups. Needs a fast read on pitch readiness without leaving their workflow.</div>
+        <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border)">
+          <div style="font-size:11px;color:var(--muted);margin-bottom:6px">Key pain points</div>
+          <ul style="font-size:12px;color:rgba(255,255,255,0.6);padding-left:16px;line-height:2">
+            <li>No single score to prioritize releases</li>
+            <li>No reminder when driver submission is missing</li>
+            <li>Can't see pickup history without switching tools</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card" style="border-color:rgba(255,184,0,0.2)">
+        <div class="card-icon">📊</div>
+        <div class="card-label" style="color:var(--gold)">Secondary User</div>
+        <div class="card-title">Marketing Lead / Director</div>
+        <div class="card-body">Oversees the roster and team performance. Wants visibility into which releases are strongest, where the team's attention should go, and how the scoring model is performing over time.</div>
+        <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border)">
+          <div style="font-size:11px;color:var(--muted);margin-bottom:6px">Key needs</div>
+          <ul style="font-size:12px;color:rgba(255,255,255,0.6);padding-left:16px;line-height:2">
+            <li>Sort/filter full roster by score</li>
+            <li>See which releases have gaps</li>
+            <li>Input on how the score is weighted</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout" style="background:rgba(255,184,0,0.05);border:1px solid rgba(255,184,0,0.15);margin-bottom:32px">
+      <div style="font-family:'DM Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);margin-bottom:8px">Internal First</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.65);line-height:1.7">This tool is for the Symphonic team only. Access is gated to <strong style="color:#fff">@symdistro.com</strong> Google accounts via Cloud Run's Identity-Aware Proxy. Client-facing features are out of scope for v1.</div>
+    </div>
+
+    <div class="sec-tag">User Stories</div>
+    <div style="margin-top:16px">
+      <div class="story-block">
+        <div class="story-role">Marketing Rep</div>
+        <div class="story-text">As a rep, I want to <strong>see a score for every priority release</strong> so I can quickly decide which ones to pitch first without having to look up data in multiple tools.</div>
+      </div>
+      <div class="story-block">
+        <div class="story-role">Marketing Rep</div>
+        <div class="story-text">As a rep, I want to <strong>be warned when a driver submission is missing</strong> so I don't pitch a release that isn't ready and lose credibility with curators.</div>
+      </div>
+      <div class="story-block">
+        <div class="story-role">Marketing Rep</div>
+        <div class="story-text">As a rep, I want to <strong>see playlist targets ranked by match score</strong> so I know which curators to pitch without spending an hour on research.</div>
+      </div>
+      <div class="story-block">
+        <div class="story-role">Marketing Rep</div>
+        <div class="story-text">As a rep, I want to <strong>view the full profile page from within Airtable</strong> so I can get the complete picture on any release in one click without leaving my workflow.</div>
+      </div>
+      <div class="story-block">
+        <div class="story-role">Marketing Lead</div>
+        <div class="story-text">As a lead, I want to <strong>sort and filter the release schedule by SYM Score</strong> in Airtable so I can see the strongest pitches at the top and allocate the team's time accordingly.</div>
+      </div>
+      <div class="story-block">
+        <div class="story-role">Marketing Lead</div>
+        <div class="story-text">As a lead, I want to <strong>have input on how the score is calculated</strong> so that the weights reflect what we know actually drives editorial placements.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="container">
+    <div class="sec-tag">03 — Features</div>
+    <div class="sec-title">What gets built.</div>
+    <div class="sec-sub">Core features broken down by layer and priority.</div>
+
+    <!-- LAYER 1 -->
+    <div style="margin-bottom:40px">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+        <span class="pill" style="background:rgba(0,217,255,0.08);color:var(--cyan);border:1px solid rgba(0,217,255,0.2)">Layer 1 — Airtable Table</span>
+      </div>
+      <table class="prd-table">
+        <thead>
+          <tr><th>Feature</th><th>Description</th><th>Phase</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="font-weight:600;color:#fff">SYM Score column</td>
+            <td>Numeric score (0–100) written nightly by the app. Sortable and filterable in Airtable natively.</td>
+            <td><span class="pill" style="background:rgba(255,184,0,0.08);color:var(--gold);border:1px solid rgba(255,184,0,0.2)">Phase 2</span></td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;color:#fff">Pillar score columns</td>
+            <td>Individual scores for each of the 5 pillars (Pickups, Audience, Social, Drive, Consistency) stored as Airtable Number fields.</td>
+            <td><span class="pill" style="background:rgba(255,184,0,0.08);color:var(--gold);border:1px solid rgba(255,184,0,0.2)">Phase 2</span></td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;color:#fff">Has Submission flag</td>
+            <td>Boolean field the team can filter on to find releases missing a driver submission.</td>
+            <td><span class="pill" style="background:rgba(57,217,138,0.08);color:var(--green);border:1px solid rgba(57,217,138,0.2)">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;color:#fff">Profile URL formula</td>
+            <td>Auto-generated formula column: <code style="font-size:11px;background:rgba(255,255,255,0.06);padding:1px 6px;border-radius:4px">"https://labs.symphonic.com/" & UPC</code>. One-click to full profile.</td>
+            <td><span class="pill" style="background:rgba(57,217,138,0.08);color:var(--green);border:1px solid rgba(57,217,138,0.2)">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;color:#fff">Last Score Update</td>
+            <td>Date field updated nightly so reps know when data was last refreshed.</td>
+            <td><span class="pill" style="background:rgba(255,184,0,0.08);color:var(--gold);border:1px solid rgba(255,184,0,0.2)">Phase 2</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- LAYER 2 -->
+    <div style="margin-bottom:40px">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+        <span class="pill" style="background:rgba(255,184,0,0.08);color:var(--gold);border:1px solid rgba(255,184,0,0.2)">Layer 2 — Airtable Extension (Drawer)</span>
+      </div>
+      <table class="prd-table">
+        <thead>
+          <tr><th>Feature</th><th>Description</th><th>Phase</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="font-weight:600;color:#fff">Auto-select on row click</td>
+            <td>Extension reads <code style="font-size:11px;background:rgba(255,255,255,0.06);padding:1px 6px;border-radius:4px">cursor.selectedRecordId</code> and updates automatically when a rep clicks any row — no button needed.</td>
+            <td><span class="pill" style="background:rgba(180,92,255,0.08);color:var(--purple);border:1px solid rgba(180,92,255,0.2)">Phase 3</span></td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;color:#fff">Radar chart</td>
+            <td>SVG pentagon chart showing all 5 pillars at a glance. Gives an instant visual read of where a release is strong or weak.</td>
+            <td><span class="pill" style="background:rgba(180,92,255,0.08);color:var(--purple);border:1px solid rgba(180,92,255,0.2)">Phase 3</span></td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;color:#fff">SYM Score display</td>
+            <td>Large score number with label ("Strong — ready to pitch", "Fair — needs attention", "Weak — not ready").</td>
+            <td><span class="pill" style="background:rgba(180,92,255,0.08);color:var(--purple);border:1px solid rgba(180,92,255,0.2)">Phase 3</span></td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;color:#fff">Pillar breakdown bars</td>
+            <td>Horizontal score bars for each pillar with label and value. Reads from Airtable score fields (already synced nightly).</td>
+            <td><span class="pill" style="background:rgba(180,92,255,0.08);color:var(--purple);border:1px solid rgba(180,92,255,0.2)">Phase 3</span></td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;color:#fff">Playlist targets</td>
+            <td>Top matching playlists ranked by similarity score. Shows playlist name, curator, and match confidence.</td>
+            <td><span class="pill" style="background:rgba(180,92,255,0.08);color:var(--purple);border:1px solid rgba(180,92,255,0.2)">Phase 3</span></td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;color:#fff">Driver submission warning</td>
+            <td>Red warning banner when no driver submission exists for the release. Prevents reps from pitching incomplete releases.</td>
+            <td><span class="pill" style="background:rgba(180,92,255,0.08);color:var(--purple);border:1px solid rgba(180,92,255,0.2)">Phase 3</span></td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;color:#fff">View Full Profile button</td>
+            <td>Opens <code style="font-size:11px;background:rgba(255,255,255,0.06);padding:1px 6px;border-radius:4px">labs.symphonic.com/[UPC]</code> in a new tab. Bridge from extension drawer to full profile page.</td>
+            <td><span class="pill" style="background:rgba(180,92,255,0.08);color:var(--purple);border:1px solid rgba(180,92,255,0.2)">Phase 3</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- LAYER 3 -->
+    <div>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+        <span class="pill" style="background:rgba(180,92,255,0.08);color:var(--purple);border:1px solid rgba(180,92,255,0.2)">Layer 3 — Full Profile Page</span>
+      </div>
+      <table class="prd-table">
+        <thead>
+          <tr><th>Feature</th><th>Description</th><th>Phase</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="font-weight:600;color:#fff">URL routing by UPC</td>
+            <td>Every release has a permanent URL at <code style="font-size:11px;background:rgba(255,255,255,0.06);padding:1px 6px;border-radius:4px">labs.symphonic.com/[UPC]</code>. Loads the correct artist profile automatically.</td>
+            <td><span class="pill" style="background:rgba(57,217,138,0.08);color:var(--green);border:1px solid rgba(57,217,138,0.2)">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;color:#fff">Artist & release header</td>
+            <td>Artist name, release title, label, genre tags, release date. Pulled from Airtable.</td>
+            <td><span class="pill" style="background:rgba(57,217,138,0.08);color:var(--green);border:1px solid rgba(57,217,138,0.2)">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;color:#fff">SYM Score + radar</td>
+            <td>Full score display with radar chart and all 5 pillar bars. Same data as the extension drawer but with more room to breathe.</td>
+            <td><span class="pill" style="background:rgba(57,217,138,0.08);color:var(--green);border:1px solid rgba(57,217,138,0.2)">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;color:#fff">Pickup history chart</td>
+            <td>Bar chart of editorial pickups per release over time. Shows trend and peak pickup count with delta vs. previous release.</td>
+            <td><span class="pill" style="background:rgba(57,217,138,0.08);color:var(--green);border:1px solid rgba(57,217,138,0.2)">Phase 1</span></td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;color:#fff">Playlist targets table</td>
+            <td>Full ranked list of target playlists grouped by similarity. More detail than the extension — includes playlist size, genre, and past placement history.</td>
+            <td><span class="pill" style="background:rgba(255,184,0,0.08);color:var(--gold);border:1px solid rgba(255,184,0,0.2)">Phase 2</span></td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;color:#fff">Social stats</td>
+            <td>Spotify monthly listeners, follower count, social growth. Sourced from Chartmetric.</td>
+            <td><span class="pill" style="background:rgba(255,184,0,0.08);color:var(--gold);border:1px solid rgba(255,184,0,0.2)">Phase 2</span></td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;color:#fff">Driver completeness card</td>
+            <td>Shows driver submission status with a red warning if missing. Links to the submission form.</td>
+            <td><span class="pill" style="background:rgba(57,217,138,0.08);color:var(--green);border:1px solid rgba(57,217,138,0.2)">Phase 1</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- SYM SCORE -->
+<section id="score">
+  <div class="container">
+    <div class="sec-tag">04 — SYM Score</div>
+    <div class="sec-title">The scorecard we build together.</div>
+    <div class="sec-sub">The SYM Score is a 0–100 composite score across 5 pillars. The weights below are a starting point — they get validated against real releases with the team before being locked in.</div>
+
+    <div class="callout" style="background:rgba(255,184,0,0.05);border:1px solid rgba(255,184,0,0.15);margin-bottom:32px">
+      <div style="font-family:'DM Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);margin-bottom:8px">Important</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.65);line-height:1.7">The score is <strong style="color:#fff">guidance, not a gate</strong>. A low score doesn't block a pitch — it surfaces where the gaps are. The rep always makes the final call. The score is designed to start conversations, not end them.</div>
+    </div>
+
+    <div class="pillar-grid">
+      <div class="pillar" style="border-color:rgba(0,217,255,0.25)">
+        <div class="pillar-name">Pickups</div>
+        <div class="pillar-weight" style="color:var(--cyan)">25</div>
+        <div class="pillar-pts">points</div>
+      </div>
+      <div class="pillar" style="border-color:rgba(57,217,138,0.25)">
+        <div class="pillar-name">Audience</div>
+        <div class="pillar-weight" style="color:var(--green)">20</div>
+        <div class="pillar-pts">points</div>
+      </div>
+      <div class="pillar" style="border-color:rgba(255,184,0,0.25)">
+        <div class="pillar-name">Social</div>
+        <div class="pillar-weight" style="color:var(--gold)">20</div>
+        <div class="pillar-pts">points</div>
+      </div>
+      <div class="pillar" style="border-color:rgba(180,92,255,0.25)">
+        <div class="pillar-name">Drive</div>
+        <div class="pillar-weight" style="color:var(--purple)">20</div>
+        <div class="pillar-pts">points</div>
+      </div>
+      <div class="pillar" style="border-color:rgba(255,140,66,0.25)">
+        <div class="pillar-name">Consistency</div>
+        <div class="pillar-weight" style="color:var(--orange)">15</div>
+        <div class="pillar-pts">points</div>
+      </div>
+    </div>
+
+    <table class="prd-table" style="margin-top:8px">
+      <thead>
+        <tr><th>Pillar</th><th>What it measures</th><th>Data source</th><th>Weight</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="font-weight:600;color:var(--cyan)">Pickups</td>
+          <td>Editorial playlist placements on past releases. Artists with a track record of getting picked up are stronger pitches.</td>
+          <td>Airtable Pickups table</td>
+          <td>25 pts</td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;color:var(--green)">Audience</td>
+          <td>Spotify monthly listeners and follower count. Proxy for how established the artist is in front of editorial curators.</td>
+          <td>Chartmetric / Spotify API</td>
+          <td>20 pts</td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;color:var(--gold)">Social</td>
+          <td>Social following and growth rate across platforms. Signals artist momentum and fanbase activity.</td>
+          <td>Chartmetric</td>
+          <td>20 pts</td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;color:var(--purple)">Drive</td>
+          <td>Driver submission completeness. No submission = incomplete pitch. Rewards reps who have done the prep work.</td>
+          <td>Airtable Driver Submissions</td>
+          <td>20 pts</td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;color:var(--orange)">Consistency</td>
+          <td>Release cadence and label activity over time. Labels that release consistently tend to have better curator relationships.</td>
+          <td>Airtable Release Schedule</td>
+          <td>15 pts</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <hr class="divider" />
+
+    <div class="sec-tag" style="margin-top:0">Score Labels</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:16px">
+      <div class="card" style="border-color:rgba(57,217,138,0.25);text-align:center;padding:20px">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;color:var(--green);line-height:1">75–100</div>
+        <div style="font-weight:700;margin:6px 0 4px">Strong</div>
+        <div style="font-size:12px;color:var(--muted)">Ready to pitch. All signals aligned.</div>
+      </div>
+      <div class="card" style="border-color:rgba(255,184,0,0.25);text-align:center;padding:20px">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;color:var(--gold);line-height:1">50–74</div>
+        <div style="font-weight:700;margin:6px 0 4px">Fair</div>
+        <div style="font-size:12px;color:var(--muted)">Needs attention. Check the weak pillars.</div>
+      </div>
+      <div class="card" style="border-color:rgba(255,80,80,0.25);text-align:center;padding:20px">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;color:#ff5050;line-height:1">0–49</div>
+        <div style="font-weight:700;margin:6px 0 4px">Weak</div>
+        <div style="font-size:12px;color:var(--muted)">Not ready. Significant gaps present.</div>
+      </div>
+    </div>
+
+    <div class="callout" style="background:rgba(0,217,255,0.04);border:1px solid rgba(0,217,255,0.12);margin-top:24px">
+      <div style="font-family:'DM Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--cyan);margin-bottom:8px">Validation Process</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.65);line-height:1.7">Before the score formula is locked: run it against a sample of 20–30 real past releases, review the outputs with 2–3 reps, and adjust weights until the scores reflect what the team knows to be true. The formula lives in the app — changes take effect on the next nightly sync.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PHASES -->
+<section id="phases">
+  <div class="container">
+    <div class="sec-tag">05 — Build Phases</div>
+    <div class="sec-title">How we get there.</div>
+    <div class="sec-sub">Three phases from working prototype to full production tool.</div>
+
+    <!-- PHASE 1 -->
+    <div style="margin-bottom:40px">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px">
+        <span class="phase-badge" style="background:rgba(0,217,255,0.1);color:var(--cyan);border:1px solid rgba(0,217,255,0.3)">Phase 1 — MVP</span>
+        <span style="font-size:14px;font-weight:700">Get a shareable link working</span>
+      </div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:20px">Foundation is already running locally. Phase 1 makes it real and shareable.</div>
+      <div class="card-grid">
+        <div class="card" style="border-color:rgba(0,217,255,0.15)">
+          <div class="card-label" style="color:var(--cyan)">Deliverable</div>
+          <div class="card-title">URL routing by UPC</div>
+          <div class="card-body">React Router added to app. Each release has a permanent, shareable URL.</div>
+        </div>
+        <div class="card" style="border-color:rgba(0,217,255,0.15)">
+          <div class="card-label" style="color:var(--cyan)">Deliverable</div>
+          <div class="card-title">Hosted on Google Cloud Run</div>
+          <div class="card-body">Dockerized, deployed, CI/CD from GitHub. Available at a real URL.</div>
+        </div>
+        <div class="card" style="border-color:rgba(0,217,255,0.15)">
+          <div class="card-label" style="color:var(--cyan)">Deliverable</div>
+          <div class="card-title">Google Auth Gate (IAP)</div>
+          <div class="card-body">Only @symdistro.com accounts can access. No login screen to build.</div>
+        </div>
+        <div class="card" style="border-color:rgba(255,184,0,0.15)">
+          <div class="card-label" style="color:var(--gold)">To Define</div>
+          <div class="card-title">Score formula finalized</div>
+          <div class="card-body">Pillar weights validated with the team against real releases. Formula locked before Phase 2 sync.</div>
+        </div>
+        <div class="card" style="border-color:rgba(255,184,0,0.15)">
+          <div class="card-label" style="color:var(--gold)">To Define</div>
+          <div class="card-title">Profile page layout finalized</div>
+          <div class="card-body">Sections and signals on the full profile page agreed on with the marketing team.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 2 -->
+    <div style="margin-bottom:40px">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px">
+        <span class="phase-badge" style="background:rgba(255,184,0,0.1);color:var(--gold);border:1px solid rgba(255,184,0,0.3)">Phase 2 — Live Data</span>
+        <span style="font-size:14px;font-weight:700">Replace demo data with real API data</span>
+      </div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:20px">Wire real data sources, sync scores to Airtable nightly.</div>
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-label" style="color:var(--gold)">Deliverable</div>
+          <div class="card-title">Chartmetric integration</div>
+          <div class="card-body">Playlist history, social stats, and similar artist data from Chartmetric. API key already in 1Password.</div>
+        </div>
+        <div class="card">
+          <div class="card-label" style="color:var(--gold)">Deliverable</div>
+          <div class="card-title">Spotify API integration</div>
+          <div class="card-body">Monthly listeners, follower count, and release data. Free public endpoints, no key needed.</div>
+        </div>
+        <div class="card">
+          <div class="card-label" style="color:var(--gold)">Deliverable</div>
+          <div class="card-title">Nightly score sync to Airtable</div>
+          <div class="card-body">Scheduled job calculates scores for all active releases and writes pillar scores back to Airtable fields. Enables sorting and filtering natively.</div>
+        </div>
+        <div class="card">
+          <div class="card-label" style="color:var(--gold)">Deliverable</div>
+          <div class="card-title">API proxy on Cloud Run</div>
+          <div class="card-body">Server-side route keeps paid API keys out of the browser. Added to the existing Cloud Run service — no extra infrastructure.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 3 -->
+    <div>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px">
+        <span class="phase-badge" style="background:rgba(180,92,255,0.1);color:var(--purple);border:1px solid rgba(180,92,255,0.3)">Phase 3 — Airtable Extension</span>
+        <span style="font-size:14px;font-weight:700">Build the in-Airtable drawer experience</span>
+      </div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:20px">The Airtable custom extension is built with the Blocks SDK and published to the base. No local server required after release.</div>
+      <div class="card-grid">
+        <div class="card" style="border-color:rgba(180,92,255,0.15)">
+          <div class="card-label" style="color:var(--purple)">Deliverable</div>
+          <div class="card-title">Extension scaffold + publish</div>
+          <div class="card-body">CLI setup, React app initialized, linked to the base, published via <code style="font-size:11px;background:rgba(255,255,255,0.06);padding:1px 5px;border-radius:3px">block release</code>.</div>
+        </div>
+        <div class="card" style="border-color:rgba(180,92,255,0.15)">
+          <div class="card-label" style="color:var(--purple)">Deliverable</div>
+          <div class="card-title">Cursor-driven record selection</div>
+          <div class="card-body">Extension reads selected row automatically via <code style="font-size:11px;background:rgba(255,255,255,0.06);padding:1px 5px;border-radius:3px">useCursor()</code>. No button click needed.</div>
+        </div>
+        <div class="card" style="border-color:rgba(180,92,255,0.15)">
+          <div class="card-label" style="color:var(--purple)">Deliverable</div>
+          <div class="card-title">Radar + score drawer UI</div>
+          <div class="card-body">Ported from the airtable-demo mockup. Radar chart, pillar bars, playlist targets, driver warning.</div>
+        </div>
+        <div class="card" style="border-color:rgba(180,92,255,0.15)">
+          <div class="card-label" style="color:var(--purple)">Deliverable</div>
+          <div class="card-title">View Full Profile link</div>
+          <div class="card-body">Button opens <code style="font-size:11px;background:rgba(255,255,255,0.06);padding:1px 5px;border-radius:3px">labs.symphonic.com/[UPC]</code> in a new tab.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OUT OF SCOPE -->
+<section id="oos">
+  <div class="container">
+    <div class="sec-tag">06 — Out of Scope</div>
+    <div class="sec-title">What this is not.</div>
+    <div class="sec-sub">v1 is intentionally focused. These items are explicitly out of scope to keep the build lean and shippable.</div>
+
+    <table class="prd-table">
+      <thead>
+        <tr><th>Item</th><th>Why it's out of scope</th><th>Future?</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="font-weight:600;color:#fff">Client-facing access</td>
+          <td>Tool is internal only for v1. Sharing with artists or labels introduces privacy and data accuracy concerns that need separate planning.</td>
+          <td><span class="pill" style="background:rgba(255,255,255,0.04);color:var(--muted);border:1px solid var(--border)">Later phase</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;color:#fff">Automated pitch sending</td>
+          <td>The tool informs pitches, it doesn't send them. Keeping humans in the loop is intentional for v1.</td>
+          <td><span class="pill" style="background:rgba(255,255,255,0.04);color:var(--muted);border:1px solid var(--border)">Later phase</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;color:#fff">Audio analysis / AI tagging</td>
+          <td>Interesting future capability (Google Vertex AI is available via Cloud Run) but not needed to deliver core value in v1.</td>
+          <td><span class="pill" style="background:rgba(255,255,255,0.04);color:var(--muted);border:1px solid var(--border)">Later phase</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;color:#fff">Label / artist login portal</td>
+          <td>No external auth system in v1. IAP handles Symphonic team auth. External users are out of scope.</td>
+          <td><span class="pill" style="background:rgba(255,255,255,0.04);color:var(--muted);border:1px solid var(--border)">Later phase</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;color:#fff">Real-time data updates</td>
+          <td>Nightly sync is sufficient for v1. Real-time would add cost and complexity without meaningful benefit for a daily workflow tool.</td>
+          <td><span class="pill" style="background:rgba(255,255,255,0.04);color:var(--muted);border:1px solid var(--border)">Later phase</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:600;color:#fff">Mobile app</td>
+          <td>Desktop Airtable workflow is the primary context. Mobile is not a v1 requirement.</td>
+          <td><span class="pill" style="background:rgba(255,255,255,0.04);color:var(--muted);border:1px solid var(--border)">Later phase</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <hr class="divider" />
+
+    <div class="sec-tag" style="margin-top:0">Open Questions</div>
+    <div style="margin-top:16px">
+      <div class="story-block">
+        <div class="story-role" style="color:var(--gold)">Score Design</div>
+        <div class="story-text">What are the right pillar weights? Do the proposed weights (25/20/20/20/15) reflect what the team believes actually drives editorial placements? <strong>Needs team input before Phase 2.</strong></div>
+      </div>
+      <div class="story-block">
+        <div class="story-role" style="color:var(--gold)">Profile Page</div>
+        <div class="story-text">Which sections and signals should appear on the full profile page? The foundation is built — the layout needs to be finalized with the marketing team. <strong>Needs team input before Phase 1 ships.</strong></div>
+      </div>
+      <div class="story-block">
+        <div class="story-role" style="color:var(--gold)">Data Access</div>
+        <div class="story-text">Does the Chartmetric API key in 1Password have the right scopes for playlist history and social stats? <strong>Needs technical confirmation before Phase 2 work starts.</strong></div>
+      </div>
+      <div class="story-block">
+        <div class="story-role" style="color:var(--gold)">Domain</div>
+        <div class="story-text">Who manages the Symphonic DNS and can set up the <code style="font-size:12px;background:rgba(255,255,255,0.06);padding:1px 6px;border-radius:4px">labs.symphonic.com</code> subdomain pointing to Cloud Run? <strong>Needs one-time coordination with whoever owns the domain.</strong></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="page-footer">
+  <div class="footer-note">Symphonic Distribution — Client Marketing Insights Dashboard — PRD v1 — June 2026</div>
+  <div class="footer-note">Internal Working Document — Subject to Change</div>
+</footer>
+
+<script>
+  const PAGE_SECTIONS = ['overview', 'users', 'features', 'score', 'phases', 'oos'];
+
+  function showSection(id) {
+    document.getElementById('hero').style.display = 'none';
+    PAGE_SECTIONS.forEach(s => {
+      document.getElementById(s).style.display = (s === id) ? '' : 'none';
+    });
+    document.querySelectorAll('.nav-links a').forEach((a, i) => {
+      a.classList.toggle('active', PAGE_SECTIONS[i] === id);
+    });
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }
+
+  function showHero() {
+    document.getElementById('hero').style.display = '';
+    PAGE_SECTIONS.forEach(s => document.getElementById(s).style.display = 'none');
+    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }
+
+  // Init: show hero only
+  PAGE_SECTIONS.forEach(s => document.getElementById(s).style.display = 'none');
+</script>
+</body>
+</html>

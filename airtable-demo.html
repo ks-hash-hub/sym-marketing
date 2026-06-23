@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Priority Release Database — Symphonic</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cyan:#00d9ff;--gold:#ffb800;--green:#39d98a;--purple:#b45cff;
+  --pink:#ff3f7a;--orange:#ff8c42;
+  --muted:rgba(255,255,255,0.42);--dim:rgba(255,255,255,0.2);
+}
+html,body{height:100%;background:#0c0e14;font-family:'Inter',sans-serif;font-size:13px;overflow:hidden}
+
+/* ── DESKTOP ── */
+.desktop{
+  position:fixed;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 30% 40%, rgba(0,217,255,0.04) 0%, transparent 60%),
+             radial-gradient(ellipse 60% 50% at 80% 70%, rgba(180,92,255,0.03) 0%, transparent 60%),
+             #0c0e14;
+  display:flex;align-items:center;justify-content:center;
+  padding:24px;
+}
+
+/* ── BROWSER WINDOW ── */
+.browser-window{
+  width:100%;max-width:1380px;height:calc(100vh - 48px);
+  background:#191b24;border-radius:12px;
+  box-shadow:0 32px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.07);
+  display:flex;flex-direction:column;overflow:hidden;
+}
+
+/* Browser chrome */
+.browser-chrome{
+  background:#1f2130;border-bottom:1px solid rgba(255,255,255,0.08);
+  padding:10px 16px;display:flex;align-items:center;gap:12px;flex-shrink:0;
+  border-radius:12px 12px 0 0;
+}
+.traffic-lights{display:flex;gap:7px;align-items:center}
+.tl{width:12px;height:12px;border-radius:50%;cursor:pointer;flex-shrink:0}
+.tl.red{background:#ff5f57}.tl.yellow{background:#febc2e}.tl.green{background:#28c840}
+.browser-back-fwd{display:flex;gap:2px}
+.nav-btn{width:26px;height:26px;border-radius:6px;background:none;border:none;
+  color:rgba(255,255,255,0.25);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.nav-btn:hover{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.6)}
+.url-bar{flex:1;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.08);
+  border-radius:7px;padding:5px 12px;font-family:'DM Mono',monospace;font-size:11px;
+  color:rgba(255,255,255,0.5);display:flex;align-items:center;gap:6px;
+  cursor:text;transition:border-color 0.15s}
+.url-bar:hover{border-color:rgba(255,255,255,0.15)}
+.url-lock{color:#39d98a;font-size:10px}
+.url-domain{color:rgba(255,255,255,0.7);font-weight:500}
+.url-path{color:rgba(255,255,255,0.35)}
+.browser-actions{display:flex;gap:4px}
+.br-action{padding:4px 10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);
+  border-radius:5px;font-size:11px;color:rgba(255,255,255,0.4);cursor:pointer;font-family:'Inter',sans-serif}
+
+/* ── PAGES (inside window) ── */
+.page{display:none;flex:1;overflow:hidden;flex-direction:column}
+.page.active{display:flex}
+
+/* ══════════════════════ AIRTABLE LAYOUT ══════════════════════ */
+.at-shell{display:flex;flex:1;overflow:hidden;flex-direction:column}
+
+/* Airtable top bar */
+.at-topbar{
+  background:#1c1f2e;border-bottom:1px solid rgba(255,255,255,0.07);
+  padding:0 18px;display:flex;align-items:center;height:44px;flex-shrink:0;gap:0;
+}
+.at-base-title{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px;color:#fff;margin-right:4px}
+.at-base-caret{color:rgba(255,255,255,0.3);font-size:11px;margin-right:16px}
+.at-top-links{display:flex;height:100%;gap:0}
+.at-top-link{padding:0 14px;font-size:12px;color:rgba(255,255,255,0.45);cursor:pointer;
+  display:flex;align-items:center;border-bottom:2px solid transparent;white-space:nowrap;
+  transition:all 0.15s}
+.at-top-link:hover{color:rgba(255,255,255,0.8)}
+.at-top-link.active{color:#fff;border-bottom-color:#00d9ff;font-weight:600}
+.at-topbar-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+.at-topbar-btn{padding:4px 10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);
+  border-radius:5px;font-size:11px;color:rgba(255,255,255,0.5);cursor:pointer}
+.at-share-btn{padding:4px 12px;background:#00d9ff;border:none;border-radius:5px;
+  font-size:11px;font-weight:700;color:#000;cursor:pointer}
+
+/* Body: sidebar + main */
+.at-body{display:flex;flex:1;overflow:hidden}
+
+/* LEFT SIDEBAR */
+.at-sidebar{
+  width:220px;flex-shrink:0;background:#17192a;border-right:1px solid rgba(255,255,255,0.06);
+  display:flex;flex-direction:column;overflow:hidden;
+}
+.sidebar-search{display:flex;align-items:center;gap:8px;padding:10px 14px;
+  border-bottom:1px solid rgba(255,255,255,0.05)}
+.sidebar-search input{flex:1;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);
+  border-radius:5px;padding:4px 8px;font-size:11px;color:rgba(255,255,255,0.6);outline:none;
+  font-family:'Inter',sans-serif}
+.sidebar-search input::placeholder{color:rgba(255,255,255,0.25)}
+.sidebar-gear{color:rgba(255,255,255,0.3);font-size:13px;cursor:pointer;flex-shrink:0}
+.sidebar-scroll{flex:1;overflow-y:auto;padding:6px 0}
+.sidebar-scroll::-webkit-scrollbar{width:3px}
+.sidebar-scroll::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08)}
+.sidebar-section{margin:4px 0}
+.sidebar-section-header{display:flex;align-items:center;gap:6px;padding:5px 12px 3px;
+  font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;
+  color:rgba(255,255,255,0.3);cursor:pointer;user-select:none}
+.sidebar-section-header span.caret{font-size:8px;color:rgba(255,255,255,0.2)}
+.sidebar-view{display:flex;align-items:center;gap:8px;padding:5px 12px 5px 20px;
+  font-size:12px;color:rgba(255,255,255,0.5);cursor:pointer;border-radius:0;
+  transition:background 0.1s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sidebar-view:hover{background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.75)}
+.sidebar-view.active{background:rgba(0,217,255,0.08);color:#00d9ff}
+.sidebar-view-icon{font-size:11px;flex-shrink:0;opacity:0.6}
+.sidebar-create{display:flex;align-items:center;gap:6px;padding:8px 12px;margin-top:4px;
+  font-size:11px;color:rgba(255,255,255,0.35);cursor:pointer;border-top:1px solid rgba(255,255,255,0.05)}
+.sidebar-create:hover{color:rgba(255,255,255,0.6)}
+
+/* MAIN CONTENT */
+.at-content{display:flex;flex-direction:column;flex:1;overflow:hidden}
+
+/* Toolbar */
+.at-toolbar{
+  background:#1c1f2e;border-bottom:1px solid rgba(255,255,255,0.06);
+  padding:6px 14px;display:flex;align-items:center;gap:6px;flex-shrink:0;flex-wrap:wrap;
+}
+.tb-chip{display:flex;align-items:center;gap:4px;padding:3px 9px;
+  background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);
+  border-radius:4px;font-size:11px;color:rgba(255,255,255,0.5);cursor:pointer;white-space:nowrap;
+  transition:all 0.12s}
+.tb-chip:hover{color:rgba(255,255,255,0.8);border-color:rgba(255,255,255,0.18)}
+.tb-chip.active{background:rgba(0,217,255,0.08);border-color:rgba(0,217,255,0.25);color:#00d9ff}
+.tb-chip.hidden-fields{background:rgba(180,92,255,0.08);border-color:rgba(180,92,255,0.25);color:#b45cff}
+.tb-chip.filter{background:rgba(255,184,0,0.07);border-color:rgba(255,184,0,0.2);color:#ffb800}
+.tb-chip.group{background:rgba(57,217,138,0.07);border-color:rgba(57,217,138,0.2);color:#39d98a}
+.tb-chip.sort{background:rgba(255,140,66,0.07);border-color:rgba(255,140,66,0.2);color:#ff8c42}
+.tb-sep{width:1px;height:16px;background:rgba(255,255,255,0.08);margin:0 2px}
+.tb-spacer{flex:1}
+.tb-share{padding:3px 10px;background:rgba(0,217,255,0.08);border:1px solid rgba(0,217,255,0.25);
+  border-radius:4px;font-size:11px;font-weight:600;color:#00d9ff;cursor:pointer}
+
+/* Table + drawer */
+.at-table-area{display:flex;flex:1;overflow:hidden}
+.at-scroll{flex:1;overflow:auto}
+.at-scroll::-webkit-scrollbar{width:6px;height:6px}
+.at-scroll::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:3px}
+.at-scroll::-webkit-scrollbar-track{background:transparent}
+
+/* Table */
+.at-table{width:100%;border-collapse:collapse;min-width:1100px}
+
+/* Sticky col header */
+.at-table thead th{
+  position:sticky;top:0;z-index:10;
+  background:#1a1d2c;padding:0 12px;height:32px;
+  text-align:left;font-size:11px;font-weight:600;
+  color:rgba(255,255,255,0.45);letter-spacing:0.03em;
+  border-right:1px solid rgba(255,255,255,0.05);
+  border-bottom:1px solid rgba(255,255,255,0.08);
+  white-space:nowrap;cursor:pointer;user-select:none;
+}
+.at-table thead th:hover{background:#1f2235;color:rgba(255,255,255,0.7)}
+.at-table thead th:first-child{width:50px;text-align:center;color:rgba(255,255,255,0.2)}
+.col-icon{margin-right:5px;font-size:10px;opacity:0.5}
+
+/* Week group row */
+.week-group-row td{
+  background:#141622;padding:5px 0 5px 14px;
+  border-bottom:1px solid rgba(255,255,255,0.04);
+  position:sticky;top:32px;z-index:8;
+}
+.week-group-inner{display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none}
+.week-caret{font-size:9px;color:rgba(255,255,255,0.3);transition:transform 0.15s}
+.week-label{font-size:11px;font-weight:700;color:rgba(255,255,255,0.6);letter-spacing:0.04em}
+.week-count-badge{font-family:'DM Mono',monospace;font-size:9px;color:rgba(255,255,255,0.3);
+  background:rgba(255,255,255,0.05);border-radius:99px;padding:1px 7px}
+.week-date{font-size:10px;color:rgba(255,255,255,0.2);margin-left:4px}
+
+/* Data rows */
+.at-row{border-bottom:1px solid rgba(255,255,255,0.03);cursor:pointer;transition:background 0.08s}
+.at-row:hover td{background:rgba(255,255,255,0.025)}
+.at-row.selected td{background:rgba(0,217,255,0.04)!important}
+.at-td{padding:0 12px;height:36px;border-right:1px solid rgba(255,255,255,0.03);
+  vertical-align:middle;white-space:nowrap;max-width:200px;overflow:hidden;text-overflow:ellipsis}
+.at-td.row-num{text-align:center;color:rgba(255,255,255,0.2);font-size:11px;font-family:'DM Mono',monospace;width:50px;max-width:50px}
+.at-td.upc-col{font-family:'DM Mono',monospace;font-size:10px;color:rgba(255,255,255,0.35);max-width:130px}
+.at-td.artist-col{font-weight:600;font-size:12px;color:rgba(255,255,255,0.88);max-width:160px}
+.at-td.release-col{font-size:12px;color:rgba(255,255,255,0.6);max-width:180px}
+.at-td.check-col{text-align:center;width:80px;max-width:80px}
+.at-td.format-col{max-width:90px}
+.at-td.genre-col{max-width:130px}
+.at-td.score-col{min-width:110px;max-width:130px}
+.at-td.action-col{min-width:110px;width:110px;max-width:110px}
+
+.check-yes{color:#39d98a;font-size:14px}
+.check-no{color:rgba(255,255,255,0.1);font-size:12px}
+
+.tag-pill{display:inline-block;border-radius:3px;padding:1px 7px;
+  font-size:10px;font-weight:600;white-space:nowrap}
+
+.lead-avatars{display:flex;gap:3px}
+.lead-av{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:8px;font-weight:700;flex-shrink:0;letter-spacing:0}
+
+.score-cell{display:flex;align-items:center;gap:6px}
+.score-n{font-family:'Bebas Neue',sans-serif;font-size:19px;line-height:1;flex-shrink:0}
+.score-bt{width:38px;height:4px;border-radius:99px;background:rgba(255,255,255,0.07);overflow:hidden}
+.score-bf{height:100%;border-radius:99px}
+
+.profile-btn{display:inline-flex;align-items:center;gap:4px;
+  background:rgba(0,217,255,0.08);border:1px solid rgba(0,217,255,0.22);
+  color:#00d9ff;border-radius:5px;padding:3px 9px;font-size:10px;font-weight:600;
+  cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap;transition:background 0.12s}
+.profile-btn:hover{background:rgba(0,217,255,0.16)}
+
+.warn-badge{display:inline-flex;align-items:center;gap:3px;font-size:8px;font-weight:700;
+  margin-left:4px;vertical-align:middle}
+
+/* Pagination */
+.at-pagination{
+  background:#16192a;border-top:1px solid rgba(255,255,255,0.06);
+  padding:7px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0;
+}
+.pg-btn{padding:4px 12px;background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.08);border-radius:4px;
+  font-size:11px;color:rgba(255,255,255,0.45);cursor:pointer;
+  font-family:'Inter',sans-serif;transition:all 0.12s}
+.pg-btn:hover:not(:disabled){border-color:rgba(0,217,255,0.3);color:#00d9ff}
+.pg-btn:disabled{opacity:0.3;cursor:default}
+.pg-nums{display:flex;gap:3px}
+.pg-n{width:26px;height:26px;display:flex;align-items:center;justify-content:center;
+  border-radius:4px;font-size:11px;cursor:pointer;font-family:'DM Mono',monospace;
+  border:1px solid transparent;color:rgba(255,255,255,0.4);transition:all 0.12s}
+.pg-n:hover{border-color:rgba(0,217,255,0.25);color:#00d9ff}
+.pg-n.active{background:rgba(0,217,255,0.1);border-color:rgba(0,217,255,0.3);color:#00d9ff;font-weight:700}
+.pg-info{font-family:'DM Mono',monospace;font-size:10px;color:rgba(255,255,255,0.3);margin-left:auto}
+
+/* ══════════════════════ EXTENSION DRAWER ══════════════════════ */
+.ext-drawer{
+  width:0;overflow:hidden;flex-shrink:0;
+  background:#15172a;border-left:1px solid rgba(255,255,255,0.07);
+  transition:width 0.22s cubic-bezier(0.4,0,0.2,1);
+  display:flex;flex-direction:column;
+}
+.ext-drawer.open{width:310px}
+.drawer-scroll{width:310px;height:100%;overflow-y:auto;display:flex;flex-direction:column}
+.drawer-scroll::-webkit-scrollbar{width:3px}
+.drawer-scroll::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08)}
+
+.dh{padding:14px 16px 12px;border-bottom:1px solid rgba(255,255,255,0.06);position:relative;flex-shrink:0}
+.dh-close{position:absolute;top:12px;right:12px;background:none;border:none;
+  color:rgba(255,255,255,0.3);cursor:pointer;font-size:15px;padding:3px 6px;border-radius:4px;line-height:1}
+.dh-close:hover{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.7)}
+.dh-artist{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:0.04em;line-height:1}
+.dh-release{font-size:11px;color:#00d9ff;font-weight:600;margin-top:3px}
+.dh-pills{display:flex;gap:4px;flex-wrap:wrap;margin-top:9px}
+.d-pill{display:inline-block;border-radius:3px;padding:2px 7px;
+  font-size:9px;font-weight:700;font-family:'DM Mono',monospace;letter-spacing:0.04em}
+
+.d-score-box{margin:12px 14px;background:rgba(0,0,0,0.25);border:1px solid rgba(0,217,255,0.18);
+  border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:12px;flex-shrink:0}
+.d-score-big{font-family:'Bebas Neue',sans-serif;font-size:54px;line-height:1;letter-spacing:0.04em;flex-shrink:0}
+.d-score-info{flex:1}
+.d-score-lbl{font-family:'DM Mono',monospace;font-size:8px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:3px}
+.d-score-sub{font-size:10px;color:rgba(255,255,255,0.45);line-height:1.5}
+
+.d-sec{padding:10px 14px;border-top:1px solid rgba(255,255,255,0.05)}
+.d-sec-lbl{font-family:'DM Mono',monospace;font-size:8px;font-weight:700;
+  letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:8px}
+
+.d-bar-row{display:flex;align-items:center;gap:7px;margin-bottom:5px}
+.d-bar-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.d-bar-name{font-family:'DM Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;flex:1}
+.d-bar-track{width:56px;height:4px;border-radius:99px;background:rgba(255,255,255,0.07);overflow:hidden;flex-shrink:0}
+.d-bar-fill{height:100%;border-radius:99px}
+.d-bar-val{font-family:'DM Mono',monospace;font-size:9px;width:16px;text-align:right;flex-shrink:0}
+
+.d-target{display:flex;align-items:center;gap:7px;padding:5px 0;
+  border-bottom:1px solid rgba(255,255,255,0.03)}
+.d-target:last-child{border:none}
+.d-match{width:17px;height:17px;border-radius:3px;display:flex;align-items:center;justify-content:center;
+  font-family:'DM Mono',monospace;font-size:9px;font-weight:700;flex-shrink:0}
+.d-target-name{flex:1;font-size:11px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.d-target-dsp{font-size:9px;color:rgba(255,255,255,0.3);flex-shrink:0}
+
+.d-warn{margin:8px 14px;background:rgba(255,107,107,0.07);
+  border:1px solid rgba(255,107,107,0.22);border-radius:7px;
+  padding:9px 11px;font-size:10px;color:#ff8080;
+  display:flex;gap:8px;align-items:flex-start;flex-shrink:0}
+
+.d-view-full{margin:12px 14px 16px;display:block;width:calc(100% - 28px);
+  text-align:center;background:rgba(0,217,255,0.09);border:1px solid rgba(0,217,255,0.3);
+  color:#00d9ff;border-radius:7px;padding:10px;font-size:11px;font-weight:700;
+  cursor:pointer;font-family:'DM Mono',monospace;letter-spacing:0.1em;
+  transition:background 0.12s;flex-shrink:0}
+.d-view-full:hover{background:rgba(0,217,255,0.18)}
+
+/* ══════════════════════ FULL PROFILE PAGE ══════════════════════ */
+.profile-page-wrap{flex:1;overflow-y:auto;background:#0a0c10}
+.profile-page-wrap::-webkit-scrollbar{width:6px}
+.profile-page-wrap::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:3px}
+
+.p-hero{padding:26px 36px 22px;border-bottom:1px solid rgba(255,255,255,0.07)}
+.p-back{font-size:10px;color:rgba(255,255,255,0.35);font-family:'DM Mono',monospace;
+  font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:14px;cursor:pointer;display:inline-flex;align-items:center;gap:5px}
+.p-back:hover{color:#00d9ff}
+.p-artist{font-family:'Bebas Neue',sans-serif;font-size:52px;line-height:1;letter-spacing:0.03em}
+.p-title{font-size:15px;color:#00d9ff;font-weight:700;margin-top:4px;margin-bottom:14px}
+.p-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px}
+.p-tag{border-radius:99px;padding:2px 11px;font-size:9px;font-weight:700;font-family:'DM Mono',monospace;letter-spacing:0.06em}
+.p-pillars{display:flex;gap:5px;flex-wrap:wrap}
+.p-pillar{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);
+  border-radius:6px;padding:3px 8px;display:flex;align-items:center;gap:4px}
+.p-pillar-lbl{font-size:8px;font-weight:700;font-family:'DM Mono',monospace;letter-spacing:0.08em;text-transform:uppercase}
+.p-pillar-val{font-size:11px;font-weight:800;font-family:'DM Mono',monospace}
+.p-pillar-max{font-size:8px;color:rgba(255,255,255,0.18);font-family:'DM Mono',monospace}
+.p-score-hero{text-align:center;border-radius:12px;padding:12px 18px;flex-shrink:0}
+.p-score-lbl{font-family:'DM Mono',monospace;font-size:8px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:2px}
+.p-score-big{font-family:'Bebas Neue',sans-serif;font-size:78px;line-height:1}
+
+.p-body{display:grid;grid-template-columns:1fr 1fr}
+.p-left{border-right:1px solid rgba(255,255,255,0.06);padding:22px 26px}
+.p-right{padding:22px 26px;display:flex;flex-direction:column;gap:12px}
+.p-col-lbl{font-family:'DM Mono',monospace;font-size:8px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:14px}
+
+.p-card{background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.07);border-radius:11px;padding:14px 16px}
+.p-card-lbl{font-family:'DM Mono',monospace;font-size:8px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:8px}
+
+.p-sig{display:flex;align-items:center;gap:7px;margin-bottom:9px}
+.p-sig-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.p-sig-name{font-family:'DM Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;flex:1}
+.p-sig-score{font-family:'Bebas Neue',sans-serif;font-size:17px;line-height:1;flex-shrink:0}
+.p-sig-track{width:48px;height:3px;border-radius:99px;background:rgba(255,255,255,0.07);overflow:hidden;flex-shrink:0}
+.p-sig-fill{height:100%;border-radius:99px}
+
+.p-social-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.p-social-item{background:rgba(255,255,255,0.03);border-radius:7px;padding:7px 9px}
+.p-social-plat{font-size:9px;color:rgba(255,255,255,0.35);margin-bottom:2px}
+.p-social-val{font-family:'Bebas Neue',sans-serif;font-size:19px;line-height:1}
+
+.p-target-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.03)}
+.p-target-row:last-child{border:none}
+.p-t-badge{width:17px;height:17px;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:9px;font-weight:700;flex-shrink:0}
+.p-t-name{flex:1;font-size:11px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.p-t-dsp{font-size:9px;color:rgba(255,255,255,0.3)}
+
+.ph-row{display:flex;align-items:center;gap:7px;margin-bottom:5px}
+.ph-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.ph-n{flex:1;font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ph-track{width:68px;height:4px;border-radius:99px;background:rgba(255,255,255,0.06);overflow:hidden;flex-shrink:0}
+.ph-fill{height:100%;border-radius:99px}
+.ph-c{font-family:'DM Mono',monospace;font-size:10px;width:16px;text-align:right;flex-shrink:0}
+
+.p-nodriver{background:rgba(255,107,107,0.06);border:1px solid rgba(255,107,107,0.25);border-radius:10px;padding:14px 16px;display:flex;gap:10px}
+</style>
+</head>
+<body>
+
+<div class="desktop">
+<div class="browser-window">
+
+  <!-- Browser chrome -->
+  <div class="browser-chrome">
+    <div class="traffic-lights">
+      <div class="tl red"></div>
+      <div class="tl yellow"></div>
+      <div class="tl green"></div>
+    </div>
+    <div class="browser-back-fwd">
+      <button class="nav-btn">←</button>
+      <button class="nav-btn">→</button>
+    </div>
+    <div class="url-bar" id="main-url-bar">
+      <span class="url-lock">🔒</span>
+      <span class="url-domain">airtable.com</span>
+      <span class="url-path">/apppQyOGTr6uGeYZd/tblG0xtGOTXKbW7Bw</span>
+    </div>
+    <div class="browser-actions">
+      <div class="br-action">↻</div>
+    </div>
+  </div>
+
+  <!-- ═══ PAGE: AIRTABLE ═══ -->
+  <div id="page-table" class="page active">
+  <div class="at-shell">
+
+    <!-- Airtable top bar -->
+    <div class="at-topbar">
+      <div class="at-base-title">🎵 Priority Release Database</div>
+      <span class="at-base-caret">∨</span>
+      <div class="at-top-links">
+        <div class="at-top-link">Data</div>
+        <div class="at-top-link">Automations</div>
+        <div class="at-top-link">Interfaces</div>
+        <div class="at-top-link">Forms</div>
+      </div>
+      <div class="at-topbar-right">
+        <div class="at-topbar-btn">⏱</div>
+        <div class="at-topbar-btn">⚠ Over limits</div>
+        <div class="at-topbar-btn">↗ Launch</div>
+        <div class="at-share-btn">Share</div>
+      </div>
+    </div>
+
+    <!-- Table tabs -->
+    <div style="background:#1c1f2e;border-bottom:1px solid rgba(255,255,255,0.06);padding:0 16px;display:flex;gap:0;overflow-x:auto;flex-shrink:0">
+      <div class="at-top-link">Artist Profile</div>
+      <div class="at-top-link">Label Profile</div>
+      <div class="at-top-link active" style="border-bottom:2px solid #00d9ff">Release Schedule</div>
+      <div class="at-top-link">Drivers Submissions</div>
+      <div class="at-top-link">Drivers Submissions Updates</div>
+      <div class="at-top-link">Pickup</div>
+      <div class="at-top-link">MERLIN Allocation Requests 2024–2026</div>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:4px;padding:0 8px">
+        <div style="width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:11px;color:rgba(255,255,255,0.4);cursor:pointer">+</div>
+        <div class="at-topbar-btn" style="font-size:10px">Tools</div>
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div class="at-body">
+
+      <!-- LEFT SIDEBAR -->
+      <div class="at-sidebar">
+        <div class="sidebar-search">
+          <input placeholder="Find a view"/>
+          <span class="sidebar-gear">⚙</span>
+        </div>
+        <div class="sidebar-scroll">
+          <div class="sidebar-section">
+            <div class="sidebar-section-header"><span class="caret">▾</span> UK/EU Priority Labels View</div>
+            <div class="sidebar-view"><span class="sidebar-view-icon">⊞</span> Symphonic UK/EU X Canva...</div>
+            <div class="sidebar-view"><span class="sidebar-view-icon">⊞</span> Symphonic UK/EU X Music...</div>
+          </div>
+          <div class="sidebar-section">
+            <div class="sidebar-section-header"><span class="caret">▾</span> Priority Meeting Views</div>
+          </div>
+          <div class="sidebar-section">
+            <div class="sidebar-section-header"><span class="caret">▾</span> Editorial Inclusion Work...</div>
+            <div class="sidebar-view"><span class="sidebar-view-icon">⊞</span> Natalie's Editorial Inclusion...</div>
+            <div class="sidebar-view active"><span class="sidebar-view-icon">⊞</span> MAIN EDITORIAL PITCH –...</div>
+            <div class="sidebar-view"><span class="sidebar-view-icon">⊞</span> MAIN EDITORIAL PITCH –...</div>
+            <div class="sidebar-view"><span class="sidebar-view-icon">⊞</span> MAIN EDITORIAL PITCH –...</div>
+            <div class="sidebar-view"><span class="sidebar-view-icon">⊞</span> Editorial Inclusion Workspa...</div>
+            <div class="sidebar-view"><span class="sidebar-view-icon">⊞</span> Editorial Inclusion Workspa...</div>
+            <div class="sidebar-view"><span class="sidebar-view-icon">⊞</span> Latin – Apple IDs, Spotify U...</div>
+          </div>
+          <div class="sidebar-section">
+            <div class="sidebar-section-header"><span class="caret">▾</span> Priority Latin Artists...</div>
+            <div class="sidebar-view"><span class="sidebar-view-icon">⊞</span> LATAM Pickup View – Nico</div>
+            <div class="sidebar-view"><span class="sidebar-view-icon">⊞</span> SC View – Nico</div>
+            <div class="sidebar-view"><span class="sidebar-view-icon">⊞</span> SC Priorities View</div>
+            <div class="sidebar-view"><span class="sidebar-view-icon">⊞</span> [Trigger Pitch Grids] –...</div>
+            <div class="sidebar-view"><span class="sidebar-view-icon">⊞</span> MAIN EDITORIAL PITCH–St...</div>
+            <div class="sidebar-view"><span class="sidebar-view-icon">⊞</span> MAIN EDITORIAL PITCH...</div>
+            <div class="sidebar-view"><span class="sidebar-view-icon">⊞</span> Editorial Inclusion Log</div>
+          </div>
+          <div class="sidebar-section">
+            <div class="sidebar-section-header"><span class="caret">▾</span> Collaborative Grids</div>
+          </div>
+        </div>
+        <div class="sidebar-create">+ Create new...</div>
+      </div>
+
+      <!-- MAIN CONTENT -->
+      <div class="at-content">
+
+        <!-- Toolbar -->
+        <div class="at-toolbar">
+          <div class="tb-chip active">⊞ Grid View</div>
+          <div class="tb-sep"></div>
+          <div class="tb-chip hidden-fields">👁 <span id="hidden-count">220</span> hidden fields</div>
+          <div class="tb-chip filter">⊟ Filtered by LABEL, DATE</div>
+          <div class="tb-chip group">▤ Grouped by 1 field</div>
+          <div class="tb-chip sort">↕ Sorted by 2 fields</div>
+          <div class="tb-chip">🎨 Color</div>
+          <div class="tb-spacer"></div>
+          <div class="tb-share">⇄ Share and sync</div>
+        </div>
+
+        <!-- Table + Drawer -->
+        <div class="at-table-area">
+          <div class="at-scroll">
+            <table class="at-table">
+              <thead>
+                <tr>
+                  <th style="width:50px;text-align:center"></th>
+                  <th><span class="col-icon">A</span>UPC...</th>
+                  <th><span class="col-icon">≡</span>ARTIST</th>
+                  <th><span class="col-icon">≡</span>RELEASE</th>
+                  <th style="text-align:center"><span class="col-icon">☑</span>EDITORIAL...</th>
+                  <th style="text-align:center"><span class="col-icon">☑</span>EDITORIAL INCLUSION – UK/EU</th>
+                  <th style="text-align:center"><span class="col-icon">☑</span>G.S.O.</th>
+                  <th><span class="col-icon">≡</span>FO...</th>
+                  <th><span class="col-icon">A</span>FOCUS</th>
+                  <th><span class="col-icon">Σ</span>SYM SCORE</th>
+                  <th><span class="col-icon">↗</span>PROFILE</th>
+                </tr>
+              </thead>
+              <tbody id="table-body"></tbody>
+            </table>
+          </div>
+
+          <!-- Extension Drawer -->
+          <div class="ext-drawer" id="ext-drawer">
+            <div class="drawer-scroll">
+              <div class="dh">
+                <button class="dh-close" onclick="closeDrawer()">✕</button>
+                <div class="dh-artist" id="d-artist">—</div>
+                <div class="dh-release" id="d-release">—</div>
+                <div class="dh-pills" id="d-pills"></div>
+              </div>
+
+              <div class="d-score-box">
+                <div class="d-score-big" id="d-score">—</div>
+                <div class="d-score-info">
+                  <div class="d-score-lbl" id="d-score-lbl" style="color:#00d9ff">SYM Score</div>
+                  <div class="d-score-sub" id="d-score-sub">—</div>
+                </div>
+              </div>
+
+              <!-- Radar SVG -->
+              <div class="d-sec" style="border:none;padding-bottom:0">
+                <div class="d-sec-lbl">Strength Profile</div>
+                <svg id="drawer-radar" viewBox="0 0 190 160" width="282" height="160"></svg>
+              </div>
+
+              <div class="d-sec">
+                <div class="d-sec-lbl">Score Breakdown</div>
+                <div id="d-pillars"></div>
+              </div>
+
+              <div class="d-sec">
+                <div class="d-sec-lbl">Top Playlist Targets</div>
+                <div style="font-size:9px;color:rgba(255,255,255,0.25);font-style:italic;margin-bottom:7px">Based on similar artist placements</div>
+                <div id="d-targets"></div>
+              </div>
+
+              <div class="d-warn" id="d-warn" style="display:none">
+                <span>⚠</span>
+                <div><strong style="color:#ff6b6b;display:block;margin-bottom:2px;font-size:10px">No Driver Submission</strong>
+                <span style="font-size:10px">No pitching context on file.</span></div>
+              </div>
+
+              <button class="d-view-full" onclick="openProfile()">⚡ VIEW FULL PROFILE →</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="at-pagination">
+          <button class="pg-btn" id="pg-prev" onclick="changePage(-1)">← Prev</button>
+          <div class="pg-nums" id="pg-nums"></div>
+          <button class="pg-btn" id="pg-next" onclick="changePage(1)">Next →</button>
+          <div class="pg-info" id="pg-info">—</div>
+        </div>
+
+      </div><!-- /at-content -->
+    </div><!-- /at-body -->
+  </div><!-- /at-shell -->
+  </div><!-- /page-table -->
+
+  <!-- ═══ PAGE: FULL PROFILE ═══ -->
+  <div id="page-profile" class="page">
+    <div class="profile-page-wrap">
+      <div class="p-hero" id="p-hero">
+        <div class="p-back" onclick="goBack()">← Back to Airtable</div>
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:24px">
+          <div style="flex:1">
+            <div class="p-artist" id="p-artist">—</div>
+            <div class="p-title" id="p-title">—</div>
+            <div class="p-tags" id="p-tags"></div>
+            <div class="p-pillars" id="p-pillars"></div>
+          </div>
+          <div class="p-score-hero" id="p-score-hero">
+            <div class="p-score-lbl">SYM Score</div>
+            <div class="p-score-big" id="p-score-big">—</div>
+          </div>
+        </div>
+      </div>
+      <div class="p-body">
+        <div class="p-left">
+          <div class="p-col-lbl">Strength Profile</div>
+          <div style="position:relative;margin:0 auto 18px;width:240px;height:240px">
+            <svg id="profile-radar" viewBox="0 0 240 240" width="240" height="240"></svg>
+          </div>
+          <div id="p-sigs"></div>
+          <div id="p-ph" style="margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.06)"></div>
+        </div>
+        <div class="p-right" id="p-right"></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /browser-window -->
+</div><!-- /desktop -->
+
+<script>
+// ═══ DATA ═══
+const RECORDS=[
+  {id:"rech7NtYD0K4IQjNa",upc:"824296353516",artist:"Haley Smalls",focus:"Static",date:"2026-06-12",priority:"High Priority",format:"Album",genre:"R&B/Soul",ei:true,eiUK:true,leads:["Greg DeVito","Stella Vaz"],spotifyML:274258,ig:98100,week:24,drivers:true},
+  {id:"recwgg5qmQanA1zPP",upc:"824296334331",artist:"Kiraw",focus:"coma",date:"2026-06-12",priority:"High Priority",format:"Single",genre:"Hip Hop/Rap",ei:false,eiUK:true,leads:["Lee Griffin","Stella Vaz"],spotifyML:323506,ig:65100,week:24,drivers:true},
+  {id:"recWy1zLi7nwTjR8i",upc:"199891485055",artist:"Cole Redding",focus:"Summer Of 99",date:"2026-06-12",priority:"High Priority",format:"Single",genre:"Pop",ei:true,eiUK:false,leads:["Greg DeVito"],spotifyML:null,ig:null,week:24,drivers:true},
+  {id:"recA46o4dpnuz0vuq",upc:"199891540952",artist:"Shawn James",focus:"Headed for the End",date:"2026-06-12",priority:"High Priority",format:"Album",genre:"Alternative",ei:true,eiUK:false,leads:["Wyatt Thomas"],spotifyML:null,ig:null,week:24,drivers:true},
+  {id:"recnqwd1588k64dX3",upc:"824296486054",artist:"Rose Falcon",focus:"Redneck Blue",date:"2026-06-12",priority:"High Priority",format:"Single",genre:"Country",ei:true,eiUK:false,leads:["Wyatt Thomas"],spotifyML:null,ig:null,week:24,drivers:true},
+  {id:"rec3WAwLBIIuSD95E",upc:"824296432754",artist:"John Riesen / Laura Auer",focus:"The Music of the Night",date:"2026-06-12",priority:"High Priority",format:"Album",genre:"Classical",ei:true,eiUK:false,leads:["Ana Gamboa","Wyatt Thomas"],spotifyML:null,ig:null,week:24,drivers:true},
+  {id:"recUc04ff1NUWrbBo",upc:"824296305232",artist:"The Chugs",focus:"Tased and Unphased",date:"2026-06-12",priority:"High Priority",format:"Single",genre:"Punk",ei:true,eiUK:false,leads:["Wyatt Thomas"],spotifyML:null,ig:null,week:24,drivers:false},
+  {id:"recQCptXqTG7qA07C",upc:"824296236253",artist:"Consumed By Fire",focus:"(Video Release)",date:"2026-06-12",priority:"High Priority",format:"Video",genre:"Christian & Gospel",ei:false,eiUK:false,leads:["Wyatt Thomas"],spotifyML:null,ig:null,week:24,drivers:true},
+  {id:"recB5ewyj2i9aekLK",upc:"199891697861",artist:"Martin Czerny",focus:"Love Went Quiet",date:"2026-06-12",priority:"Medium Priority",format:"Single",genre:"Classical",ei:false,eiUK:false,leads:["Ana Gamboa","Stella Vaz"],spotifyML:344399,ig:2279,week:24,drivers:true},
+  {id:"reclPXvk1sIw8jAH4",upc:"824296423059",artist:"Lookas",focus:"Deus Me Estendeu Sua Mão",date:"2026-06-12",priority:"Medium Priority",format:"Single",genre:"Christian & Gospel",ei:false,eiUK:false,leads:["Stella Vaz","Beatriz Lira"],spotifyML:176617,ig:21100,week:24,drivers:true},
+  {id:"recFnHwFRBOhauv9w",upc:"199891584727",artist:"Lilly White",focus:"To the Shore",date:"2026-06-12",priority:"Medium Priority",format:"Single",genre:"Classical",ei:true,eiUK:false,leads:["Ana Gamboa","Stella Vaz"],spotifyML:24486,ig:52,week:24,drivers:true},
+  {id:"recRtaeOYnZGgVPbB",upc:"824296288320",artist:"MyceliumBug / kGiank0",focus:"Whisper",date:"2026-06-12",priority:"General Release",format:"Single",genre:"Electronic",ei:false,eiUK:true,leads:["Stella Vaz"],spotifyML:732261,ig:3069,week:24,drivers:false},
+  {id:"rec3Z6gpJD8bmJHPu",upc:"824296078051",artist:"GRIXEN",focus:"Voltage Collapse",date:"2026-06-12",priority:"Medium Priority",format:"Single",genre:"Electronic",ei:false,eiUK:false,leads:["Aaron Simpson","Lee Griffin"],spotifyML:1741,ig:493,week:24,drivers:true},
+  {id:"recHA4kPbqFtwm5kS",upc:"199891383092",artist:"Damien Sebe",focus:"free",date:"2026-06-12",priority:"Medium Priority",format:"Single",genre:"Hip Hop/Rap",ei:false,eiUK:false,leads:["Lee Griffin","Michael Burrows"],spotifyML:null,ig:null,week:24,drivers:false},
+  {id:"recnbyYPF8yUz0P0L",upc:"4260054553266",artist:"BROWNIE",focus:"gentle blue",date:"2026-06-12",priority:"Medium Priority",format:"Single",genre:"Jazz",ei:true,eiUK:false,leads:["Ana Gamboa","Stella Vaz"],spotifyML:12211,ig:624,week:24,drivers:true},
+  {id:"recwn57z5NjW7x9Wh",upc:"824296009840",artist:"Adrian and Meredith",focus:"One Day (Right Thing)",date:"2026-06-12",priority:"Medium Priority",format:"Single",genre:"Country",ei:false,eiUK:false,leads:["Wyatt Thomas"],spotifyML:null,ig:null,week:24,drivers:false},
+  {id:"recHXG10GfZ8etPFy",upc:"824296162842",artist:"YUUGE",focus:"Anthropomorphic",date:"2026-06-12",priority:"Medium Priority",format:"Single",genre:"Rock",ei:false,eiUK:false,leads:["Wyatt Thomas"],spotifyML:null,ig:null,week:24,drivers:false},
+  {id:"recWY7G1SSLb2CKxE",upc:"748731713003",artist:"Floyd Mercantile / Peter Mulvey",focus:"I'm Always Chasing Rainbows",date:"2026-06-12",priority:"Medium Priority",format:"Album",genre:"Folk",ei:false,eiUK:false,leads:["Wyatt Thomas"],spotifyML:6153,ig:11600,week:24,drivers:true},
+  {id:"recrwAhPriesPn4v0",upc:"199891689385",artist:"Kirbanu",focus:"Everything You Need Is Inside",date:"2026-06-12",priority:"Medium Priority",format:"Single",genre:"Singer/Songwriter",ei:false,eiUK:false,leads:["Stella Vaz"],spotifyML:13552,ig:6,week:24,drivers:true},
+  {id:"recD4m8HIMwdPlef1",upc:"7300349707169",artist:"Entropy Zero",focus:"First Contact",date:"2026-06-12",priority:"Medium Priority",format:"Single",genre:"Electronic",ei:false,eiUK:false,leads:["Lee Griffin"],spotifyML:null,ig:null,week:24,drivers:true},
+];
+
+const TARGETS={
+  "R&B/Soul":[{pl:"R&B Radar",dsp:"Spotify",n:3},{pl:"Soul in the City",dsp:"Apple Music",n:2},{pl:"Late Night R&B",dsp:"Spotify",n:2},{pl:"New R&B",dsp:"Amazon Music",n:1}],
+  "Hip Hop/Rap":[{pl:"Rap Caviar",dsp:"Spotify",n:3},{pl:"Most Necessary",dsp:"Spotify",n:2},{pl:"Hip Hop Central",dsp:"Apple Music",n:2},{pl:"New Hip-Hop",dsp:"Amazon Music",n:1}],
+  "Pop":[{pl:"New Music Friday",dsp:"Spotify",n:3},{pl:"Pop Rising",dsp:"Spotify",n:2},{pl:"Breaking Pop",dsp:"Apple Music",n:2},{pl:"Fresh Finds",dsp:"Spotify",n:1}],
+  "Alternative":[{pl:"All New Alt",dsp:"Spotify",n:3},{pl:"New Noise",dsp:"Spotify",n:2},{pl:"Breaking Alternative",dsp:"Apple Music",n:2}],
+  "Country":[{pl:"New Boots",dsp:"Spotify",n:3},{pl:"Country Rising",dsp:"Spotify",n:2},{pl:"New in Country",dsp:"Apple Music",n:2}],
+  "Classical":[{pl:"Classical New Releases",dsp:"Spotify",n:3},{pl:"New Classical",dsp:"Apple Music",n:2},{pl:"Classical Focus",dsp:"Amazon Music",n:2}],
+  "Electronic":[{pl:"Electronic Rising",dsp:"Spotify",n:3},{pl:"Synthwave Spectrum",dsp:"Spotify",n:2},{pl:"New Arrivals: Electronic",dsp:"Apple Music",n:2},{pl:"Dance Hits",dsp:"Amazon Music",n:1}],
+  "Christian & Gospel":[{pl:"Christian Hits",dsp:"Spotify",n:3},{pl:"Worship & Devotion",dsp:"Apple Music",n:2},{pl:"Christian Rising",dsp:"Spotify",n:2}],
+  "Punk":[{pl:"Punk Classics",dsp:"Spotify",n:2},{pl:"Rock This",dsp:"Apple Music",n:2},{pl:"Punk & Alt",dsp:"Spotify",n:1}],
+  "Jazz":[{pl:"State of Jazz",dsp:"Spotify",n:3},{pl:"Jazz Classics",dsp:"Spotify",n:2},{pl:"Jazz New Releases",dsp:"Apple Music",n:2}],
+  "Folk":[{pl:"Fresh Folk",dsp:"Spotify",n:3},{pl:"Folk & Singer-Songwriter",dsp:"Apple Music",n:2},{pl:"Acoustic Morning",dsp:"Spotify",n:2}],
+  "Singer/Songwriter":[{pl:"Singer-Songwriter",dsp:"Spotify",n:3},{pl:"Acoustic Hits",dsp:"Spotify",n:2},{pl:"A-List Singer/Songwriter",dsp:"Apple Music",n:2}],
+  "Rock":[{pl:"Rock This",dsp:"Spotify",n:3},{pl:"All New Rock",dsp:"Apple Music",n:2},{pl:"New Rock Arrivals",dsp:"Spotify",n:1}],
+};
+
+const LEAD_COLORS=["#00d9ff","#b45cff","#39d98a","#ffb800","#ff8c42","#ff3f7a","#e1306c"];
+function lc(i){return LEAD_COLORS[i%LEAD_COLORS.length]}
+function fmtN(n){if(!n)return"—";if(n>=1000000)return(n/1000000).toFixed(1)+"M";if(n>=1000)return(n/1000).toFixed(0)+"K";return n}
+function scoreColor(n){return n>=70?"#00d9ff":n>=50?"#39d98a":n>=35?"#ffb800":"#ff3f7a"}
+function priColor(p){return p==="High Priority"?"#ff3f7a":p==="Medium Priority"?"#ffb800":"#00d9ff"}
+function priShort(p){return p==="High Priority"?"P1":p==="Medium Priority"?"P2":"G"}
+function dspColor(d){return d==="Spotify"?"#1db954":d==="Apple Music"?"#fa233b":"#ff9900"}
+
+function computeScore(r){
+  const audience=r.spotifyML?Math.min(20,Math.round(r.spotifyML/60000)):0;
+  const social=r.ig?Math.min(20,Math.round(r.ig/30000)):0;
+  const drive=r.drivers?(r.priority==="High Priority"?18:r.priority==="Medium Priority"?12:6)+(r.ei?2:0):4;
+  const pickups=r.ei?(r.priority==="High Priority"?18:14):(r.priority==="Medium Priority"?10:5);
+  const consistency=8+(r.drivers?4:0)+(r.ei?2:0);
+  return{total:Math.min(100,audience+social+drive+pickups+consistency),audience,social,drive,pickups,consistency};
+}
+RECORDS.forEach(r=>r.sc=computeScore(r));
+RECORDS.sort((a,b)=>b.sc.total-a.sc.total);
+
+const PAGE_SIZE=8;
+let page=1,selected=null;
+
+function totalPages(){return Math.ceil(RECORDS.length/PAGE_SIZE)}
+
+function renderTable(){
+  const recs=RECORDS.slice((page-1)*PAGE_SIZE,page*PAGE_SIZE);
+  let html='';let lastWeek=null;
+  recs.forEach((r,i)=>{
+    const gi=(page-1)*PAGE_SIZE+i;
+    if(r.week!==lastWeek){
+      const wc=RECORDS.filter(x=>x.week===r.week).length;
+      html+=`<tr class="week-group-row"><td colspan="11">
+        <div class="week-group-inner">
+          <span class="week-caret">▾</span>
+          <span class="week-label">WEEK #${r.week}</span>
+          <span class="week-count-badge">${wc}</span>
+          <span class="week-date">Jun ${r.date.split('-')[2]}, 2026</span>
+        </div>
+      </td></tr>`;
+      lastWeek=r.week;
+    }
+    const sc=r.sc,col=scoreColor(sc.total),pc=priColor(r.priority);
+    const isSelected=selected&&selected.id===r.id;
+    const leadHtml=r.leads.slice(0,2).map((l,li)=>{
+      const p=l.split(' ');const init=(p[0][0]+(p[1]?p[1][0]:'')).toUpperCase();
+      return`<div class="lead-av" style="background:${lc(li)}18;border:1px solid ${lc(li)}30;color:${lc(li)}" title="${l}">${init}</div>`;
+    }).join('');
+    const warn=!r.drivers?`<span class="warn-badge" style="color:#ff6b6b">⚠</span>`
+      :(!r.ei&&r.priority!=="General Release"?`<span class="warn-badge" style="color:#ffb800">⚠</span>`:'');
+
+    html+=`<tr class="at-row${isSelected?' selected':''}" onclick="selectRow(${gi})">
+      <td class="at-td row-num">${gi+1}</td>
+      <td class="at-td upc-col">${r.upc}</td>
+      <td class="at-td artist-col">${r.artist}</td>
+      <td class="at-td release-col">${r.focus||'—'}${warn}</td>
+      <td class="at-td check-col">${r.ei?'<span class="check-yes">✓</span>':'<span class="check-no">—</span>'}</td>
+      <td class="at-td check-col">${r.eiUK?'<span class="check-yes">✓</span>':'<span class="check-no">—</span>'}</td>
+      <td class="at-td check-col"><span class="check-no">—</span></td>
+      <td class="at-td format-col"><span class="tag-pill" style="background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.55)">${r.format}</span></td>
+      <td class="at-td" style="max-width:180px;overflow:hidden;text-overflow:ellipsis;color:rgba(255,255,255,0.65)">${r.focus||'—'}</td>
+      <td class="at-td score-col">
+        <div class="score-cell">
+          <div class="score-n" style="color:${col}">${sc.total}</div>
+          <div><div class="score-bt"><div class="score-bf" style="width:${sc.total}%;background:${col}"></div></div></div>
+        </div>
+      </td>
+      <td class="at-td action-col" onclick="event.stopPropagation();selectRow(${gi});openDrawer()">
+        <span class="profile-btn">⚡ Profile</span>
+      </td>
+    </tr>`;
+  });
+  document.getElementById('table-body').innerHTML=html;
+  renderPagination();
+}
+
+function renderPagination(){
+  const tp=totalPages();
+  document.getElementById('pg-prev').disabled=page<=1;
+  document.getElementById('pg-next').disabled=page>=tp;
+  document.getElementById('pg-info').textContent=`${(page-1)*PAGE_SIZE+1}–${Math.min(page*PAGE_SIZE,RECORDS.length)} of ${RECORDS.length}`;
+  let h='';
+  for(let i=1;i<=tp;i++){
+    if(i===1||i===tp||Math.abs(i-page)<=1){
+      h+=`<div class="pg-n${i===page?' active':''}" onclick="goToPage(${i})">${i}</div>`;
+    } else if(Math.abs(i-page)===2){
+      h+=`<div style="display:flex;align-items:center;padding:0 2px;color:rgba(255,255,255,0.2);font-size:11px">…</div>`;
+    }
+  }
+  document.getElementById('pg-nums').innerHTML=h;
+}
+
+function changePage(d){page=Math.max(1,Math.min(totalPages(),page+d));renderTable();document.getElementById('table-body').scrollTop=0}
+function goToPage(n){page=n;renderTable()}
+function selectRow(idx){selected=RECORDS[idx];renderTable()}
+
+// DRAWER
+function openDrawer(){
+  if(!selected)return;
+  const r=selected,sc=r.sc,col=scoreColor(sc.total),pc=priColor(r.priority);
+  document.getElementById('d-artist').textContent=r.artist;
+  document.getElementById('d-release').textContent=r.focus||'—';
+  document.getElementById('d-score').textContent=sc.total;
+  document.getElementById('d-score').style.color=col;
+  document.getElementById('d-score-lbl').style.color=col;
+  document.getElementById('d-score-box').style.borderColor=`${col}25`;
+  const sub={70:"Strong — ready to pitch",50:"Good — a few gaps",35:"Fair — needs attention",0:"Weak — missing key info"};
+  document.getElementById('d-score-sub').textContent=Object.entries(sub).reverse().find(([k])=>sc.total>=+k)[1];
+
+  document.getElementById('d-pills').innerHTML=
+    `<span class="d-pill" style="background:${pc}15;color:${pc};border:1px solid ${pc}30">${priShort(r.priority)}</span>`+
+    `<span class="d-pill" style="background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.5);border:1px solid rgba(255,255,255,0.1)">${r.genre}</span>`+
+    (r.ei?`<span class="d-pill" style="background:rgba(57,217,138,0.1);color:#39d98a;border:1px solid rgba(57,217,138,0.25)">EI</span>`:'')+
+    (r.eiUK?`<span class="d-pill" style="background:rgba(57,217,138,0.1);color:#39d98a;border:1px solid rgba(57,217,138,0.25)">UK/EU</span>`:'');
+
+  drawRadar('drawer-radar',sc,95,80);
+
+  const PL=[{n:'Pickups',v:sc.pickups,m:25,c:'#39d98a'},{n:'Audience',v:sc.audience,m:20,c:'#00d9ff'},{n:'Social',v:sc.social,m:20,c:'#e1306c'},{n:'Drive',v:sc.drive,m:20,c:'#ff8c42'},{n:'Consist.',v:sc.consistency,m:15,c:'#ffb800'}];
+  document.getElementById('d-pillars').innerHTML=PL.map(p=>`<div class="d-bar-row">
+    <div class="d-bar-dot" style="background:${p.c}"></div>
+    <div class="d-bar-name" style="color:${p.c}">${p.n}</div>
+    <div class="d-bar-track"><div class="d-bar-fill" style="width:${Math.round(p.v/p.m*100)}%;background:${p.c}"></div></div>
+    <div class="d-bar-val" style="color:${p.c}">${p.v}</div>
+  </div>`).join('');
+
+  const tgts=(TARGETS[r.genre]||TARGETS['Pop']).slice(0,4);
+  document.getElementById('d-targets').innerHTML=tgts.map(t=>{
+    const mc=t.n>=3?"#ffb800":t.n===2?"#00d9ff":"rgba(255,255,255,0.25)";
+    const mb=t.n>=3?"rgba(255,184,0,0.1)":t.n===2?"rgba(0,217,255,0.08)":"rgba(255,255,255,0.04)";
+    return`<div class="d-target">
+      <div class="d-match" style="background:${mb};border:1px solid ${mc}30;color:${mc}">${t.n}</div>
+      <div class="d-target-name">${t.pl}</div>
+      <div class="d-target-dsp" style="color:${dspColor(t.dsp)}">${t.dsp}</div>
+    </div>`;}).join('');
+
+  document.getElementById('d-warn').style.display=r.drivers?'none':'flex';
+  document.getElementById('ext-drawer').classList.add('open');
+}
+function closeDrawer(){document.getElementById('ext-drawer').classList.remove('open');selected=null;renderTable()}
+
+// RADAR
+function drawRadar(id,sc,cx,cy){
+  const svg=document.getElementById(id);if(!svg)return;svg.innerHTML='';
+  const r=Math.min(cx,cy)*0.72;
+  const axes=['Audience','Activity','History','Story','Momentum','Consist.'];
+  const vals=[Math.min(100,sc.audience*5),Math.min(100,sc.drive*5),Math.min(100,sc.pickups*4),Math.min(100,sc.drive>10?72:28),Math.min(100,sc.consistency*6),Math.min(100,sc.consistency*6+10)];
+  const cols=['#00d9ff','#39d98a','#ff8c42','#b45cff','#ff3f7a','#ffb800'];
+
+  [0.3,0.55,0.8,1].forEach(f=>{
+    const poly=document.createElementNS('http://www.w3.org/2000/svg','polygon');
+    poly.setAttribute('points',axes.map((_,i)=>{const a=i*Math.PI*2/6-Math.PI/2;return`${cx+Math.cos(a)*r*f},${cy+Math.sin(a)*r*f}`}).join(' '));
+    poly.setAttribute('fill','none');poly.setAttribute('stroke','rgba(255,255,255,0.06)');poly.setAttribute('stroke-width','1');
+    svg.appendChild(poly);
+  });
+  axes.forEach((_,i)=>{
+    const a=i*Math.PI*2/6-Math.PI/2;
+    const ln=document.createElementNS('http://www.w3.org/2000/svg','line');
+    ln.setAttribute('x1',cx);ln.setAttribute('y1',cy);ln.setAttribute('x2',cx+Math.cos(a)*r);ln.setAttribute('y2',cy+Math.sin(a)*r);
+    ln.setAttribute('stroke','rgba(255,255,255,0.05)');ln.setAttribute('stroke-width','1');svg.appendChild(ln);
+  });
+  const dpoly=document.createElementNS('http://www.w3.org/2000/svg','polygon');
+  dpoly.setAttribute('points',vals.map((v,i)=>{const a=i*Math.PI*2/6-Math.PI/2;const d=r*(v/100);return`${cx+Math.cos(a)*d},${cy+Math.sin(a)*d}`}).join(' '));
+  dpoly.setAttribute('fill','rgba(0,217,255,0.1)');dpoly.setAttribute('stroke','#00d9ff');dpoly.setAttribute('stroke-width','1.5');
+  svg.appendChild(dpoly);
+  axes.forEach((axis,i)=>{
+    const a=i*Math.PI*2/6-Math.PI/2;const bx=cx+Math.cos(a)*(r+16);const by=cy+Math.sin(a)*(r+16);
+    const rc=document.createElementNS('http://www.w3.org/2000/svg','rect');
+    rc.setAttribute('x',bx-15);rc.setAttribute('y',by-11);rc.setAttribute('width','30');rc.setAttribute('height','22');rc.setAttribute('rx','4');
+    rc.setAttribute('fill',`${cols[i]}12`);rc.setAttribute('stroke',`${cols[i]}45`);svg.appendChild(rc);
+    const t1=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t1.setAttribute('x',bx);t1.setAttribute('y',by-1);t1.setAttribute('text-anchor','middle');t1.setAttribute('font-size','5');
+    t1.setAttribute('font-family',"'DM Mono',monospace");t1.setAttribute('fill',`${cols[i]}99`);t1.textContent=axis.substring(0,6).toUpperCase();svg.appendChild(t1);
+    const t2=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t2.setAttribute('x',bx);t2.setAttribute('y',by+9);t2.setAttribute('text-anchor','middle');t2.setAttribute('font-size','9');
+    t2.setAttribute('font-family',"'Bebas Neue',sans-serif");t2.setAttribute('fill',cols[i]);t2.textContent=Math.round(vals[i]);svg.appendChild(t2);
+  });
+}
+
+// FULL PROFILE
+function openProfile(){
+  if(!selected)return;
+  const r=selected,sc=r.sc,col=scoreColor(sc.total),pc=priColor(r.priority);
+  document.getElementById('main-url-bar').innerHTML=`<span style="color:#39d98a;font-size:10px">🔒</span><span style="color:rgba(255,255,255,0.7);font-weight:500">labs.symphonic.com</span><span style="color:rgba(255,255,255,0.35)">/${r.upc}</span>`;
+  document.getElementById('p-artist').textContent=r.artist;
+  document.getElementById('p-title').textContent=r.focus||'—';
+  document.getElementById('p-score-big').textContent=sc.total;
+  document.getElementById('p-score-big').style.color=col;
+  document.getElementById('p-score-hero').style.background=`${col}08`;
+  document.getElementById('p-score-hero').style.border=`2px solid ${col}30`;
+  document.getElementById('p-score-hero').style.borderRadius='12px';
+  document.getElementById('p-score-hero').style.padding='12px 18px';
+
+  document.getElementById('p-tags').innerHTML=
+    `<span class="p-tag" style="background:${pc}12;color:${pc};border:1px solid ${pc}28">${r.priority}</span>`+
+    `<span class="p-tag" style="background:rgba(0,217,255,0.07);color:#00d9ff;border:1px solid rgba(0,217,255,0.18)">${r.genre}</span>`+
+    `<span class="p-tag" style="background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.5);border:1px solid rgba(255,255,255,0.1)">${r.format}</span>`+
+    (r.ei?`<span class="p-tag" style="background:rgba(57,217,138,0.08);color:#39d98a;border:1px solid rgba(57,217,138,0.22)">EI</span>`:'')+
+    `<span class="p-tag" style="background:rgba(255,184,0,0.08);color:#ffb800;border:1px solid rgba(255,184,0,0.2)">Jun ${r.date.split('-')[2]}, 2026</span>`;
+
+  const PL=[{l:'Pickups',v:sc.pickups,m:25,c:'#39d98a'},{l:'Audience',v:sc.audience,m:20,c:'#00d9ff'},{l:'Social',v:sc.social,m:20,c:'#e1306c'},{l:'Drive',v:sc.drive,m:20,c:'#ff8c42'},{l:'Consist.',v:sc.consistency,m:15,c:'#ffb800'}];
+  document.getElementById('p-pillars').innerHTML=PL.map(p=>`<div class="p-pillar" style="background:${p.c}08;border-color:${p.c}20"><span class="p-pillar-lbl" style="color:${p.c}">${p.l}</span><span class="p-pillar-val" style="color:${p.c}">${p.v}</span><span class="p-pillar-max">/${p.m}</span></div>`).join('');
+
+  setTimeout(()=>drawRadar('profile-radar',sc,120,120),50);
+
+  const sigs=[{n:'Audience',v:Math.min(100,sc.audience*5),c:'#00d9ff'},{n:'Activity',v:Math.min(100,sc.drive*5),c:'#39d98a'},{n:'History',v:Math.min(100,sc.pickups*4),c:'#ff8c42'},{n:'Story',v:Math.min(100,sc.drive>10?72:28),c:'#b45cff'},{n:'Momentum',v:Math.min(100,sc.consistency*6),c:'#ff3f7a'},{n:'Consistency',v:Math.min(100,sc.consistency*6+10),c:'#ffb800'}];
+  document.getElementById('p-sigs').innerHTML=sigs.map(s=>`<div class="p-sig"><div class="p-sig-dot" style="background:${s.c}"></div><div class="p-sig-name" style="color:${s.c}">${s.n}</div><div class="p-sig-score" style="color:${s.c}">${s.v}</div><div class="p-sig-track"><div class="p-sig-fill" style="width:${s.v}%;background:${s.c}"></div></div></div>`).join('');
+
+  const ph=r.ei?[{n:r.focus||'Current',c:3,cur:true},{n:'Previous Release',c:2,cur:false},{n:'Earlier',c:1,cur:false}]:[{n:r.focus||'Current',c:2,cur:true},{n:'Previous Release',c:1,cur:false}];
+  const maxph=Math.max(...ph.map(x=>x.c));
+  document.getElementById('p-ph').innerHTML=`<div style="font-family:'DM Mono',monospace;font-size:8px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:8px">Pickup History</div>`+
+    ph.map(p=>`<div class="ph-row"><div class="ph-dot" style="background:${p.cur?col:'rgba(255,255,255,0.18)'}"></div><div class="ph-n" style="color:${p.cur?'rgba(255,255,255,0.85)':'rgba(255,255,255,0.4)'}">${p.n}${p.cur?` <span style="font-size:8px;color:${col}">CURRENT</span>`:''}</div><div class="ph-track"><div class="ph-fill" style="width:${Math.round(p.c/maxph*100)}%;background:${p.cur?col:'rgba(255,255,255,0.2)'}"></div></div><div class="ph-c" style="color:${p.cur?col:'rgba(255,255,255,0.3)'}">${p.c}</div></div>`).join('');
+
+  const tgts=(TARGETS[r.genre]||TARGETS['Pop']).slice(0,5);
+  let rhtml='';
+  if(!r.drivers){
+    rhtml+=`<div class="p-nodriver"><div style="font-size:18px;flex-shrink:0;margin-top:1px">⚠</div><div><div style="font-size:11px;font-weight:700;color:#ff6b6b;margin-bottom:5px">No Driver Submission on File</div><div style="font-size:11px;color:rgba(255,255,255,0.5);line-height:1.6">No pitching context has been submitted. Story, similar artists, mood tags, and marketing drivers are missing — this limits pitch effectiveness.</div></div></div>`;
+  }
+  rhtml+=`<div class="p-card"><div class="p-card-lbl" style="display:flex;justify-content:space-between;align-items:center">Playlist Targets <span style="font-size:8px;color:#ffb800;background:rgba(255,184,0,0.08);border:1px solid rgba(255,184,0,0.2);border-radius:99px;padding:1px 8px">${tgts.length} playlists</span></div><div style="font-size:10px;color:rgba(255,255,255,0.25);font-style:italic;margin-bottom:8px">Based on similar artists, these playlists have shown interest in this sound.</div>${tgts.map(t=>{const mc=t.n>=3?"#ffb800":t.n===2?"#00d9ff":"rgba(255,255,255,0.2)";const mb=t.n>=3?"rgba(255,184,0,0.1)":t.n===2?"rgba(0,217,255,0.08)":"rgba(255,255,255,0.04)";return`<div class="p-target-row"><div class="p-t-badge" style="background:${mb};border:1px solid ${mc}30;color:${mc}">${t.n}</div><div class="p-t-name">${t.pl}</div><div class="p-t-dsp" style="color:${dspColor(t.dsp)}">${t.dsp}</div></div>`;}).join('')}</div>`;
+  rhtml+=`<div class="p-card"><div class="p-card-lbl">Social & Audience</div><div class="p-social-grid"><div class="p-social-item"><div class="p-social-plat">Spotify Monthly</div><div class="p-social-val" style="color:#1db954">${fmtN(r.spotifyML)}</div></div><div class="p-social-item"><div class="p-social-plat">Instagram</div><div class="p-social-val" style="color:#e1306c">${fmtN(r.ig)}</div></div><div class="p-social-item"><div class="p-social-plat">Priority</div><div class="p-social-val" style="color:${pc};font-size:14px">${priShort(r.priority)}</div></div><div class="p-social-item"><div class="p-social-plat">Format</div><div class="p-social-val" style="color:rgba(255,255,255,0.5);font-size:13px">${r.format}</div></div></div></div>`;
+  rhtml+=`<div class="p-card"><div class="p-card-lbl">Marketing Lead${r.leads.length>1?'s':''}</div>${r.leads.map((l,i)=>{const p=l.split(' ');const init=(p[0][0]+(p[1]?p[1][0]:'')).toUpperCase();return`<div style="display:flex;align-items:center;gap:10px;margin-bottom:7px"><div style="width:26px;height:26px;border-radius:50%;background:${lc(i)}18;border:1px solid ${lc(i)}30;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:13px;color:${lc(i)};flex-shrink:0">${init}</div><div style="font-size:12px;font-weight:600">${l}</div></div>`;}).join('')}</div>`;
+
+  document.getElementById('p-right').innerHTML=rhtml;
+  document.getElementById('page-table').classList.remove('active');
+  document.getElementById('page-profile').classList.add('active');
+}
+
+function goBack(){
+  document.getElementById('main-url-bar').innerHTML=`<span style="color:#39d98a;font-size:10px">🔒</span><span style="color:rgba(255,255,255,0.7);font-weight:500">airtable.com</span><span style="color:rgba(255,255,255,0.35)">/apppQyOGTr6uGeYZd/tblG0xtGOTXKbW7Bw</span>`;
+  document.getElementById('page-profile').classList.remove('active');
+  document.getElementById('page-table').classList.add('active');
+}
+
+renderTable();
+</script>
+</body>
+</html>
