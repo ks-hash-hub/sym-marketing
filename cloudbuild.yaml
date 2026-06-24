@@ -1,8 +1,10 @@
 steps:
-  # Build the Docker image
+  # Build the Docker image (token passed as build arg so Vite bakes it in)
   - name: "gcr.io/cloud-builders/docker"
     args:
       - build
+      - --build-arg
+      - VITE_AIRTABLE_TOKEN=$_AIRTABLE_TOKEN
       - -t
       - us-central1-docker.pkg.dev/sym-marketing-intel/sym-marketing/app:$COMMIT_SHA
       - -t
@@ -27,7 +29,6 @@ steps:
       - --region=us-central1
       - --platform=managed
       - --no-allow-unauthenticated
-      - --set-env-vars=VITE_AIRTABLE_TOKEN=$_AIRTABLE_TOKEN
       - --memory=256Mi
       - --cpu=1
       - --min-instances=0
