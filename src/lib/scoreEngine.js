@@ -15,12 +15,11 @@ export function symphonicScore(r, driverData = {}, pickups = []) {
     ? Math.min(20, Math.round((Math.log10(r.spotifyML) / Math.log10(6000000)) * 20))
     : 0;
 
-  // 3. Social Presence (0–15) — weighted cross-platform followers
-  const weighted = (r.igFollowers || 0) * 1.0
-    + (r.tiktokFollowers || d.tiktok || 0) * 1.2
-    + (d.youtube || 0) * 0.8
-    + (d.twitter || 0) * 0.5
-    + (d.soundcloud || 0) * 0.3;
+  // 3. Social Presence (0–15) — weighted cross-platform followers (from Chartmetric)
+  const weighted = (r.igFollowers     || 0) * 1.0
+    + (r.tiktokFollowers || 0) * 1.2
+    + (r.ytFollowers     || 0) * 0.8
+    + (r.twFollowers     || 0) * 0.5;
   const social = Math.min(15, Math.round((weighted / 4500000) * 15));
 
   // 4. Story Quality (0–15) — pitch completeness

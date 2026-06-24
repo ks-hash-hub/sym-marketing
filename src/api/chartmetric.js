@@ -115,11 +115,13 @@ async function fetchArtistStats(spotifyId) {
     const cmId = artistData?.obj?.id || artistData?.id;
     if (!cmId) return null;
 
-    // Step 2: fetch stats in parallel
-    const [spotifyStats, igStats, tiktokStats] = await Promise.allSettled([
+    // Step 2: fetch all platform stats in parallel
+    const [spotifyStats, igStats, tiktokStats, ytStats, twStats] = await Promise.allSettled([
       cmFetch(`/artist/${cmId}/stat/spotify?latest=true`),
       cmFetch(`/artist/${cmId}/stat/instagram?latest=true`),
       cmFetch(`/artist/${cmId}/stat/tiktok?latest=true`),
+      cmFetch(`/artist/${cmId}/stat/youtube?latest=true`),
+      cmFetch(`/artist/${cmId}/stat/twitter?latest=true`),
     ]);
 
     const getLatest = (result, field) => {
@@ -133,9 +135,11 @@ async function fetchArtistStats(spotifyId) {
 
     const stats = {
       cmId,
-      spotifyML:        getLatest(spotifyStats,  "listeners"),
-      igFollowers:      getLatest(igStats,        "followers"),
-      tiktokFollowers:  getLatest(tiktokStats,    "followers"),
+      spotifyML:       getLatest(spotifyStats, "listeners"),
+      igFollowers:     getLatest(igStats,       "followers"),
+      tiktokFollowers: getLatest(tiktokStats,   "followers"),
+      ytFollowers:     getLatest(ytStats,        "subscribers"),
+      twFollowers:     getLatest(twStats,        "followers"),
     };
 
     _statsCache[spotifyId] = stats;
@@ -193,7 +197,9 @@ export async function enrichWithChartmetric(releases, driverData) {
       ...r,
       spotifyML:       stats.spotifyML       || r.spotifyML       || 0,
       igFollowers:     stats.igFollowers     || r.igFollowers     || 0,
-      tiktokFollowers: stats.tiktokFollowers || 0,
+      tiktokFollowers: stats.tiktokFollowers || r.tiktokFollowers || 0,
+      ytFollowers:     stats.ytFollowers     || r.ytFollowers     || 0,
+      twFollowers:     stats.twFollowers     || r.twFollowers     || 0,
     };
   });
 }

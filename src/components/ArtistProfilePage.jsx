@@ -416,11 +416,10 @@ export default function ArtistProfilePage({ release, onBack, driverData: driverD
             <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8 }}>
               {[
                 { label:"Spotify ML",  value:release.spotifyML,  color:DSP_COLORS.Spotify },
-                { label:"Instagram",   value:release.igFollowers, color:"#E1306C" },
-                { label:"TikTok",      value:d.tiktok,            color:"#69C9D0" },
-                { label:"YouTube",     value:d.youtube,           color:"#FF0000" },
-                { label:"Twitter/X",   value:d.twitter,           color:"#1DA1F2" },
-                { label:"SoundCloud",  value:d.soundcloud,        color:"#ff5500" },
+                { label:"Instagram",   value:release.igFollowers,     color:"#E1306C" },
+                { label:"TikTok",      value:release.tiktokFollowers, color:"#69C9D0" },
+                { label:"YouTube",     value:release.ytFollowers,     color:"#FF0000" },
+                { label:"Twitter/X",   value:release.twFollowers,     color:"#1DA1F2" },
               ].filter(p => p.value).map(p => (
                 <div key={p.label} style={{ background:`${p.color}10`, border:`1px solid ${p.color}25`, borderRadius:10, padding:"10px 12px" }}>
                   <div style={{ fontSize:9, color:C.muted, marginBottom:3 }}>{p.label}</div>

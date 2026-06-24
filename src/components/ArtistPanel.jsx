@@ -144,11 +144,10 @@ export default function ArtistPanel({ r, onClose, onViewProfile, driverData: dri
               <div style={{ fontSize:9, fontWeight:700, letterSpacing:"0.12em", textTransform:"uppercase", color:C.muted, fontFamily:"'DM Mono',monospace", marginBottom:8 }}>Social Following</div>
               <div style={{ display:"flex", gap:8, flexWrap:"wrap" }}>
                 {[
-                  { label:"Instagram",  value:r.igFollowers, color:"#E1306C" },
-                  { label:"TikTok",     value:d.tiktok,      color:"#69C9D0" },
-                  { label:"YouTube",    value:d.youtube,     color:"#FF0000" },
-                  { label:"Twitter/X",  value:d.twitter,     color:"#1DA1F2" },
-                  { label:"SoundCloud", value:d.soundcloud,  color:"#ff5500" },
+                  { label:"Instagram",  value:r.igFollowers,     color:"#E1306C" },
+                  { label:"TikTok",     value:r.tiktokFollowers, color:"#69C9D0" },
+                  { label:"YouTube",    value:r.ytFollowers,     color:"#FF0000" },
+                  { label:"Twitter/X",  value:r.twFollowers,     color:"#1DA1F2" },
                 ].filter(p=>p.value).map(p=>(
                   <div key={p.label} style={{ background:`${p.color}12`, border:`1px solid ${p.color}30`, borderRadius:8, padding:"6px 10px", minWidth:72 }}>
                     <div style={{ fontSize:9, color:C.muted, marginBottom:2 }}>{p.label}</div>
