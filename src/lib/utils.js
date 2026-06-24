@@ -1,4 +1,5 @@
-export const T = new Date("2025-05-17");
+export const T = new Date();
+T.setHours(0, 0, 0, 0);
 
 export function daysUntil(dateStr) {
   const diff = new Date(dateStr + "T12:00:00") - T;

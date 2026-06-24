@@ -11,7 +11,8 @@
  *   5. Return enriched release objects (spotifyML, igFollowers, tiktokFollowers)
  */
 
-const CM_BASE     = "https://api.chartmetric.com/api";
+// Proxied through Vite dev server (/cm-api) and nginx (production) to avoid CORS
+const CM_BASE     = "/cm-api";
 const REFRESH_TOK = import.meta.env.VITE_CHARTMETRIC_TOKEN;
 
 // ─── Auth ──────────────────────────────────────────────────────────────────
@@ -51,11 +52,15 @@ async function getAccessToken() {
   return _accessToken;
 }
 
-async function cmFetch(path) {
+async function cmFetch(path, retries = 2) {
   const token = await getAccessToken();
   const res   = await fetch(`${CM_BASE}${path}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
+  if (res.status === 429 && retries > 0) {
+    await new Promise(r => setTimeout(r, 2000));
+    return cmFetch(path, retries - 1);
+  }
   if (!res.ok) throw new Error(`Chartmetric ${res.status}: ${path}`);
   return res.json();
 }
@@ -171,14 +176,13 @@ export async function enrichWithChartmetric(releases, driverData) {
 
   const uniqueIds = [...new Set(Object.values(spotifyIdByArtist))];
 
-  // Fetch all in parallel (Chartmetric allows reasonable concurrency)
+  // Fetch strictly sequentially — Chartmetric rate limit is ~1 req/sec
   const statsBySpotifyId = {};
-  await Promise.all(
-    uniqueIds.map(async (sid) => {
-      const stats = await fetchArtistStats(sid);
-      if (stats) statsBySpotifyId[sid] = stats;
-    })
-  );
+  for (const sid of uniqueIds) {
+    const stats = await fetchArtistStats(sid);
+    if (stats) statsBySpotifyId[sid] = stats;
+    await new Promise(r => setTimeout(r, 1200));
+  }
 
   // Merge stats back onto releases
   return releases.map(r => {
