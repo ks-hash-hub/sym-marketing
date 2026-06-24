@@ -10,6 +10,7 @@ import { daysUntil, fmtDate } from "./lib/utils.js";
 import { symphonicScore, scoreColor } from "./lib/scoreEngine.js";
 import { generateInsights } from "./lib/insightEngine.js";
 import { useAppData } from "./hooks/useAppData.js";
+import { fetchReleaseById } from "./api/airtable.js";
 
 import WEEKLY_PICKUP_TREND from "./data/weeklyPickupTrend.json";
 
@@ -41,19 +42,27 @@ export default function App() {
   const { releases: RELEASES, pickups: PICKUPS, driverData: DRIVER_DATA,
           loading: dataLoading, isLive, isEnriched, lastUpdated, error: dataError } = useAppData();
 
-  // ── URL routing: /:upc → artist profile ───────────────────────────────────
+  // ── URL routing: /recXXXX → artist profile ────────────────────────────────
   useEffect(() => {
-    const upc = window.location.pathname.replace(/^\//, "").trim();
-    if (upc && RELEASES.length) {
-      const match = RELEASES.find(r => r.upc === upc || r.id === upc);
-      if (match) { setProfileTarget(match); setTab("artist-profile"); }
+    const path = window.location.pathname.replace(/^\//, "").trim();
+    if (!path) return;
+
+    // Try matching against already-loaded releases first (fast path)
+    const local = RELEASES.find(r => r.id === path || String(r.upc) === path);
+    if (local) { setProfileTarget(local); setTab("artist-profile"); return; }
+
+    // If URL is an Airtable record ID, fetch it directly — don't wait for full load
+    if (path.startsWith("rec") && import.meta.env.VITE_AIRTABLE_TOKEN) {
+      fetchReleaseById(path)
+        .then(r => { setProfileTarget(r); setTab("artist-profile"); })
+        .catch(() => {}); // silently fall back to command center on error
     }
   }, [RELEASES]);
 
   useEffect(() => {
     const onPop = () => {
-      const upc = window.location.pathname.replace(/^\//, "").trim();
-      if (!upc) { setTab("command"); setProfileTarget(null); }
+      const path = window.location.pathname.replace(/^\//, "").trim();
+      if (!path) { setTab("command"); setProfileTarget(null); }
     };
     window.addEventListener("popstate", onPop);
     return () => window.removeEventListener("popstate", onPop);

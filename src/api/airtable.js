@@ -114,6 +114,21 @@ function transformRelease(rec) {
 }
 
 /**
+ * Fetch a single release record by its Airtable record ID.
+ * Used for direct URL routing (e.g. /recXXXXXXXXXX links from the Airtable extension).
+ */
+export async function fetchReleaseById(recordId) {
+  if (!TOKEN) throw new Error("VITE_AIRTABLE_TOKEN is not set");
+  const res = await fetch(
+    `${BASE_URL}/${BASE_ID}/${TBL_RELEASES}/${recordId}`,
+    { headers: { Authorization: `Bearer ${TOKEN}` } }
+  );
+  if (!res.ok) throw new Error(`Airtable ${res.status}`);
+  const rec = await res.json();
+  return transformRelease(rec);
+}
+
+/**
  * Fetch upcoming releases (next 60 days + last 7 days) from Release Schedule.
  * Returns array of release objects shaped to match src/data/releases.json.
  */
