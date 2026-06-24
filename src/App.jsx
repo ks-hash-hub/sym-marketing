@@ -191,7 +191,7 @@ export default function App() {
         {tab==="command" && (() => {
           const ranked = [...RELEASES]
             .filter(r => daysUntil(r.date) >= 0 && daysUntil(r.date) <= 30)
-            .map(r => ({ r, sc: symphonicScore(r) }))
+            .map(r => ({ r, sc: symphonicScore(r, DRIVER_DATA, PICKUPS) }))
             .sort((a, b) => b.sc.total - a.sc.total);
 
           const leads = [...new Set(thisWeek.map(r => r.lead))].sort();
@@ -307,7 +307,7 @@ export default function App() {
                             {/* Release rows */}
                             <div style={{ display:"flex", flexDirection:"column", gap:4, paddingLeft:40 }}>
                               {releases.map(r => {
-                                const sc = symphonicScore(r);
+                                const sc = symphonicScore(r, DRIVER_DATA, PICKUPS);
                                 const col = scoreColor(sc.total);
                                 const days = daysUntil(r.date);
                                 const hasDriverEntry2 = !!(DRIVER_DATA[r.artist] || DRIVER_DATA[r.upc]);
@@ -395,7 +395,7 @@ export default function App() {
             else if (sortBy === "priority") { va = ["Priority 1","Priority 2","Priority 3"].indexOf(a.priority); vb = ["Priority 1","Priority 2","Priority 3"].indexOf(b.priority); }
             else if (sortBy === "pickups")  { va = PICKUPS.filter(p=>p.artist===a.artist).length; vb = PICKUPS.filter(p=>p.artist===b.artist).length; }
             else if (sortBy === "ml")       { va = a.spotifyML; vb = b.spotifyML; }
-            else if (sortBy === "score")    { va = symphonicScore(a).total; vb = symphonicScore(b).total; }
+            else if (sortBy === "score")    { va = symphonicScore(a, DRIVER_DATA, PICKUPS).total; vb = symphonicScore(b, DRIVER_DATA, PICKUPS).total; }
             if (typeof va === "string") return sortDir === "asc" ? va.localeCompare(vb) : vb.localeCompare(va);
             return sortDir === "asc" ? va - vb : vb - va;
           });
@@ -482,7 +482,7 @@ export default function App() {
                           <td style={{ padding:"10px 16px", fontSize:12, color: pickupCount>0?C.green:C.dim, fontFamily:"'DM Mono',monospace", fontWeight:700 }}>{pickupCount > 0 ? pickupCount : "—"}</td>
                           <td style={{ padding:"10px 16px" }}>
                             {(() => {
-                              const sc = symphonicScore(r);
+                              const sc = symphonicScore(r, DRIVER_DATA, PICKUPS);
                               const col = scoreColor(sc.total);
                               return (
                                 <div style={{ display:"flex", alignItems:"center", gap:7 }}>
@@ -531,7 +531,7 @@ export default function App() {
                 <>
                   <div onClick={()=>setSelectedRelease(null)} style={{ position:"fixed", inset:0, background:"rgba(7,8,15,0.6)", zIndex:100, backdropFilter:"blur(2px)" }} />
                   <div style={{ position:"fixed", right:0, top:0, bottom:0, width:520, background:C.surface, borderLeft:`1px solid rgba(0,217,255,0.18)`, zIndex:101, display:"flex", flexDirection:"column", padding:24, animation:"slideIn 0.22s cubic-bezier(0.16,1,0.3,1)" }}>
-                    <ArtistPanel key={selectedRelease.id} r={selectedRelease} onClose={()=>setSelectedRelease(null)}
+                    <ArtistPanel key={selectedRelease.id} r={selectedRelease} onClose={()=>setSelectedRelease(null)} driverData={DRIVER_DATA} pickups={PICKUPS}
                       onViewProfile={()=>{ setProfileTarget(selectedRelease); setSelectedRelease(null); setTab("artist-profile"); window.history.pushState({}, "", `/${selectedRelease.upc}`); }} />
                   </div>
                 </>
@@ -619,7 +619,7 @@ export default function App() {
 
         {/* ════════════════ ARTIST PROFILE ════════════════ */}
         {tab==="artist-profile" && profileTarget && (
-          <ArtistProfilePage r={profileTarget} release={profileTarget} onBack={()=>{ setTab("releases"); setProfileTarget(null); window.history.pushState({}, "", "/"); }} />
+          <ArtistProfilePage r={profileTarget} release={profileTarget} onBack={()=>{ setTab("releases"); setProfileTarget(null); window.history.pushState({}, "", "/"); }} driverData={DRIVER_DATA} pickups={PICKUPS} />
         )}
 
       </div>

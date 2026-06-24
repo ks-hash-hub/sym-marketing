@@ -1,16 +1,14 @@
-import DRIVER_DATA from "../data/driverData.json";
-import PICKUPS from "../data/pickups.json";
 import { C } from "./constants.js";
 
-export function symphonicScore(r) {
-  const d = DRIVER_DATA[r.artist] || {};
-  const artistPickups = PICKUPS.filter(p => p.artist === r.artist);
+export function symphonicScore(r, driverData = {}, pickups = []) {
+  const d = driverData[r.artist] || driverData[r.upc] || {};
+  const artistPickups = pickups.filter(p => p.artist === r.artist);
 
   // 1. Symphonic Pickup History (0–25)
   const fp       = artistPickups.filter(p => p.type === "1st Party").length;
   const tp       = artistPickups.filter(p => p.type === "3rd Party").length;
   const cover    = artistPickups.some(p => p.cover) ? 5 : 0;
-  const pickups  = Math.min(25, fp * 4 + tp * 2 + cover);
+  const pScore   = Math.min(25, fp * 4 + tp * 2 + cover);
 
   // 2. Spotify Monthly Listeners / Audience Reach (0–20)
   const audience = r.spotifyML > 0
@@ -31,8 +29,8 @@ export function symphonicScore(r) {
   // 5. Release Consistency (0–15)
   const consistency = Math.round((d.releaseConsistency || 0) / 100 * 15);
 
-  const total = pickups + audience + social + drive + consistency;
-  return { total, breakdown: { pickups, audience, social, drive, consistency } };
+  const total = pScore + audience + social + drive + consistency;
+  return { total, breakdown: { pickups: pScore, audience, social, drive, consistency } };
 }
 
 export function scoreColor(s) {

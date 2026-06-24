@@ -5,24 +5,26 @@ import {
 import { C, DSP_COLORS, PRIORITY_COLORS, GENRE_COLORS, DRIVER_COLORS, HISTORY_TIMEFRAMES, TooltipStyle } from "../lib/constants.js";
 import { T, fmtDate, fmtN } from "../lib/utils.js";
 import { symphonicScore, scoreColor } from "../lib/scoreEngine.js";
-import DRIVER_DATA from "../data/driverData.json";
-import PICKUPS from "../data/pickups.json";
+import DRIVER_DATA_JSON from "../data/driverData.json";
+import PICKUPS_JSON from "../data/pickups.json";
 import ORGANIC_EDITORIAL from "../data/organicEditorial.json";
 import UGC_PLAYLISTS from "../data/ugcPlaylists.json";
 import SIMILAR_ARTIST_PICKUPS from "../data/similarArtistPickups.json";
 import Pill from "./Pill.jsx";
 
-export default function ArtistPanel({ r, onClose, onViewProfile }) {
+export default function ArtistPanel({ r, onClose, onViewProfile, driverData: driverDataProp, pickups: pickupsProp }) {
   const [activeTab,        setActiveTab]        = useState("overview");
   const [historyTimeframe, setHistoryTimeframe] = useState("1Y");
-  const d = DRIVER_DATA[r.artist] || {};
+  const DRIVER_DATA = driverDataProp || DRIVER_DATA_JSON;
+  const PICKUPS     = pickupsProp    || PICKUPS_JSON;
+  const d = DRIVER_DATA[r.artist] || DRIVER_DATA[r.upc] || {};
   const artistPickups = PICKUPS.filter(p => p.artist === r.artist)
     .sort((a, b) => new Date(b.dateSent) - new Date(a.dateSent));
 
   const tfDays   = HISTORY_TIMEFRAMES.find(t => t.label === historyTimeframe)?.days ?? null;
   const cutoff   = tfDays ? new Date(T.getTime() - tfDays * 86400000) : null;
   const inWindow = dateStr => !cutoff || new Date(dateStr) >= cutoff;
-  const sc = symphonicScore(r);
+  const sc = symphonicScore(r, DRIVER_DATA, PICKUPS);
   const scCol = scoreColor(sc.total);
   const organicEditorial = ORGANIC_EDITORIAL[r.artist] || [];
   const ugcPlaylists     = UGC_PLAYLISTS[r.artist] || [];

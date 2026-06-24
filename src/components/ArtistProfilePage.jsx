@@ -5,8 +5,8 @@ import {
 import { C, DSP_COLORS, PRIORITY_COLORS, GENRE_COLORS, DRIVER_COLORS, HISTORY_TIMEFRAMES, TooltipStyle } from "../lib/constants.js";
 import { T, daysUntil, fmtDate, fmtN } from "../lib/utils.js";
 import { symphonicScore, scoreColor } from "../lib/scoreEngine.js";
-import DRIVER_DATA from "../data/driverData.json";
-import PICKUPS from "../data/pickups.json";
+import DRIVER_DATA_JSON from "../data/driverData.json";
+import PICKUPS_JSON from "../data/pickups.json";
 import PAST_RELEASES from "../data/pastReleases.json";
 import ORGANIC_EDITORIAL from "../data/organicEditorial.json";
 import UGC_PLAYLISTS from "../data/ugcPlaylists.json";
@@ -14,13 +14,15 @@ import SIMILAR_ARTIST_PICKUPS from "../data/similarArtistPickups.json";
 import Pill from "./Pill.jsx";
 import SectionLabel from "./SectionLabel.jsx";
 
-export default function ArtistProfilePage({ release, onBack }) {
+export default function ArtistProfilePage({ release, onBack, driverData: driverDataProp, pickups: pickupsProp }) {
   const [historyTimeframe, setHistoryTimeframe] = useState("1Y");
   const [expandedRelease,  setExpandedRelease]  = useState(null);
   const [historyOpen,      setHistoryOpen]      = useState(false);
   const [releasesOpen,     setReleasesOpen]     = useState(false);
   useEffect(() => { window.scrollTo(0, 0); }, [release.id]);
 
+  const DRIVER_DATA    = driverDataProp || DRIVER_DATA_JSON;
+  const PICKUPS        = pickupsProp    || PICKUPS_JSON;
   const hasDriverEntry = !!(DRIVER_DATA[release.artist] || DRIVER_DATA[release.upc]);
   const d              = DRIVER_DATA[release.artist] || DRIVER_DATA[release.upc] || {};
   const artistPickups  = PICKUPS.filter(p => p.artist === release.artist)
@@ -45,7 +47,7 @@ export default function ArtistProfilePage({ release, onBack }) {
       return acc;
     }, {})
   ).sort((a,b) => b.artists.length - a.artists.length).slice(0, 12);
-  const sc             = symphonicScore(release);
+  const sc             = symphonicScore(release, DRIVER_DATA, PICKUPS);
   const scCol          = scoreColor(sc.total);
   const tfDays         = HISTORY_TIMEFRAMES.find(t=>t.label===historyTimeframe)?.days ?? null;
   const cutoff         = tfDays ? new Date(T.getTime() - tfDays*86400000) : null;
