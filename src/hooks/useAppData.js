@@ -40,10 +40,11 @@ const DEMO_DATA = {
 export function useAppData() {
   const [state, setState] = useState({
     ...DEMO_DATA,
-    loading:    false,
-    isLive:     false,
-    isEnriched: false,
-    error:      null,
+    loading:     false,
+    isLive:      false,
+    isEnriched:  false,
+    lastUpdated: null,
+    error:       null,
   });
 
   useEffect(() => {
@@ -72,14 +73,14 @@ export function useAppData() {
         if (cancelled) return;
 
         // 3. Show Airtable data immediately while Chartmetric loads
-        setState({ releases, driverData, pickups, loading: false, isLive: true, isEnriched: false, error: null });
+        setState({ releases, driverData, pickups, loading: false, isLive: true, isEnriched: false, lastUpdated: new Date(), error: null });
 
         // 4. Enrich with Chartmetric if token present (non-blocking)
         if (chartmetricToken) {
           try {
             const enriched = await enrichWithChartmetric(releases, driverData);
             if (!cancelled) {
-              setState(s => ({ ...s, releases: enriched, isEnriched: true }));
+              setState(s => ({ ...s, releases: enriched, isEnriched: true, lastUpdated: new Date() }));
             }
           } catch (cmErr) {
             console.warn("[useAppData] Chartmetric enrichment failed (non-fatal):", cmErr.message);

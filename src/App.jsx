@@ -39,7 +39,7 @@ export default function App() {
 
   // ── Live data (or JSON fallback) ──────────────────────────────────────────
   const { releases: RELEASES, pickups: PICKUPS, driverData: DRIVER_DATA,
-          loading: dataLoading, isLive, isEnriched, error: dataError } = useAppData();
+          loading: dataLoading, isLive, isEnriched, lastUpdated, error: dataError } = useAppData();
 
   // ── URL routing: /:upc → artist profile ───────────────────────────────────
   useEffect(() => {
@@ -178,7 +178,10 @@ export default function App() {
             </div>
           )}
           <div style={{ fontFamily:"'DM Mono',monospace", fontSize:9, color:C.dim, textAlign:"center" }}>
-            {new Date().toLocaleDateString("en-US", { month:"short", day:"numeric", year:"numeric" })}
+            {lastUpdated
+              ? `Updated ${lastUpdated.toLocaleTimeString("en-US", { hour:"numeric", minute:"2-digit" })}`
+              : new Date().toLocaleDateString("en-US", { month:"short", day:"numeric", year:"numeric" })
+            }
           </div>
         </div>
       </div>

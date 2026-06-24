@@ -62,30 +62,31 @@ export default function ArtistPanel({ r, onClose, onViewProfile, driverData: dri
     <div style={{ display:"flex", flexDirection:"column", height:"100%" }}>
       {/* ── Persistent header ─────────────────────────────────────── */}
       <div style={{ flexShrink:0, paddingBottom:16 }}>
-        <div style={{ position:"absolute", top:16, right:16, display:"flex", gap:6, zIndex:1 }}>
-          {onViewProfile && (
-            <button onClick={onViewProfile} style={{ background:"rgba(0,217,255,0.1)", border:`1px solid rgba(0,217,255,0.3)`, color:C.cyan, borderRadius:6, fontSize:10, fontWeight:700, letterSpacing:"0.08em", textTransform:"uppercase", padding:"0 10px", height:28, cursor:"pointer", fontFamily:"'DM Mono',monospace", whiteSpace:"nowrap" }}>Full Profile →</button>
-          )}
-          <button onClick={onClose} style={{ background:"rgba(255,255,255,0.06)", border:"none", color:C.muted, width:28, height:28, borderRadius:6, fontSize:14, display:"flex", alignItems:"center", justifyContent:"center", cursor:"pointer" }}>✕</button>
-        </div>
-        <div style={{ display:"flex", alignItems:"flex-start", justifyContent:"space-between", marginBottom:6, paddingRight:40 }}>
-          <div style={{ fontSize:20, fontWeight:800 }}>
+        <div style={{ display:"flex", alignItems:"flex-start", gap:8, marginBottom:6 }}>
+          {/* Title — takes remaining space, won't push into buttons */}
+          <div style={{ flex:1, minWidth:0, fontSize:20, fontWeight:800, paddingTop:4 }}>
             {r.artist} <span style={{ color:C.muted, fontWeight:400 }}>—</span> <span style={{ color:C.cyan }}>{r.release}</span>
           </div>
           {/* Symphonic Score badge */}
-          <div style={{ flexShrink:0, textAlign:"center", background:`${scCol}14`, border:`1px solid ${scCol}44`, borderRadius:10, padding:"6px 12px", marginLeft:10 }}>
+          <div style={{ flexShrink:0, textAlign:"center", background:`${scCol}14`, border:`1px solid ${scCol}44`, borderRadius:10, padding:"6px 12px" }}>
             <div style={{ fontSize:9, fontWeight:700, letterSpacing:"0.14em", textTransform:"uppercase", color:scCol, fontFamily:"'DM Mono',monospace", marginBottom:2 }}>SYM SCORE</div>
             <div style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:32, fontWeight:800, color:scCol, lineHeight:1, letterSpacing:"0.04em" }}>{sc.total}</div>
           </div>
+          {/* Action buttons */}
+          {onViewProfile && (
+            <button onClick={onViewProfile} style={{ flexShrink:0, background:"rgba(0,217,255,0.1)", border:`1px solid rgba(0,217,255,0.3)`, color:C.cyan, borderRadius:6, fontSize:10, fontWeight:700, letterSpacing:"0.08em", textTransform:"uppercase", padding:"0 10px", height:28, cursor:"pointer", fontFamily:"'DM Mono',monospace", whiteSpace:"nowrap", marginTop:4 }}>Full Profile →</button>
+          )}
+          <button onClick={onClose} style={{ flexShrink:0, background:"rgba(255,255,255,0.06)", border:"none", color:C.muted, width:28, height:28, borderRadius:6, fontSize:14, display:"flex", alignItems:"center", justifyContent:"center", cursor:"pointer", marginTop:4 }}>✕</button>
         </div>
         {/* Score breakdown chips */}
         <div style={{ display:"flex", gap:5, flexWrap:"wrap", marginBottom:10 }}>
           {[
             { label:"Pickups",  value: sc.breakdown.pickups,     max:25, color: C.green },
             { label:"Audience", value: sc.breakdown.audience,    max:20, color: C.cyan },
-            { label:"Social",   value: sc.breakdown.social,      max:20, color: "#E1306C" },
-            { label:"Drive",    value: sc.breakdown.drive,       max:20, color: C.orange },
-            { label:"Consist.", value: sc.breakdown.consistency, max:15, color: C.gold },
+            { label:"Social",   value: sc.breakdown.social,      max:15, color: "#E1306C" },
+            { label:"Story",    value: sc.breakdown.story,       max:15, color: C.purple },
+            { label:"Drive",    value: sc.breakdown.drive,       max:15, color: C.orange },
+            { label:"Consist.", value: sc.breakdown.consistency, max:10, color: C.gold },
           ].map(({ label, value, max, color }) => (
             <div key={label} style={{ background:`${color}10`, border:`1px solid ${color}30`, borderRadius:7, padding:"3px 8px", display:"flex", alignItems:"center", gap:5 }}>
               <span style={{ fontSize:9, color, fontWeight:700, fontFamily:"'DM Mono',monospace", letterSpacing:"0.08em", textTransform:"uppercase" }}>{label}</span>

@@ -184,9 +184,10 @@ export default function ArtistProfilePage({ release, onBack, driverData: driverD
               {[
                 { label:"Pickups",  value: sc.breakdown.pickups,     max:25, color: C.green },
                 { label:"Audience", value: sc.breakdown.audience,    max:20, color: C.cyan },
-                { label:"Social",   value: sc.breakdown.social,      max:20, color: "#E1306C" },
-                { label:"Drive",    value: sc.breakdown.drive,       max:20, color: C.orange },
-                { label:"Consist.", value: sc.breakdown.consistency, max:15, color: C.gold },
+                { label:"Social",   value: sc.breakdown.social,      max:15, color: "#E1306C" },
+                { label:"Story",    value: sc.breakdown.story,       max:15, color: C.purple },
+                { label:"Drive",    value: sc.breakdown.drive,       max:15, color: C.orange },
+                { label:"Consist.", value: sc.breakdown.consistency, max:10, color: C.gold },
               ].map(({ label, value, max, color }) => (
                 <div key={label} style={{ background:`${color}10`, border:`1px solid ${color}30`, borderRadius:7, padding:"3px 8px", display:"flex", alignItems:"center", gap:5 }}>
                   <span style={{ fontSize:9, color, fontWeight:700, fontFamily:"'DM Mono',monospace", letterSpacing:"0.08em", textTransform:"uppercase" }}>{label}</span>
