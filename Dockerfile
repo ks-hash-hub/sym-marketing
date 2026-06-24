@@ -4,9 +4,11 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY . .
-# Vite bakes env vars at build time — pass token in as a build arg
+# Vite bakes env vars at build time — pass tokens in as build args
 ARG VITE_AIRTABLE_TOKEN
 ENV VITE_AIRTABLE_TOKEN=$VITE_AIRTABLE_TOKEN
+ARG VITE_CHARTMETRIC_TOKEN
+ENV VITE_CHARTMETRIC_TOKEN=$VITE_CHARTMETRIC_TOKEN
 RUN npm run build
 
 # Stage 2: serve with nginx

@@ -39,7 +39,7 @@ export default function App() {
 
   // ── Live data (or JSON fallback) ──────────────────────────────────────────
   const { releases: RELEASES, pickups: PICKUPS, driverData: DRIVER_DATA,
-          loading: dataLoading, isLive, error: dataError } = useAppData();
+          loading: dataLoading, isLive, isEnriched, error: dataError } = useAppData();
 
   // ── URL routing: /:upc → artist profile ───────────────────────────────────
   useEffect(() => {
@@ -165,7 +165,7 @@ export default function App() {
             </div>
           ) : isLive ? (
             <div style={{ background:"rgba(0,217,255,0.08)", border:"1px solid rgba(0,217,255,0.25)", color:C.cyan, borderRadius:6, padding:"4px 10px", fontSize:9, fontWeight:700, letterSpacing:"0.1em", textAlign:"center" }}>
-              ● LIVE DATA
+              ● LIVE DATA{isEnriched ? " + CM" : ""}
             </div>
           ) : (
             <div style={{ background:"rgba(57,217,138,0.08)", border:"1px solid rgba(57,217,138,0.2)", color:C.green, borderRadius:6, padding:"4px 10px", fontSize:9, fontWeight:700, letterSpacing:"0.1em", textAlign:"center" }}>

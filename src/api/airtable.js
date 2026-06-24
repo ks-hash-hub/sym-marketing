@@ -145,13 +145,19 @@ const DRIVER_FIELDS = [
   "RELEASE DATE",
   "WHAT'S THE STORY",
   "SIMILAR ARTISTS / FOR FANS OF",
-  "MOOD",                       // multipleSelects → [name]
-  "SONG STYLES",                // multipleSelects → [name]
+  "MOOD",
+  "SONG STYLES",
   "UPCOMING SHOWS",
   "AD DETAILS",
   "CONFIRMED PRESS",
-  "MARKETING DRIVERS (MS)",     // multipleSelects → [name]
-  "SONG CHARACTERISTICS",       // multipleSelects → [name]
+  "MARKETING DRIVERS (MS)",
+  "SONG CHARACTERISTICS",
+  "SPOTIFY PROFILE URL",
+  "IG LINK",
+  "TIKTOK HANDLE",
+  "YT LINK",
+  "TW LINK",
+  "SC LINK",
 ];
 
 function transformDriver(f) {
@@ -164,9 +170,16 @@ function transformDriver(f) {
     upcomingShows:  f["UPCOMING SHOWS"]                     || null,
     adDetails:      f["AD DETAILS"]                         || null,
     confirmedPress: f["CONFIRMED PRESS"]                    || null,
-    socialActivity: null,   // not in Airtable yet
-    dspTools:       [],     // not in Airtable yet
-    releaseConsistency: 0,  // not in Airtable yet
+    socialActivity: null,
+    dspTools:       [],
+    releaseConsistency: 0,
+    // Social profile links — used by Chartmetric enrichment
+    spotifyUrl:     f["SPOTIFY PROFILE URL"]                || null,
+    igUrl:          f["IG LINK"]                            || null,
+    tiktokUrl:      f["TIKTOK HANDLE"]                      || null,
+    ytUrl:          f["YT LINK"]                            || null,
+    twUrl:          f["TW LINK"]                            || null,
+    scUrl:          f["SC LINK"]                            || null,
   };
 }
 

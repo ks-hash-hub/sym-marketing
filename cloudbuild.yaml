@@ -1,10 +1,12 @@
 steps:
-  # Build the Docker image (token passed as build arg so Vite bakes it in)
+  # Build the Docker image (tokens passed as build args so Vite bakes them in)
   - name: "gcr.io/cloud-builders/docker"
     args:
       - build
       - --build-arg
       - VITE_AIRTABLE_TOKEN=$_AIRTABLE_TOKEN
+      - --build-arg
+      - VITE_CHARTMETRIC_TOKEN=$_CHARTMETRIC_TOKEN
       - -t
       - us-central1-docker.pkg.dev/sym-marketing-intel/sym-marketing/app:$COMMIT_SHA
       - -t
@@ -39,7 +41,8 @@ images:
   - us-central1-docker.pkg.dev/sym-marketing-intel/sym-marketing/app:latest
 
 substitutions:
-  _AIRTABLE_TOKEN: ""
+  _AIRTABLE_TOKEN:    ""
+  _CHARTMETRIC_TOKEN: ""
 
 options:
   logging: CLOUD_LOGGING_ONLY
