@@ -23,10 +23,11 @@ export default function ArtistProfilePage({ release, onBack, driverData: driverD
 
   const DRIVER_DATA    = driverDataProp || DRIVER_DATA_JSON;
   const PICKUPS        = pickupsProp    || PICKUPS_JSON;
-  const hasDriverEntry = !!(DRIVER_DATA[release.artist] || DRIVER_DATA[release.upc]);
-  const d              = DRIVER_DATA[release.artist] || DRIVER_DATA[release.upc] || {};
-  const artistPickups  = PICKUPS.filter(p => p.artist === release.artist)
-                                .sort((a,b) => new Date(b.dateSent)-new Date(a.dateSent));
+  const hasDriverEntry = !!(DRIVER_DATA[release.id] || DRIVER_DATA[release.artist] || DRIVER_DATA[release.upc]);
+  const d              = DRIVER_DATA[release.id] || DRIVER_DATA[release.artist] || DRIVER_DATA[release.upc] || {};
+  const artistPickups  = PICKUPS
+    .filter(p => (p.releaseId && p.releaseId === release.id) || p.artist === release.artist)
+    .sort((a,b) => new Date(b.dateSent)-new Date(a.dateSent));
   const pastReleases   = PAST_RELEASES[release.artist] || [];
   const organicEd      = ORGANIC_EDITORIAL[release.artist] || [];
   const ugcPlaylists   = UGC_PLAYLISTS[release.artist] || [];
@@ -68,7 +69,7 @@ export default function ArtistProfilePage({ release, onBack, driverData: driverD
   );
 
   const profileRd = [
-    { metric:"Audience",    value: Math.min(100, Math.round(release.spotifyML/60000)), color: C.cyan,    pos:{ top:"2%",  left:"50%" } },
+    { metric:"Audience",    value: Math.min(100, Math.round((sc.breakdown.audience/20)*100)), color: C.cyan,    pos:{ top:"2%",  left:"50%" } },
     { metric:"Activity",    value: profileActivityScore,                                color: C.green,   pos:{ top:"25%", left:"93%" } },
     { metric:"History",     value: Math.min(100, artistPickups.length * 12),           color: C.orange,  pos:{ top:"75%", left:"93%" } },
     { metric:"Story",       value: profileStoryScore,                                  color: C.purple,  pos:{ top:"97%", left:"50%" } },
