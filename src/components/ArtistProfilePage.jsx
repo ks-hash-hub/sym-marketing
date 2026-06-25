@@ -14,7 +14,7 @@ import SIMILAR_ARTIST_PICKUPS from "../data/similarArtistPickups.json";
 import Pill from "./Pill.jsx";
 import SectionLabel from "./SectionLabel.jsx";
 
-export default function ArtistProfilePage({ release, onBack, driverData: driverDataProp, pickups: pickupsProp }) {
+export default function ArtistProfilePage({ release, onBack, driverData: driverDataProp, pickups: pickupsProp, isLive }) {
   const [historyTimeframe, setHistoryTimeframe] = useState("1Y");
   const [expandedRelease,  setExpandedRelease]  = useState(null);
   const [historyOpen,      setHistoryOpen]      = useState(false);
@@ -197,9 +197,12 @@ export default function ArtistProfilePage({ release, onBack, driverData: driverD
               ))}
             </div>
           </div>
-          <div style={{ flexShrink:0, textAlign:"center", background:`${scCol}14`, border:`2px solid ${scCol}44`, borderRadius:16, padding:"14px 20px" }}>
+          <div style={{ flexShrink:0, textAlign:"center", background:`${scCol}14`, border:`2px solid ${scCol}44`, borderRadius:16, padding:"14px 20px", position:"relative" }}>
             <div style={{ fontSize:9, fontWeight:700, letterSpacing:"0.14em", textTransform:"uppercase", color:scCol, fontFamily:"'DM Mono',monospace", marginBottom:4 }}>SYM SCORE</div>
             <div style={{ fontFamily:"'Bebas Neue',sans-serif", fontSize:88, color:scCol, lineHeight:1, letterSpacing:"0.04em" }}>{sc.total}</div>
+            {!isLive && (
+              <div style={{ fontSize:8, color:C.muted, fontFamily:"'DM Mono',monospace", marginTop:4, animation:"pulse 1.5s ease infinite" }}>⟳ loading…</div>
+            )}
           </div>
         </div>
       </div>

@@ -631,7 +631,7 @@ export default function App() {
 
         {/* ════════════════ ARTIST PROFILE ════════════════ */}
         {tab==="artist-profile" && profileTarget && (
-          <ArtistProfilePage r={profileTarget} release={profileTarget} onBack={()=>{ setTab("releases"); setProfileTarget(null); window.history.pushState({}, "", "/"); }} driverData={DRIVER_DATA} pickups={PICKUPS} />
+          <ArtistProfilePage r={profileTarget} release={profileTarget} onBack={()=>{ setTab("releases"); setProfileTarget(null); window.history.pushState({}, "", "/"); }} driverData={DRIVER_DATA} pickups={PICKUPS} isLive={isLive} />
         )}
 
       </div>
