@@ -187,6 +187,7 @@ function SymphonicScoreExtension() {
       "UPC CODE", "ARTIST NAME (FOR ZAP)", "Release*", "DATE",
       "PRIORITY LEVEL", "GENRE", "EDITORIAL INCLUSION",
       "SPOTIFY ML (from ARTIST)", "IG FOLLOWERS (from ARTIST)",
+      "TIKTOK # (LOOK UP)", "YT Followers (Look Up)",
     ],
   });
 
@@ -227,8 +228,8 @@ function SymphonicScoreExtension() {
       ei:              cv("EDITORIAL INCLUSION") || false,
       spotifyML:       lookupNum("SPOTIFY ML (from ARTIST)"),
       igFollowers:     lookupNum("IG FOLLOWERS (from ARTIST)"),
-      tiktokFollowers: 0,
-      ytFollowers:     0,
+      tiktokFollowers: lookupNum("TIKTOK # (LOOK UP)"),
+      ytFollowers:     lookupNum("YT Followers (Look Up)"),
       twFollowers:     0,
     };
   }, [activeRec]);
@@ -411,9 +412,11 @@ function SymphonicScoreExtension() {
           <div style={Object.assign({}, mono, { fontSize: 7, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: C.muted, marginBottom: 7 })}>Audience</div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 5 }}>
             {[
-              { label: "Spotify ML", value: fmtN(release.spotifyML),  color: DSP_COLORS.Spotify },
-              { label: "Instagram",  value: fmtN(release.igFollowers), color: "#E1306C" },
-            ].map(function(s) {
+              { label: "Spotify ML", value: fmtN(release.spotifyML),      color: DSP_COLORS.Spotify },
+              { label: "Instagram",  value: fmtN(release.igFollowers),     color: "#E1306C" },
+              { label: "TikTok",     value: fmtN(release.tiktokFollowers), color: "#69C9D0" },
+              { label: "YouTube",    value: fmtN(release.ytFollowers),     color: DSP_COLORS.YouTube },
+            ].filter(function(s) { return s.value !== "0"; }).map(function(s) {
               return (
                 <div key={s.label} style={{ background: "rgba(255,255,255,0.03)", borderRadius: 6, padding: "7px 9px" }}>
                   <div style={{ fontSize: 9, color: C.muted, marginBottom: 2 }}>{s.label}</div>
