@@ -199,25 +199,16 @@ function transformDriver(f) {
 }
 
 /**
- * Fetch driver submissions for a set of UPCs.
- * Returns an object keyed by BOTH artist name AND UPC for flexible lookup:
- *   driverData["Luna Vega"]  → works
- *   driverData["824296202201"] → also works
- *
- * @param {string[]} upcs  UPC codes from loaded releases
+ * Fetch driver submissions, keyed by BOTH artist name AND UPC.
+ * Fetches all submissions within the past 120 days — no UPC filter,
+ * so entries missing a UPC (lookup by artist name only) are still found.
+ *   driverData["EV"]             → works even if UPC field is blank
+ *   driverData["824296202201"]   → also works
  */
-export async function fetchDriverSubmissions(upcs = []) {
-  if (!upcs.length) return {};
-
-  // Build OR filter over UPCs (max 50 to keep formula length reasonable)
-  const safeUpcs = upcs.slice(0, 50);
-  const upcFilter = safeUpcs.length === 1
-    ? `{UPC}="${safeUpcs[0]}"`
-    : `OR(${safeUpcs.map(u => `{UPC}="${u}"`).join(",")})`;
-
+export async function fetchDriverSubmissions(_upcs = []) {
   const records = await fetchAllPages(TBL_DRIVERS, {
     fields: DRIVER_FIELDS,
-    filter: upcFilter,
+    filter: "IS_AFTER({RELEASE DATE}, DATEADD(TODAY(), -120, 'days'))",
     sort:   [{ field: "RELEASE DATE", direction: "desc" }],
   });
 
