@@ -235,12 +235,13 @@ function SymphonicScoreExtension() {
 
   const driverData = useMemo(function() {
     if (!release || !driverRecords) return null;
+    // RELEASE LINK links to the RELEASES table (not Release Schedule) — IDs won't match.
+    // Match by UPC first (unique per release), fall back to artist name.
     var rec = driverRecords.find(function(r) {
-      var links = r.getCellValue("RELEASE LINK") || [];
-      if (links.some(function(l) { return l.id === release.id; })) return true;
-      var upc    = r.getCellValueAsString("UPC");
+      var upc = r.getCellValueAsString("UPC");
+      if (upc && upc === release.upc) return true;
       var artist = r.getCellValueAsString("ARTIST");
-      return upc === release.upc || artist === release.artist;
+      return artist === release.artist;
     });
     if (!rec) return null;
     var cv = function(f) { return rec.getCellValue(f); };
