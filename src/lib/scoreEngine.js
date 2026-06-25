@@ -1,8 +1,10 @@
 import { C } from "./constants.js";
 
 export function symphonicScore(r, driverData = {}, pickups = []) {
-  const d = driverData[r.artist] || driverData[r.upc] || {};
-  const artistPickups = pickups.filter(p => p.artist === r.artist);
+  const d = driverData[r.id] || driverData[r.artist] || driverData[r.upc] || {};
+  const artistPickups = pickups.filter(p =>
+    (p.releaseId && p.releaseId === r.id) || p.artist === r.artist
+  );
 
   // 1. Pickup History (0–25)
   const fp    = artistPickups.filter(p => p.type === "1st Party").length;

@@ -158,6 +158,7 @@ const DRIVER_FIELDS = [
   "ARTIST",
   "RELEASE",
   "RELEASE DATE",
+  "RELEASE LINK",           // multipleRecordLinks → Release Schedule record ID
   "WHAT'S THE STORY",
   "SIMILAR ARTISTS / FOR FANS OF",
   "MOOD",
@@ -177,6 +178,7 @@ const DRIVER_FIELDS = [
 
 function transformDriver(f) {
   return {
+    releaseId:      (f["RELEASE LINK"] || [])[0]            || null,
     story:          f["WHAT'S THE STORY"]                   || null,
     similarArtists: f["SIMILAR ARTISTS / FOR FANS OF"]      || null,
     mood:           f["MOOD"]                               || [],
@@ -212,20 +214,22 @@ export async function fetchDriverSubmissions(_upcs = []) {
     sort:   [{ field: "RELEASE DATE", direction: "desc" }],
   });
 
-  const byArtist = {};
-  const byUpc    = {};
+  const result = {};
 
   // Walk newest-first so the first entry per key wins (most recent submission)
   records.forEach(rec => {
-    const f      = rec.fields;
-    const artist = (f["ARTIST"] || "").trim();
-    const upc    = (f["UPC"]    || "").trim();
-    const data   = transformDriver(f);
-    if (artist && !byArtist[artist]) byArtist[artist] = data;
-    if (upc    && !byUpc[upc])       byUpc[upc]       = data;
+    const f        = rec.fields;
+    const artist   = (f["ARTIST"]       || "").trim();
+    const upc      = (f["UPC"]          || "").trim();
+    const releaseId = (f["RELEASE LINK"] || [])[0] || null;
+    const data     = transformDriver(f);
+    // Key by release record ID first (most reliable), then artist name, then UPC as fallbacks
+    if (releaseId && !result[releaseId]) result[releaseId] = data;
+    if (artist    && !result[artist])    result[artist]    = data;
+    if (upc       && !result[upc])       result[upc]       = data;
   });
 
-  return { ...byArtist, ...byUpc };
+  return result;
 }
 
 // ─── Pickups ───────────────────────────────────────────────────────────────
@@ -233,17 +237,19 @@ export async function fetchDriverSubmissions(_upcs = []) {
 const PICKUP_FIELDS = [
   "PLAYLIST",
   "DSP",
-  "Release",       // formula → array of release title strings
-  "ARTIST",        // formula → artist string
+  "Release",        // formula → release title string
+  "ARTIST",         // formula → artist name string
+  "UPC",            // multipleRecordLinks → Release Schedule record ID
   "1ST or 3RD",
   "DATE SENT",
-  "MARKETING LEAD",// multipleSelects → [name]
+  "MARKETING LEAD", // multipleSelects → [name]
   "COVER",
 ];
 
 function transformPickup(rec) {
   const f = rec.fields;
   return {
+    releaseId: (f["UPC"] || [])[0] || "",   // Release Schedule record ID
     playlist:  f["PLAYLIST"]  || "",
     dsp:       f["DSP"]       || "",
     release:   (f["Release"]  || [])[0] || f["Release"] || "",
