@@ -312,6 +312,7 @@ function SymphonicScoreExtension() {
     { n: "Pickups",  v: sc.breakdown.pickups,     m: 25, c: C.green   },
     { n: "Audience", v: sc.breakdown.audience,    m: 20, c: C.cyan    },
     { n: "Social",   v: sc.breakdown.social,      m: 15, c: "#E1306C" },
+    { n: "Story",    v: sc.breakdown.story,       m: 15, c: C.purple  },
     { n: "Drive",    v: sc.breakdown.drive,       m: 15, c: C.orange  },
     { n: "Consist.", v: sc.breakdown.consistency, m: 10, c: C.gold    },
   ];
