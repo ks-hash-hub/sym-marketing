@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SYM Score — Planning Doc</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg:      #0a0c10;
+    --surface: #111318;
+    --card:    #161a22;
+    --border:  rgba(255,255,255,0.08);
+    --cyan:    #00d9ff;
+    --gold:    #ffb800;
+    --green:   #39d98a;
+    --purple:  #b45cff;
+    --pink:    #ff3f7a;
+    --orange:  #ff8c42;
+    --muted:   rgba(255,255,255,0.45);
+    --dim:     rgba(255,255,255,0.18);
+  }
+  body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; font-size: 15px; line-height: 1.65; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 48px;
+    background: rgba(10,12,16,0.92); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 0.12em; color: var(--cyan); cursor: pointer; }
+  .nav-links { display: flex; gap: 28px; }
+  .nav-links a {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted); text-decoration: none; transition: color 0.2s;
+    font-family: 'DM Mono', monospace; cursor: pointer; padding-bottom: 4px;
+  }
+  .nav-links a:hover { color: #fff; }
+  .nav-links a.active { color: var(--cyan); border-bottom: 2px solid var(--cyan); }
+
+  /* LAYOUT */
+  .page { display: none; padding: 120px 48px 80px; max-width: 900px; margin: 0 auto; }
+  .page.active { display: block; }
+
+  /* HERO */
+  #hero { display: flex; flex-direction: column; justify-content: center; min-height: 100vh; padding: 0 48px; max-width: 900px; margin: 0 auto; }
+  #hero.hidden { display: none; }
+  .hero-eyebrow { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.2em; color: var(--cyan); text-transform: uppercase; margin-bottom: 20px; }
+  .hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(52px, 8vw, 88px); letter-spacing: 0.04em; line-height: 1; margin-bottom: 24px; }
+  .hero-title span { color: var(--cyan); }
+  .hero-sub { font-size: 17px; color: var(--muted); max-width: 540px; line-height: 1.7; margin-bottom: 40px; }
+  .hero-meta { display: flex; gap: 32px; }
+  .hero-meta-item { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--dim); letter-spacing: 0.1em; }
+  .hero-meta-item strong { color: var(--muted); display: block; margin-bottom: 2px; }
+  .hero-cta {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--cyan); color: #000; font-weight: 700; font-size: 13px;
+    padding: 14px 28px; border-radius: 8px; cursor: pointer; border: none;
+    letter-spacing: 0.05em; text-transform: uppercase; transition: opacity 0.2s;
+    margin-bottom: 40px; width: fit-content;
+  }
+  .hero-cta:hover { opacity: 0.85; }
+
+  /* SECTION TITLES */
+  .section-label {
+    font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em;
+    color: var(--cyan); text-transform: uppercase; margin-bottom: 8px;
+  }
+  .section-title { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 0.06em; margin-bottom: 8px; }
+  .section-sub { color: var(--muted); font-size: 14px; margin-bottom: 40px; max-width: 600px; }
+
+  /* CARDS */
+  .card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 24px 28px; margin-bottom: 16px;
+  }
+  .card-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; }
+  .card-sub { font-size: 13px; color: var(--muted); margin-bottom: 14px; }
+
+  /* SCORE PILLARS */
+  .pillar-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 32px; }
+  .pillar {
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+    padding: 18px 20px;
+  }
+  .pillar-pts { font-family: 'Bebas Neue', sans-serif; font-size: 32px; line-height: 1; margin-bottom: 4px; }
+  .pillar-name { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+  .pillar-desc { font-size: 12px; color: var(--muted); line-height: 1.55; }
+  .pillar-source { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--dim); margin-top: 10px; }
+
+  /* BULLETS */
+  ul.clean { list-style: none; padding: 0; }
+  ul.clean li {
+    padding: 10px 0; border-bottom: 1px solid var(--border);
+    font-size: 14px; color: rgba(255,255,255,0.8);
+    display: flex; align-items: flex-start; gap: 10px;
+  }
+  ul.clean li:last-child { border-bottom: none; }
+  ul.clean li::before { content: '—'; color: var(--dim); flex-shrink: 0; margin-top: 1px; }
+
+  /* STATUS TAGS */
+  .tag {
+    display: inline-block; font-family: 'DM Mono', monospace; font-size: 10px;
+    letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600;
+    padding: 3px 10px; border-radius: 20px; margin-left: 8px; vertical-align: middle;
+  }
+  .tag-green  { background: rgba(57,217,138,0.15); color: var(--green); }
+  .tag-gold   { background: rgba(255,184,0,0.15);  color: var(--gold); }
+  .tag-pink   { background: rgba(255,63,122,0.15); color: var(--pink); }
+  .tag-cyan   { background: rgba(0,217,255,0.12);  color: var(--cyan); }
+  .tag-purple { background: rgba(180,92,255,0.15); color: var(--purple); }
+
+  /* QUICK WIN ROWS */
+  .qw-row {
+    display: flex; align-items: flex-start; gap: 16px;
+    padding: 16px 0; border-bottom: 1px solid var(--border);
+  }
+  .qw-row:last-child { border-bottom: none; }
+  .qw-num {
+    font-family: 'Bebas Neue', sans-serif; font-size: 28px;
+    color: var(--dim); flex-shrink: 0; line-height: 1; padding-top: 2px; min-width: 28px;
+  }
+  .qw-body { flex: 1; }
+  .qw-title { font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+  .qw-desc { font-size: 13px; color: var(--muted); }
+  .qw-effort { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--dim); margin-top: 6px; }
+
+  /* OPEN QUESTIONS */
+  .q-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;
+  }
+  .q-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px;
+  }
+  .q-label { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gold); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px; }
+  .q-text { font-size: 14px; color: rgba(255,255,255,0.85); line-height: 1.55; }
+  .q-note { font-size: 12px; color: var(--muted); margin-top: 8px; }
+
+  /* DIVIDER */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+  /* PHILOSOPHY CALLOUT */
+  .callout {
+    border-left: 3px solid var(--cyan); background: rgba(0,217,255,0.06);
+    border-radius: 0 8px 8px 0; padding: 16px 20px; margin-bottom: 28px;
+    font-size: 14px; color: rgba(255,255,255,0.85); line-height: 1.65;
+  }
+  .callout strong { color: var(--cyan); }
+</style>
+</head>
+<body>
+
+<!-- PASSWORD GATE -->
+<div id="gate" style="position:fixed;inset:0;background:#0a0c10;z-index:9999;display:flex;align-items:center;justify-content:center;">
+  <div style="text-align:center;max-width:320px;">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:0.1em;color:#00d9ff;margin-bottom:24px;">SYM SCORE</div>
+    <input id="pw" type="password" placeholder="Enter password" onkeydown="if(event.key==='Enter')checkPw()"
+      style="width:100%;padding:14px 18px;background:#161a22;border:1px solid rgba(255,255,255,0.12);border-radius:8px;color:#fff;font-size:15px;outline:none;margin-bottom:12px;" />
+    <button onclick="checkPw()"
+      style="width:100%;padding:14px;background:#00d9ff;color:#000;font-weight:700;font-size:13px;border:none;border-radius:8px;cursor:pointer;letter-spacing:0.06em;text-transform:uppercase;">
+      Enter
+    </button>
+    <div id="pw-err" style="color:#ff3f7a;font-size:13px;margin-top:10px;display:none;">Incorrect password</div>
+  </div>
+</div>
+
+<nav>
+  <div class="nav-logo" onclick="showHero()">SYM SCORE</div>
+  <div class="nav-links">
+    <a onclick="show('philosophy')">Philosophy</a>
+    <a onclick="show('pillars')">Score Pillars</a>
+    <a onclick="show('quickwins')">Quick Wins</a>
+    <a onclick="show('openqs')">Open Questions</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div id="hero">
+  <div class="hero-eyebrow">Internal Planning Doc · Updated Jul 1, 2026</div>
+  <h1 class="hero-title">SYM Score<br><span>Planning</span></h1>
+  <p class="hero-sub">How we plan to build the scoring system, what we can ship now, and what we still need to decide before we build.</p>
+  <button class="hero-cta" onclick="show('philosophy')">Start Reading →</button>
+  <div class="hero-meta">
+    <div class="hero-meta-item"><strong>Status</strong>Planning Phase</div>
+    <div class="hero-meta-item"><strong>Updated</strong>Jul 1 Marketing Meeting</div>
+    <div class="hero-meta-item"><strong>Decision Needed</strong>Score Methodology</div>
+  </div>
+</div>
+
+<!-- PHILOSOPHY -->
+<div id="philosophy" class="page">
+  <div class="section-label">Section 01</div>
+  <div class="section-title">Scoring Philosophy</div>
+  <p class="section-sub">The principles we aligned on in the Jun 25 meeting that will shape every decision below.</p>
+
+  <div class="callout">
+    <strong>Core idea:</strong> The score should reflect whether an artist is doing the right things — not just whether they've blown up. Process adherence is more actionable than raw performance.
+  </div>
+
+  <div class="card">
+    <div class="card-title">Process over performance</div>
+    <div class="card-sub">Did they submit drivers on time? Do they submit for every release? Are they using all available tools? These signal coachable behavior more than raw listener counts do.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Scores must be contextual</div>
+    <div class="card-sub">10,000 monthly listeners means something very different for an Americana artist than a Pop artist. A raw number with no context can mislead. Genre-weighting and career-stage context are the right direction — we'll gather more input on <em>how</em> to weight on the July 1 call.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Three jobs the score needs to do</div>
+    <div class="card-sub" style="margin-bottom:16px;">Each "bucket" has a distinct audience and use case:</div>
+    <ul class="clean">
+      <li><strong style="color:var(--cyan)">Health Check</strong> — Client managers coaching artists: are they doing what they're supposed to?</li>
+      <li><strong style="color:var(--gold)">Pitch Ammunition</strong> — Tailor pitch bullets per DSP using platform-specific metrics (Amazon Voice Index, Spotify ML, growth rates)</li>
+      <li><strong style="color:var(--green)">Opportunities</strong> — Identify high-performing artists for relationship building, advances, feature opportunities</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Benchmarking approach — TBD</div>
+    <div class="card-sub">Open question: do we score against an absolute benchmark (e.g. 1M listeners = 100pts) or relative to the rest of our catalog? Relative scoring surfaces who's performing well <em>for us</em>, but makes scores harder to explain to clients. Absolute scoring is simpler to communicate but may skew heavily by genre. <strong style="color:var(--gold)">This needs a decision on July 1.</strong></div>
+  </div>
+</div>
+
+<!-- PILLARS -->
+<div id="pillars" class="page">
+  <div class="section-label">Section 02</div>
+  <div class="section-title">Score Pillars</div>
+  <p class="section-sub">Current 6-pillar plan. Weights are a starting point — final calibration pending July 1 team input.</p>
+
+  <div class="callout">
+    Total: <strong>100 points</strong> across 6 dimensions. The top 3 pillars (Pickups, Audience, Social) are performance signals. The bottom 3 (Story, Drive, Consistency) are process signals. The team leaned toward weighting process more heavily — exact weights TBD.
+  </div>
+
+  <div class="pillar-grid">
+    <div class="pillar" style="border-top: 3px solid var(--cyan);">
+      <div class="pillar-pts" style="color:var(--cyan)">25</div>
+      <div class="pillar-name">Pickups</div>
+      <div class="pillar-desc">1st party editorial placements (×4), 3rd party (×2), cover placements (+5 bonus). Cap at 25.</div>
+      <div class="pillar-source">Source: Airtable Pickups table</div>
+    </div>
+    <div class="pillar" style="border-top: 3px solid var(--purple);">
+      <div class="pillar-pts" style="color:var(--purple)">20</div>
+      <div class="pillar-name">Audience</div>
+      <div class="pillar-desc">Log-scaled Spotify Monthly Listeners. 6M listeners ≈ ceiling. Genre context adjustment needed.</div>
+      <div class="pillar-source">Source: Chartmetric API</div>
+    </div>
+    <div class="pillar" style="border-top: 3px solid var(--pink);">
+      <div class="pillar-pts" style="color:var(--pink)">15</div>
+      <div class="pillar-name">Social</div>
+      <div class="pillar-desc">Weighted cross-platform: IG (×1.0), TikTok (×1.2), YouTube (×0.8), Twitter (×0.5).</div>
+      <div class="pillar-source">Source: Chartmetric API</div>
+    </div>
+    <div class="pillar" style="border-top: 3px solid var(--gold);">
+      <div class="pillar-pts" style="color:var(--gold)">15</div>
+      <div class="pillar-name">Story</div>
+      <div class="pillar-desc">Pitch completeness: narrative (+5), similar artists (+3), mood/vibes (+2), song styles (+2), drivers submitted (+3 max).</div>
+      <div class="pillar-source">Source: Airtable Drivers table</div>
+    </div>
+    <div class="pillar" style="border-top: 3px solid var(--orange);">
+      <div class="pillar-pts" style="color:var(--orange)">15</div>
+      <div class="pillar-name">Drive</div>
+      <div class="pillar-desc">Activity signals: upcoming shows, social momentum, DSP tools used, confirmed press, ad spend.</div>
+      <div class="pillar-source">Source: Airtable Drivers table</div>
+    </div>
+    <div class="pillar" style="border-top: 3px solid var(--green);">
+      <div class="pillar-pts" style="color:var(--green)">10</div>
+      <div class="pillar-name">Consistency</div>
+      <div class="pillar-desc">Historical release cadence score — how regularly is this artist releasing music?</div>
+      <div class="pillar-source">Source: Airtable Release Schedule</div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <div class="section-label">Score Labels</div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px;">
+    <div class="card" style="border-top:3px solid var(--green);text-align:center;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--green)">80–100</div>
+      <div style="font-size:12px;font-weight:700;">Strong</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px;">Ready to pitch</div>
+    </div>
+    <div class="card" style="border-top:3px solid var(--cyan);text-align:center;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--cyan)">65–79</div>
+      <div style="font-size:12px;font-weight:700;">Good</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px;">Pitch with context</div>
+    </div>
+    <div class="card" style="border-top:3px solid var(--gold);text-align:center;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--gold)">50–64</div>
+      <div style="font-size:12px;font-weight:700;">Fair</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px;">Needs attention</div>
+    </div>
+    <div class="card" style="border-top:3px solid var(--pink);text-align:center;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--pink)">0–49</div>
+      <div style="font-size:12px;font-weight:700;">Weak</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px;">Coach first</div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <div class="section-label">What We're Not Scoring Yet</div>
+  <ul class="clean" style="margin-top:16px;">
+    <li>% of drivers submitted on time <span class="tag tag-green">Formula confirmed — ≥28 days = on time</span></li>
+    <li>% of last 5 releases with drivers submitted <span class="tag tag-cyan">Easy to add</span></li>
+    <li>OAC / SoundCloud enrollment status <span class="tag tag-cyan">Easy to add</span></li>
+    <li>Spotify active listener ratio (active / monthly) <span class="tag tag-gold">New — Greg flagged Jul 1</span></li>
+    <li>Social momentum / trend detection (TikTok creates, Shorts) <span class="tag tag-gold">New — Greg flagged Jul 1</span></li>
+    <li>Charting status (Spotify, YouTube) <span class="tag tag-gold">New — Gabby flagged Jul 1</span></li>
+    <li>Release engagement (release-to-release growth) <span class="tag tag-pink">Spotify for Artists — no API, needs scraping</span></li>
+    <li>Top 10 territories <span class="tag tag-cyan">Chartmetric has this</span></li>
+    <li>Tour dates <span class="tag tag-cyan">Bandsintown or Google Maps</span></li>
+    <li>Spotify profile completeness (bio, photos) <span class="tag tag-gold">New — Ana Maria flagged Jul 1</span></li>
+    <li>Amazon Voice Index score <span class="tag tag-pink">API access TBD</span></li>
+    <li>Growth rates (quarterly/annual % change) <span class="tag tag-cyan">Chartmetric likely has this</span></li>
+    <li>Genre-weighted benchmarks <span class="tag tag-purple">Phase 2</span></li>
+    <li>Album cycle / release cycle scoring <span class="tag tag-purple">Phase 2 — flagged by Greg</span></li>
+  </ul>
+
+  <hr class="divider" />
+
+  <div class="section-label">Jul 1 Meeting — Key Alignments</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px;">
+    <div class="card" style="border-left:3px solid var(--green);">
+      <div class="card-title" style="color:var(--green)">On-time submission rule confirmed</div>
+      <div class="card-sub">Michael confirmed the Airtable formula: submitted date minus release date. Green if ≥28 days before release, red if less. Already exists — just needs to become a score dimension.</div>
+    </div>
+    <div class="card" style="border-left:3px solid var(--green);">
+      <div class="card-title" style="color:var(--green)">Chartmetric daily sync to Airtable</div>
+      <div class="card-sub">Confirmed direction: ping Chartmetric API daily, write follower counts + ML directly into Airtable columns. Team can then filter and sort in Airtable the way they're used to working.</div>
+    </div>
+    <div class="card" style="border-left:3px solid var(--cyan);">
+      <div class="card-title" style="color:var(--cyan)">Pickup history → programming targets</div>
+      <div class="card-sub">Michael's idea: use past pickup data to auto-populate the programming target column for new releases. Flag as different genre to turn off if needed.</div>
+    </div>
+    <div class="card" style="border-left:3px solid var(--cyan);">
+      <div class="card-title" style="color:var(--cyan)">Song Stats API — evaluate</div>
+      <div class="card-sub">Team is already in Song Stats. Symphonic is evaluating the API cost. Kyle to document what's available and share list to help justify. Song Stats + Chartmetric may overlap.</div>
+    </div>
+  </div>
+</div>
+
+<!-- QUICK WINS -->
+<div id="quickwins" class="page">
+  <div class="section-label">Section 03</div>
+  <div class="section-title">Quick Wins</div>
+  <p class="section-sub">Things we can ship now that are independent of the full score engine. No methodology decisions required.</p>
+
+  <div class="card">
+    <div class="qw-row">
+      <div class="qw-num">1</div>
+      <div class="qw-body">
+        <div class="qw-title">Pickup score column in Airtable release schedule <span class="tag tag-green">Ready now</span></div>
+        <div class="qw-desc">Add a calculated field in the Release Schedule view that shows each artist's pickup score (0–25) — the one pillar the team explicitly aligned on. Sorts and filters immediately without waiting for the full app.</div>
+        <div class="qw-effort">Effort: 1–2 hours · No code · Airtable formula only</div>
+      </div>
+    </div>
+    <div class="qw-row">
+      <div class="qw-num">2</div>
+      <div class="qw-body">
+        <div class="qw-title">OAC + SoundCloud enrollment checkboxes <span class="tag tag-green">Ready now</span></div>
+        <div class="qw-desc">Add two checkbox fields to the Release Schedule or a related Artist table in Airtable: "YouTube OAC enrolled?" and "SoundCloud Official Profile?". These are binary — no API needed — and give client managers instant visibility.</div>
+        <div class="qw-effort">Effort: 30 min · No code · Airtable field additions</div>
+      </div>
+    </div>
+    <div class="qw-row">
+      <div class="qw-num">3</div>
+      <div class="qw-body">
+        <div class="qw-title">Last driver submission date field <span class="tag tag-green">Ready now</span></div>
+        <div class="qw-desc">Airtable already tracks submission dates — add a rollup or lookup field on the Release Schedule that surfaces the most recent drivers submission date per artist. Gives client managers the "when did they last submit?" answer in one column.</div>
+        <div class="qw-effort">Effort: 1 hour · No code · Airtable rollup field</div>
+      </div>
+    </div>
+    <div class="qw-row">
+      <div class="qw-num">4</div>
+      <div class="qw-body">
+        <div class="qw-title">% of last 5 releases with drivers <span class="tag tag-cyan">Small lift</span></div>
+        <div class="qw-desc">An Airtable formula that calculates how many of the artist's last 5 releases had a linked Drivers submission. Color-code red/yellow/green. Immediately useful for the Health Check use case without touching the app.</div>
+        <div class="qw-effort">Effort: 2–3 hours · Airtable formula + linked table</div>
+      </div>
+    </div>
+    <div class="qw-row">
+      <div class="qw-num">5</div>
+      <div class="qw-body">
+        <div class="qw-title">On-time submission score column <span class="tag tag-green">Ready now</span></div>
+        <div class="qw-desc">The Airtable formula already exists (submitted date minus release date, red if &lt;28 days). Just expose it as a numeric score column — average across last 5 releases per artist — so the team can sort and filter on it. Confirmed by Michael on Jul 1.</div>
+        <div class="qw-effort">Effort: 1–2 hours · No code · Airtable rollup of existing formula</div>
+      </div>
+    </div>
+    <div class="qw-row">
+      <div class="qw-num">6</div>
+      <div class="qw-body">
+        <div class="qw-title">Chartmetric data → Airtable columns (daily sync) <span class="tag tag-cyan">Small lift</span></div>
+        <div class="qw-desc">Ping the Chartmetric API daily and write Spotify ML, IG followers, TikTok followers, YouTube followers directly into columns on the Release Schedule. Team can sort, filter, and use in priority meetings without opening the app. Top 10 territories included — pre-populates the territory spotlight column for premium pitches.</div>
+        <div class="qw-effort">Effort: 3–4 hours · Airtable automation or Cloud Scheduler script</div>
+      </div>
+    </div>
+    <div class="qw-row">
+      <div class="qw-num">7</div>
+      <div class="qw-body">
+        <div class="qw-title">Automated playlist ad tracking <span class="tag tag-cyan">Small lift</span></div>
+        <div class="qw-desc">AI query to identify playlist ads from the MS report → route into Airtable. Add a checkbox to push specific pickups directly to the release schedule — eliminates the current 2-day delay.</div>
+        <div class="qw-effort">Effort: 3–4 hours · Airtable automation + AI query setup</div>
+      </div>
+    </div>
+    <div class="qw-row">
+      <div class="qw-num">8</div>
+      <div class="qw-body">
+        <div class="qw-title">Health Check view in the app <span class="tag tag-purple">Next sprint</span></div>
+        <div class="qw-desc">New tab in the dashboard showing per-artist: last submission date, % of releases with drivers, on-time rate, OAC/SoundCloud enrollment. The "coaching ammunition" use case. All data already in Airtable.</div>
+        <div class="qw-effort">Effort: 1 day · App code · No new data sources needed</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- OPEN QUESTIONS -->
+<div id="openqs" class="page">
+  <div class="section-label">Section 04</div>
+  <div class="section-title">Open Questions</div>
+  <p class="section-sub">What we need to gather or decide before we can lock the score methodology. Bring these to the July 1 call.</p>
+
+  <div class="callout">
+    <strong>Jul 1 update:</strong> On-time submission rule confirmed (≥28 days). Chartmetric daily sync to Airtable confirmed as direction. Several new data points surfaced. Open questions below are what still need decisions.
+  </div>
+
+  <div class="q-row">
+    <div class="q-card">
+      <div class="q-label">Benchmarking method</div>
+      <div class="q-text">Do we score against absolute thresholds, or relative to our catalog? Relative surfaces who's performing well for us — absolute is simpler to communicate. Greg noted 10k listeners means very different things by genre — hard to use absolute.</div>
+      <div class="q-note">Still open · Owner: Davey + Michael · Discuss next call</div>
+    </div>
+    <div class="q-card">
+      <div class="q-label">Pillar weights</div>
+      <div class="q-text">Process adherence (Story + Drive + Consistency = 40pts) vs performance (Pickups + Audience + Social = 60pts). The Jul 1 team leaned toward more process weight. What's the right split? Need group input.</div>
+      <div class="q-note">Still open · Owner: Full marketing team</div>
+    </div>
+  </div>
+
+  <div class="q-row">
+    <div class="q-card">
+      <div class="q-label">Spotify active listener ratio</div>
+      <div class="q-text">Greg flagged this as more meaningful than raw monthly listeners — active/monthly % above 25–30% signals a leaned-in fanbase. Spotify for Artists has no API. Does Chartmetric expose this? If not, can we scrape it?</div>
+      <div class="q-note">Owner: Kyle · Check Chartmetric API for active listener data</div>
+    </div>
+    <div class="q-card">
+      <div class="q-label">Release engagement data</div>
+      <div class="q-text">Ana Maria: Spotify for Artists shows release-to-release engagement, but only for ~30 days. Need to decide: do we scrape and store it, or skip it for v1? This is the most useful postmortem signal we don't have yet.</div>
+      <div class="q-note">Owner: Kyle · Spotify for Artists scraping feasibility check</div>
+    </div>
+  </div>
+
+  <div class="q-row">
+    <div class="q-card">
+      <div class="q-label">Song Stats API</div>
+      <div class="q-text">Team is evaluating Song Stats API cost. Kyle needs to document what fields are available and what overlaps with Chartmetric, to help justify the spend. What does Song Stats give us that Chartmetric doesn't?</div>
+      <div class="q-note">Owner: Kyle · Review Song Stats API docs, share list with Michael</div>
+    </div>
+    <div class="q-card">
+      <div class="q-label">Tour date source</div>
+      <div class="q-text">Gabby + Andrew: auto-pull tour dates per territory. Options: Bandsintown API, Google Maps venue calendar, or Spotify profile (no API). Need to pick a source and confirm it covers enough of the catalog.</div>
+      <div class="q-note">Owner: Kyle · Evaluate Bandsintown API as primary source</div>
+    </div>
+  </div>
+
+  <div class="q-row">
+    <div class="q-card">
+      <div class="q-label">Genre weighting</div>
+      <div class="q-text">10k Americana listeners ≠ 10k Pop listeners. Scores need genre context. How do we define genre tiers and what multipliers make sense? Needs marketing team input — can't be decided by engineering alone.</div>
+      <div class="q-note">Phase 2 · Gather data first, decide after initial launch</div>
+    </div>
+    <div class="q-card">
+      <div class="q-label">Album cycle vs artist-level scoring</div>
+      <div class="q-text">Greg's point: an artist who changed genres (hip-hop → pop) gets misleading scores at the artist level. Release-cycle or project-level scoring would be more accurate. How do we toggle off irrelevant history?</div>
+      <div class="q-note">Phase 2 · Flagged by Greg · Design needed before building</div>
+    </div>
+  </div>
+
+  <div class="q-row">
+    <div class="q-card">
+      <div class="q-label">Chartmetric token</div>
+      <div class="q-text">App is wired to Chartmetric but needs a live refresh token. Who owns the Chartmetric account? Need token scoped to social + streaming data added to Cloud Run as VITE_CHARTMETRIC_TOKEN.</div>
+      <div class="q-note">Owner: Kyle · Blocker for live data in app</div>
+    </div>
+    <div class="q-card">
+      <div class="q-label">Amazon Voice Index</div>
+      <div class="q-text">High-value pitch bullet for Amazon pitches. Does Symphonic have API access? If not, is there a manual pull process? Check with Amazon rep or Josh.</div>
+      <div class="q-note">Owner: Josh / Infra · Check with Amazon rep</div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <div class="section-label">Confirmed / No Longer Open</div>
+  <ul class="clean" style="margin-top:16px;">
+    <li>On-time submission rule: ≥28 days before release = on time. Formula already in Airtable. <span class="tag tag-green">Confirmed Jul 1</span></li>
+    <li>Chartmetric daily sync to Airtable columns: confirmed direction. <span class="tag tag-green">Confirmed Jul 1</span></li>
+    <li>Score is internal-only for v1. No client-facing access. <span class="tag tag-green">Confirmed</span></li>
+    <li>Pickup score (0–100 dimension) in release schedule. <span class="tag tag-green">Confirmed Jun 25</span></li>
+  </ul>
+</div>
+
+<script>
+  const PASSWORD = 'sym_marketing_2026';
+
+  function checkPw() {
+    if (document.getElementById('pw').value === PASSWORD) {
+      document.getElementById('gate').style.display = 'none';
+    } else {
+      document.getElementById('pw-err').style.display = 'block';
+    }
+  }
+
+  const PAGE_SECTIONS = ['philosophy','pillars','quickwins','openqs'];
+
+  function showHero() {
+    document.getElementById('hero').classList.remove('hidden');
+    PAGE_SECTIONS.forEach(id => {
+      document.getElementById(id).classList.remove('active');
+    });
+    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  }
+
+  function show(id) {
+    document.getElementById('hero').classList.add('hidden');
+    PAGE_SECTIONS.forEach(sid => {
+      document.getElementById(sid).classList.toggle('active', sid === id);
+    });
+    document.querySelectorAll('.nav-links a').forEach(a => {
+      a.classList.toggle('active', a.getAttribute('onclick').includes(`'${id}'`));
+    });
+    window.scrollTo(0, 0);
+  }
+</script>
+</body>
+</html>
