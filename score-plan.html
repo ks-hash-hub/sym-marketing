@@ -172,6 +172,7 @@
   <div class="nav-links">
     <a onclick="show('philosophy')">Philosophy</a>
     <a onclick="show('pillars')">Score Pillars</a>
+    <a onclick="show('formulas')">Formulas</a>
     <a onclick="show('quickwins')">Quick Wins</a>
     <a onclick="show('openqs')">Open Questions</a>
   </div>
@@ -340,6 +341,243 @@
     <div class="card" style="border-left:3px solid var(--cyan);">
       <div class="card-title" style="color:var(--cyan)">Song Stats API — evaluate</div>
       <div class="card-sub">Team is already in Song Stats. Symphonic is evaluating the API cost. Kyle to document what's available and share list to help justify. Song Stats + Chartmetric may overlap.</div>
+    </div>
+  </div>
+</div>
+
+<!-- FORMULAS -->
+<div id="formulas" class="page">
+  <div class="section-label">Section 03</div>
+  <div class="section-title">Score Formulas</div>
+  <p class="section-sub">Exact calculation logic per pillar. Green = confirmed and ready to build. Gold = needs a data source verified. Pink = open decision needed.</p>
+
+  <div class="callout">
+    <strong>Current total: 105 pts.</strong> Drive was bumped from 15 → 20 to reflect the team's emphasis on process adherence. Need to trim 5pts somewhere to get back to 100 — either cap Drive at 15, or reduce Pickups to 20. <strong style="color:var(--gold)">Decision needed.</strong>
+  </div>
+
+  <!-- PILLAR 1: PICKUPS -->
+  <div class="card" style="margin-bottom:20px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+      <div>
+        <div class="section-label" style="margin-bottom:4px;">Pillar 1</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:0.06em;">Pickups <span style="color:var(--cyan)">0–25 pts</span></div>
+      </div>
+      <span class="tag tag-green">Ready to build</span>
+    </div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:14px;">Source: Airtable Pickups table · All DSPs, not just Spotify</div>
+    <div style="background:var(--surface);border-radius:8px;padding:16px 18px;margin-bottom:14px;">
+      <table style="width:100%;border-collapse:collapse;font-size:13px;">
+        <thead><tr style="color:var(--dim);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;">
+          <th style="text-align:left;padding-bottom:8px;">Signal</th><th style="text-align:right;padding-bottom:8px;">Points</th>
+        </tr></thead>
+        <tbody>
+          <tr style="border-top:1px solid var(--border)"><td style="padding:8px 0;color:rgba(255,255,255,0.8)">1st party editorial placement</td><td style="text-align:right;color:var(--cyan);font-family:'DM Mono',monospace">+4 each</td></tr>
+          <tr style="border-top:1px solid var(--border)"><td style="padding:8px 0;color:rgba(255,255,255,0.8)">3rd party playlist placement</td><td style="text-align:right;color:var(--cyan);font-family:'DM Mono',monospace">+2 each</td></tr>
+          <tr style="border-top:1px solid var(--border)"><td style="padding:8px 0;color:rgba(255,255,255,0.8)">Cover placement (any platform)</td><td style="text-align:right;color:var(--cyan);font-family:'DM Mono',monospace">+5 bonus</td></tr>
+          <tr style="border-top:1px solid var(--border)"><td style="padding:8px 0;font-weight:700">Cap</td><td style="text-align:right;font-weight:700;color:var(--cyan);font-family:'DM Mono',monospace">25</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="q-note">Michael confirmed: pickups across all DSPs count, not just Spotify editorial. Long-term goal: use pickup history to auto-populate programming targets column for new releases.</div>
+  </div>
+
+  <!-- PILLAR 2: AUDIENCE -->
+  <div class="card" style="margin-bottom:20px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+      <div>
+        <div class="section-label" style="margin-bottom:4px;">Pillar 2</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:0.06em;">Audience <span style="color:var(--purple)">0–20 pts</span></div>
+      </div>
+      <span class="tag tag-gold">Chartmetric token needed</span>
+    </div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:14px;">Source: Chartmetric API</div>
+
+    <div style="margin-bottom:12px;">
+      <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Base score — Spotify Monthly Listeners (0–15 pts)</div>
+      <div style="background:var(--surface);border-radius:8px;padding:14px 16px;font-family:'DM Mono',monospace;font-size:12px;color:var(--cyan);">
+        min(15, (log10(spotifyML) / log10(6,000,000)) × 15)
+      </div>
+      <div style="font-size:12px;color:var(--muted);margin-top:8px;">100k listeners ≈ 8pts &nbsp;·&nbsp; 1M ≈ 12pts &nbsp;·&nbsp; 6M ≈ 15pts (ceiling)</div>
+    </div>
+
+    <div>
+      <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Bonus — Active listener ratio (0–5 pts) <span class="tag tag-gold">Greg flagged Jul 1</span></div>
+      <div style="background:var(--surface);border-radius:8px;padding:16px 18px;">
+        <table style="width:100%;border-collapse:collapse;font-size:13px;">
+          <tbody>
+            <tr style="border-top:1px solid var(--border)"><td style="padding:8px 0;color:rgba(255,255,255,0.8)">≥45% active / monthly listeners</td><td style="text-align:right;color:var(--gold);font-family:'DM Mono',monospace">+5pts</td></tr>
+            <tr style="border-top:1px solid var(--border)"><td style="padding:8px 0;color:rgba(255,255,255,0.8)">≥30% active / monthly</td><td style="text-align:right;color:var(--gold);font-family:'DM Mono',monospace">+3pts</td></tr>
+            <tr style="border-top:1px solid var(--border)"><td style="padding:8px 0;color:rgba(255,255,255,0.8)">≥15% active / monthly</td><td style="text-align:right;color:var(--gold);font-family:'DM Mono',monospace">+1pt</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="q-note" style="margin-top:8px;">Need to verify: does Chartmetric expose active listener count separately from monthly listeners? If not, drop bonus for v1. Greg's benchmark: 25–30%+ = leaned-in fanbase. Lake Street Dive example: 45% (1.2M / 2.6M).</div>
+    </div>
+  </div>
+
+  <!-- PILLAR 3: SOCIAL -->
+  <div class="card" style="margin-bottom:20px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+      <div>
+        <div class="section-label" style="margin-bottom:4px;">Pillar 3</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:0.06em;">Social <span style="color:var(--pink)">0–15 pts</span></div>
+      </div>
+      <span class="tag tag-gold">Trend detection TBD</span>
+    </div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:14px;">Source: Chartmetric API</div>
+
+    <div style="margin-bottom:12px;">
+      <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Base score — Weighted follower count (0–12 pts)</div>
+      <div style="background:var(--surface);border-radius:8px;padding:14px 16px;font-family:'DM Mono',monospace;font-size:12px;color:var(--cyan);">
+        weighted = IG(×1.0) + TikTok(×1.2) + YouTube(×0.8) + Twitter(×0.5)<br/>
+        min(12, (weighted / 4,500,000) × 12)
+      </div>
+    </div>
+
+    <div>
+      <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Bonus — Trend / momentum detection (0–3 pts) <span class="tag tag-gold">Greg flagged Jul 1</span></div>
+      <div style="background:var(--surface);border-radius:8px;padding:16px 18px;">
+        <table style="width:100%;border-collapse:collapse;font-size:13px;">
+          <tbody>
+            <tr style="border-top:1px solid var(--border)"><td style="padding:8px 0;color:rgba(255,255,255,0.8)">TikTok creates 10× 7-day baseline</td><td style="text-align:right;color:var(--gold);font-family:'DM Mono',monospace">+3pts</td></tr>
+            <tr style="border-top:1px solid var(--border)"><td style="padding:8px 0;color:rgba(255,255,255,0.8)">TikTok creates 5× 7-day baseline</td><td style="text-align:right;color:var(--gold);font-family:'DM Mono',monospace">+2pts</td></tr>
+            <tr style="border-top:1px solid var(--border)"><td style="padding:8px 0;color:rgba(255,255,255,0.8)">TikTok creates 2× 7-day baseline</td><td style="text-align:right;color:var(--gold);font-family:'DM Mono',monospace">+1pt</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="q-note" style="margin-top:8px;">Logic: pull daily TikTok creates per track from Chartmetric, compare to 7-day rolling average. Spike = trending. Greg's example: Lake Street Dive had 8,000 creates in a day — their team didn't even know yet. Need to verify Chartmetric exposes daily creates per track. SMS product team is also building virality detection — may be able to share signals.</div>
+    </div>
+  </div>
+
+  <!-- PILLAR 4: STORY -->
+  <div class="card" style="margin-bottom:20px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+      <div>
+        <div class="section-label" style="margin-bottom:4px;">Pillar 4</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:0.06em;">Story <span style="color:var(--gold)">0–15 pts</span></div>
+      </div>
+      <span class="tag tag-green">Ready to build</span>
+    </div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:14px;">Source: Airtable Drivers table · Pitch completeness — did they fill it out fully?</div>
+    <div style="background:var(--surface);border-radius:8px;padding:16px 18px;">
+      <table style="width:100%;border-collapse:collapse;font-size:13px;">
+        <tbody>
+          <tr style="border-top:1px solid var(--border)"><td style="padding:8px 0;color:rgba(255,255,255,0.8)">Artist narrative / pitch bio submitted</td><td style="text-align:right;color:var(--gold);font-family:'DM Mono',monospace">+5</td></tr>
+          <tr style="border-top:1px solid var(--border)"><td style="padding:8px 0;color:rgba(255,255,255,0.8)">Similar artists listed</td><td style="text-align:right;color:var(--gold);font-family:'DM Mono',monospace">+3</td></tr>
+          <tr style="border-top:1px solid var(--border)"><td style="padding:8px 0;color:rgba(255,255,255,0.8)">Mood / vibe tags filled in</td><td style="text-align:right;color:var(--gold);font-family:'DM Mono',monospace">+2</td></tr>
+          <tr style="border-top:1px solid var(--border)"><td style="padding:8px 0;color:rgba(255,255,255,0.8)">Song styles filled in</td><td style="text-align:right;color:var(--gold);font-family:'DM Mono',monospace">+2</td></tr>
+          <tr style="border-top:1px solid var(--border)"><td style="padding:8px 0;color:rgba(255,255,255,0.8)">Drivers submitted (marketing context)</td><td style="text-align:right;color:var(--gold);font-family:'DM Mono',monospace">+1 each, max 3</td></tr>
+          <tr style="border-top:1px solid var(--border)"><td style="padding:8px 0;font-weight:700">Cap</td><td style="text-align:right;font-weight:700;color:var(--gold);font-family:'DM Mono',monospace">15</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- PILLAR 5: DRIVE -->
+  <div class="card" style="margin-bottom:20px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+      <div>
+        <div class="section-label" style="margin-bottom:4px;">Pillar 5</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:0.06em;">Drive <span style="color:var(--orange)">0–20 pts</span></div>
+      </div>
+      <span class="tag tag-gold">OAC/SoundCloud fields needed</span>
+    </div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:6px;">Source: Airtable Drivers table + enrollment checkbox fields</div>
+    <div style="font-size:12px;color:var(--orange);margin-bottom:14px;font-family:'DM Mono',monospace;">⚠ Bumped from 15 → 20 to reflect process emphasis. Total is 105 — need to trim 5pts elsewhere.</div>
+    <div style="background:var(--surface);border-radius:8px;padding:16px 18px;">
+      <table style="width:100%;border-collapse:collapse;font-size:13px;">
+        <thead><tr style="color:var(--dim);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;">
+          <th style="text-align:left;padding-bottom:8px;">Signal</th><th style="text-align:right;padding-bottom:8px;">Points</th>
+        </tr></thead>
+        <tbody>
+          <tr style="border-top:1px solid var(--border)"><td style="padding:8px 0;color:rgba(255,255,255,0.8)" colspan="2"><strong>On-time submission rate</strong> (last 5 releases, ≥28 days before = on time)</td></tr>
+          <tr><td style="padding:4px 0 4px 16px;color:var(--muted)">100% on time</td><td style="text-align:right;color:var(--orange);font-family:'DM Mono',monospace">+6</td></tr>
+          <tr><td style="padding:4px 0 4px 16px;color:var(--muted)">60–99% on time</td><td style="text-align:right;color:var(--orange);font-family:'DM Mono',monospace">+3</td></tr>
+          <tr><td style="padding:4px 0 4px 16px;color:var(--muted)">&lt;60% on time</td><td style="text-align:right;color:var(--orange);font-family:'DM Mono',monospace">+0</td></tr>
+          <tr style="border-top:1px solid var(--border)"><td style="padding:8px 0;color:rgba(255,255,255,0.8)" colspan="2"><strong>Drivers submitted</strong> (last 5 releases)</td></tr>
+          <tr><td style="padding:4px 0 4px 16px;color:var(--muted)">5 of 5 releases had drivers</td><td style="text-align:right;color:var(--orange);font-family:'DM Mono',monospace">+6</td></tr>
+          <tr><td style="padding:4px 0 4px 16px;color:var(--muted)">3–4 of 5</td><td style="text-align:right;color:var(--orange);font-family:'DM Mono',monospace">+3</td></tr>
+          <tr><td style="padding:4px 0 4px 16px;color:var(--muted)">&lt;3 of 5</td><td style="text-align:right;color:var(--orange);font-family:'DM Mono',monospace">+0</td></tr>
+          <tr style="border-top:1px solid var(--border)"><td style="padding:8px 0;color:rgba(255,255,255,0.8)">OAC enrolled <span style="font-size:11px;color:var(--dim)">(new field needed)</span></td><td style="text-align:right;color:var(--orange);font-family:'DM Mono',monospace">+2</td></tr>
+          <tr style="border-top:1px solid var(--border)"><td style="padding:8px 0;color:rgba(255,255,255,0.8)">SoundCloud Official Profile <span style="font-size:11px;color:var(--dim)">(new field needed)</span></td><td style="text-align:right;color:var(--orange);font-family:'DM Mono',monospace">+2</td></tr>
+          <tr style="border-top:1px solid var(--border)"><td style="padding:8px 0;color:rgba(255,255,255,0.8)">Confirmed press / PR campaign</td><td style="text-align:right;color:var(--orange);font-family:'DM Mono',monospace">+2</td></tr>
+          <tr style="border-top:1px solid var(--border)"><td style="padding:8px 0;color:rgba(255,255,255,0.8)">Confirmed ad spend</td><td style="text-align:right;color:var(--orange);font-family:'DM Mono',monospace">+2</td></tr>
+          <tr style="border-top:1px solid var(--border)"><td style="padding:8px 0;font-weight:700">Cap</td><td style="text-align:right;font-weight:700;color:var(--orange);font-family:'DM Mono',monospace">20</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="q-note" style="margin-top:10px;">On-time rule confirmed by Michael (≥28 days = green). OAC + SoundCloud need new checkbox fields in Airtable — quick win before app work. "Last 5 releases" — open: do we count only releases where drivers were expected, or all releases?</div>
+  </div>
+
+  <!-- PILLAR 6: CONSISTENCY -->
+  <div class="card" style="margin-bottom:20px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+      <div>
+        <div class="section-label" style="margin-bottom:4px;">Pillar 6</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:0.06em;">Consistency <span style="color:var(--green)">0–10 pts</span></div>
+      </div>
+      <span class="tag tag-green">Ready to build</span>
+    </div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:14px;">Source: Airtable Release Schedule · Rolling 12-month release cadence</div>
+    <div style="background:var(--surface);border-radius:8px;padding:16px 18px;margin-bottom:12px;">
+      <table style="width:100%;border-collapse:collapse;font-size:13px;">
+        <tbody>
+          <tr style="border-top:1px solid var(--border)"><td style="padding:8px 0;color:rgba(255,255,255,0.8)">4+ releases / year</td><td style="text-align:right;color:var(--green);font-family:'DM Mono',monospace">10pts</td></tr>
+          <tr style="border-top:1px solid var(--border)"><td style="padding:8px 0;color:rgba(255,255,255,0.8)">2–3 releases / year</td><td style="text-align:right;color:var(--green);font-family:'DM Mono',monospace">7pts</td></tr>
+          <tr style="border-top:1px solid var(--border)"><td style="padding:8px 0;color:rgba(255,255,255,0.8)">1 release / year</td><td style="text-align:right;color:var(--green);font-family:'DM Mono',monospace">4pts</td></tr>
+          <tr style="border-top:1px solid var(--border)"><td style="padding:8px 0;color:rgba(255,255,255,0.8)">&lt;1 / year</td><td style="text-align:right;color:var(--green);font-family:'DM Mono',monospace">1pt</td></tr>
+          <tr style="border-top:1px solid var(--border)"><td style="padding:8px 0;color:rgba(255,255,255,0.8)">Debut / first release</td><td style="text-align:right;color:var(--dim);font-family:'DM Mono',monospace">null (not 0)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="q-note">Debut artists get null — not penalized for no history. Greg flagged this for genre-changed artists too (e.g. artist was hip-hop, now pop — old releases shouldn't weigh down the score). Phase 2: allow toggling off releases from a prior genre/project.</div>
+  </div>
+
+  <!-- TOTALS TABLE -->
+  <hr class="divider" />
+  <div class="section-label">Score Summary</div>
+  <div style="background:var(--surface);border-radius:10px;padding:20px 24px;margin-top:16px;">
+    <table style="width:100%;border-collapse:collapse;font-size:14px;">
+      <thead><tr style="color:var(--dim);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;">
+        <th style="text-align:left;padding-bottom:10px;">Pillar</th>
+        <th style="text-align:center;padding-bottom:10px;">Max Pts</th>
+        <th style="text-align:center;padding-bottom:10px;">Type</th>
+        <th style="text-align:right;padding-bottom:10px;">Source</th>
+      </tr></thead>
+      <tbody>
+        <tr style="border-top:1px solid var(--border)"><td style="padding:10px 0;font-weight:600">Pickups</td><td style="text-align:center;color:var(--cyan);font-family:'DM Mono',monospace">25</td><td style="text-align:center"><span class="tag tag-cyan">Performance</span></td><td style="text-align:right;font-size:12px;color:var(--muted)">Airtable</td></tr>
+        <tr style="border-top:1px solid var(--border)"><td style="padding:10px 0;font-weight:600">Audience</td><td style="text-align:center;color:var(--purple);font-family:'DM Mono',monospace">20</td><td style="text-align:center"><span class="tag tag-cyan">Performance</span></td><td style="text-align:right;font-size:12px;color:var(--muted)">Chartmetric</td></tr>
+        <tr style="border-top:1px solid var(--border)"><td style="padding:10px 0;font-weight:600">Social</td><td style="text-align:center;color:var(--pink);font-family:'DM Mono',monospace">15</td><td style="text-align:center"><span class="tag tag-cyan">Performance</span></td><td style="text-align:right;font-size:12px;color:var(--muted)">Chartmetric</td></tr>
+        <tr style="border-top:1px solid var(--border)"><td style="padding:10px 0;font-weight:600">Story</td><td style="text-align:center;color:var(--gold);font-family:'DM Mono',monospace">15</td><td style="text-align:center"><span class="tag tag-green">Process</span></td><td style="text-align:right;font-size:12px;color:var(--muted)">Airtable</td></tr>
+        <tr style="border-top:1px solid var(--border)"><td style="padding:10px 0;font-weight:600">Drive</td><td style="text-align:center;color:var(--orange);font-family:'DM Mono',monospace">20</td><td style="text-align:center"><span class="tag tag-green">Process</span></td><td style="text-align:right;font-size:12px;color:var(--muted)">Airtable</td></tr>
+        <tr style="border-top:1px solid var(--border)"><td style="padding:10px 0;font-weight:600">Consistency</td><td style="text-align:center;color:var(--green);font-family:'DM Mono',monospace">10</td><td style="text-align:center"><span class="tag tag-green">Process</span></td><td style="text-align:right;font-size:12px;color:var(--muted)">Airtable</td></tr>
+        <tr style="border-top:2px solid rgba(255,255,255,0.15)"><td style="padding:12px 0;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:0.06em;">Total</td><td style="text-align:center;font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--orange)">105*</td><td colspan="2" style="text-align:right;font-size:12px;color:var(--orange);">*Trim 5pts to reach 100 — decision needed</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr class="divider" />
+  <div class="section-label">Score Labels</div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px;">
+    <div class="card" style="border-top:3px solid var(--green);text-align:center;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--green)">80–100</div>
+      <div style="font-size:12px;font-weight:700;">Strong</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px;">Ready to pitch</div>
+    </div>
+    <div class="card" style="border-top:3px solid var(--cyan);text-align:center;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--cyan)">65–79</div>
+      <div style="font-size:12px;font-weight:700;">Good</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px;">Pitch with context</div>
+    </div>
+    <div class="card" style="border-top:3px solid var(--gold);text-align:center;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--gold)">50–64</div>
+      <div style="font-size:12px;font-weight:700;">Fair</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px;">Needs attention</div>
+    </div>
+    <div class="card" style="border-top:3px solid var(--pink);text-align:center;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--pink)">0–49</div>
+      <div style="font-size:12px;font-weight:700;">Weak</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px;">Coach first</div>
     </div>
   </div>
 </div>
@@ -515,7 +753,7 @@
     }
   }
 
-  const PAGE_SECTIONS = ['philosophy','pillars','quickwins','openqs'];
+  const PAGE_SECTIONS = ['philosophy','pillars','formulas','quickwins','openqs'];
 
   function showHero() {
     document.getElementById('hero').classList.remove('hidden');
