@@ -400,11 +400,11 @@
         <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--green);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:6px;">Airtable</div>
         <div style="font-size:13px;font-weight:700;margin-bottom:8px;">Internal Process Data</div>
         <ul class="clean" style="font-size:12px;">
-          <li>Pickup history (1st/3rd party, covers)</li>
+          <li>Symphonic pickup history (1st/3rd party, covers)</li>
           <li>Driver form submissions + dates</li>
-          <li>On-time submission rate</li>
+          <li>On-time submission rate (≥28 day formula)</li>
           <li>Release schedule / cadence</li>
-          <li>OAC + SoundCloud enrollment (new checkboxes)</li>
+          <li>OAC + SoundCloud status (auto-written by daily sync)</li>
         </ul>
         <div style="font-size:11px;color:var(--green);margin-top:10px;font-family:'DM Mono',monospace;">✓ Ready now — no external dependency</div>
       </div>
@@ -446,7 +446,7 @@
         </tbody>
       </table>
     </div>
-    <div class="q-note">Michael confirmed: pickups across all DSPs count, not just Spotify editorial. Long-term goal: use pickup history to auto-populate programming targets column for new releases.</div>
+    <div class="q-note">Michael confirmed: pickups across all DSPs count, not just Spotify editorial. <strong style="color:var(--cyan)">Source is both Airtable (Symphonic-pitched) + Songstats API (organic/non-Symphonic) by ISRC</strong> — combined to show full picture. Symphonic-sourced pickups flagged separately from organic. Long-term goal: use pickup history to auto-populate programming targets column for new releases.</div>
   </div>
 
   <!-- PILLAR 2: AUDIENCE -->
@@ -661,64 +661,56 @@
       <div class="qw-num">1</div>
       <div class="qw-body">
         <div class="qw-title">Pickup score column in Airtable release schedule <span class="tag tag-green">Ready now</span></div>
-        <div class="qw-desc">Add a calculated field in the Release Schedule view that shows each artist's pickup score (0–25) — the one pillar the team explicitly aligned on. Sorts and filters immediately without waiting for the full app.</div>
+        <div class="qw-desc">Add a calculated field in the Release Schedule view that shows each artist's Symphonic pickup score (0–25). Sorts and filters immediately without waiting for the full app. Based on existing pickup records in Airtable.</div>
         <div class="qw-effort">Effort: 1–2 hours · No code · Airtable formula only</div>
       </div>
     </div>
     <div class="qw-row">
       <div class="qw-num">2</div>
       <div class="qw-body">
-        <div class="qw-title">OAC + SoundCloud enrollment checkboxes <span class="tag tag-green">Ready now</span></div>
-        <div class="qw-desc">Add two checkbox fields to the Release Schedule or a related Artist table in Airtable: "YouTube OAC enrolled?" and "SoundCloud Official Profile?". These are binary — no API needed — and give client managers instant visibility.</div>
-        <div class="qw-effort">Effort: 30 min · No code · Airtable field additions</div>
+        <div class="qw-title">Last driver submission date + on-time score <span class="tag tag-green">Ready now</span></div>
+        <div class="qw-desc">Airtable already tracks submission dates and the ≥28-day formula already exists. Add: (a) a rollup field for most recent submission date per artist, and (b) an average on-time score across last 5 releases. Gives client managers instant coaching data.</div>
+        <div class="qw-effort">Effort: 1–2 hours · No code · Airtable rollup fields</div>
       </div>
     </div>
     <div class="qw-row">
       <div class="qw-num">3</div>
       <div class="qw-body">
-        <div class="qw-title">Last driver submission date field <span class="tag tag-green">Ready now</span></div>
-        <div class="qw-desc">Airtable already tracks submission dates — add a rollup or lookup field on the Release Schedule that surfaces the most recent drivers submission date per artist. Gives client managers the "when did they last submit?" answer in one column.</div>
-        <div class="qw-effort">Effort: 1 hour · No code · Airtable rollup field</div>
+        <div class="qw-title">% of last 5 releases with drivers <span class="tag tag-green">Ready now</span></div>
+        <div class="qw-desc">Airtable formula calculating how many of the artist's last 5 releases had a linked Drivers submission. Color-code red/yellow/green. Immediately useful for the Health Check use case without touching the app.</div>
+        <div class="qw-effort">Effort: 2–3 hours · Airtable formula + linked table</div>
       </div>
     </div>
     <div class="qw-row">
       <div class="qw-num">4</div>
       <div class="qw-body">
-        <div class="qw-title">% of last 5 releases with drivers <span class="tag tag-cyan">Small lift</span></div>
-        <div class="qw-desc">An Airtable formula that calculates how many of the artist's last 5 releases had a linked Drivers submission. Color-code red/yellow/green. Immediately useful for the Health Check use case without touching the app.</div>
-        <div class="qw-effort">Effort: 2–3 hours · Airtable formula + linked table</div>
+        <div class="qw-title">OAC + SoundCloud enrollment — automated detection <span class="tag tag-cyan">Small lift</span></div>
+        <div class="qw-desc">Rather than manual checkboxes, automate enrollment detection: Chartmetric or Songstats provides the artist's YouTube channel ID and SoundCloud handle → we check YouTube Data API for OAC status (isLinked flag) and SoundCloud API for official profile verification → write result back to Airtable daily. No manual entry needed once wired up.</div>
+        <div class="qw-effort">Effort: 3–4 hours · Cloud Scheduler script · Requires Chartmetric/Songstats token + YouTube + SoundCloud API keys</div>
       </div>
     </div>
     <div class="qw-row">
       <div class="qw-num">5</div>
       <div class="qw-body">
-        <div class="qw-title">On-time submission score column <span class="tag tag-green">Ready now</span></div>
-        <div class="qw-desc">The Airtable formula already exists (submitted date minus release date, red if &lt;28 days). Just expose it as a numeric score column — average across last 5 releases per artist — so the team can sort and filter on it. Confirmed by Michael on Jul 1.</div>
-        <div class="qw-effort">Effort: 1–2 hours · No code · Airtable rollup of existing formula</div>
+        <div class="qw-title">Full pickup history — Symphonic + organic via Songstats <span class="tag tag-cyan">Small lift</span></div>
+        <div class="qw-desc">Songstats API returns complete playlist pickup history by ISRC — including editorial placements Symphonic didn't pitch (organic). Combine with Symphonic's Airtable pickup records to show the full picture: total pickups, broken down by Symphonic-sourced vs organic. Makes the Pickups pillar more accurate and gives client managers a stronger story ("12 total pickups — 7 ours, 5 organic").</div>
+        <div class="qw-effort">Effort: 3–4 hours · Requires Songstats API access · ISRC lookup per release</div>
       </div>
     </div>
     <div class="qw-row">
       <div class="qw-num">6</div>
       <div class="qw-body">
-        <div class="qw-title">Chartmetric data → Airtable columns (daily sync) <span class="tag tag-cyan">Small lift</span></div>
-        <div class="qw-desc">Ping the Chartmetric API daily and write Spotify ML, IG followers, TikTok followers, YouTube followers directly into columns on the Release Schedule. Team can sort, filter, and use in priority meetings without opening the app. Top 10 territories included — pre-populates the territory spotlight column for premium pitches.</div>
-        <div class="qw-effort">Effort: 3–4 hours · Airtable automation or Cloud Scheduler script</div>
+        <div class="qw-title">Songstats/Socialstats → Airtable daily sync <span class="tag tag-cyan">Small lift</span></div>
+        <div class="qw-desc">Ping Songstats API daily for Spotify ML, chart positions, top 10 territories. Ping Socialstats API for IG/TikTok/YouTube follower counts. Write all values directly into Airtable columns on the Release Schedule — team can sort, filter, and use in priority meetings. Top 10 territories pre-populates the territory spotlight column for premium pitches.</div>
+        <div class="qw-effort">Effort: 4–5 hours · Cloud Scheduler script · Requires Song Stats API access</div>
       </div>
     </div>
     <div class="qw-row">
       <div class="qw-num">7</div>
       <div class="qw-body">
-        <div class="qw-title">Automated playlist ad tracking <span class="tag tag-cyan">Small lift</span></div>
-        <div class="qw-desc">AI query to identify playlist ads from the MS report → route into Airtable. Add a checkbox to push specific pickups directly to the release schedule — eliminates the current 2-day delay.</div>
-        <div class="qw-effort">Effort: 3–4 hours · Airtable automation + AI query setup</div>
-      </div>
-    </div>
-    <div class="qw-row">
-      <div class="qw-num">8</div>
-      <div class="qw-body">
         <div class="qw-title">Health Check view in the app <span class="tag tag-purple">Next sprint</span></div>
-        <div class="qw-desc">New tab in the dashboard showing per-artist: last submission date, % of releases with drivers, on-time rate, OAC/SoundCloud enrollment. The "coaching ammunition" use case. All data already in Airtable.</div>
-        <div class="qw-effort">Effort: 1 day · App code · No new data sources needed</div>
+        <div class="qw-desc">New tab in the dashboard showing per-artist: last submission date, % of releases with drivers, on-time rate, OAC/SoundCloud enrollment status. All data flows from Airtable once the above quick wins are done.</div>
+        <div class="qw-effort">Effort: 1 day · App code · Depends on QW 1–4 being done first</div>
       </div>
     </div>
   </div>
