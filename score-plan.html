@@ -349,11 +349,79 @@
 <div id="formulas" class="page">
   <div class="section-label">Section 03</div>
   <div class="section-title">Score Formulas</div>
-  <p class="section-sub">Exact calculation logic per pillar. Green = confirmed and ready to build. Gold = needs a data source verified. Pink = open decision needed.</p>
+  <p class="section-sub">Exact calculation logic per pillar. Green = confirmed and ready to build. Gold = needs API access confirmed. Pink = open decision needed.</p>
 
   <div class="callout">
     <strong>Current total: 105 pts.</strong> Drive was bumped from 15 → 20 to reflect the team's emphasis on process adherence. Need to trim 5pts somewhere to get back to 100 — either cap Drive at 15, or reduce Pickups to 20. <strong style="color:var(--gold)">Decision needed.</strong>
   </div>
+
+  <!-- DATA SOURCES OVERVIEW -->
+  <div style="margin-bottom:28px;">
+    <div class="section-label" style="margin-bottom:12px;">Data Architecture — Where We Get Each Signal</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
+      <div class="card" style="border-top:3px solid var(--cyan);">
+        <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--cyan);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:6px;">Songstats API</div>
+        <div style="font-size:13px;font-weight:700;margin-bottom:8px;">Streaming Intelligence</div>
+        <ul class="clean" style="font-size:12px;">
+          <li>Spotify Monthly Listeners</li>
+          <li>Streaming stats across 18 DSPs</li>
+          <li>Playlist history (all time)</li>
+          <li>Chart positions</li>
+          <li>Historic data for growth rates</li>
+          <li>Amazon Music data (→ Voice Index proxy)</li>
+        </ul>
+        <div style="font-size:11px;color:var(--gold);margin-top:10px;font-family:'DM Mono',monospace;">⚠ Confirm API tier with Michael</div>
+      </div>
+      <div class="card" style="border-top:3px solid var(--pink);">
+        <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--pink);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:6px;">Socialstats API</div>
+        <div style="font-size:13px;font-weight:700;margin-bottom:8px;">Social + Trend Detection</div>
+        <ul class="clean" style="font-size:12px;">
+          <li>IG, TikTok, YouTube follower counts</li>
+          <li>Post-level TikTok data (creates/day)</li>
+          <li>Historic social growth</li>
+          <li>Instagram + YouTube post data</li>
+        </ul>
+        <div style="font-size:11px;color:var(--gold);margin-top:10px;font-family:'DM Mono',monospace;">⚠ Separate product — confirm access</div>
+      </div>
+      <div class="card" style="border-top:3px solid var(--purple);">
+        <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--purple);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:6px;">Radiostats API</div>
+        <div style="font-size:13px;font-weight:700;margin-bottom:8px;">Radio Airplay</div>
+        <ul class="clean" style="font-size:12px;">
+          <li>50,000+ radio stations globally</li>
+          <li>Spin counts + station counts</li>
+          <li>Historic airplay by ISRC</li>
+          <li>Bonus pitch signal (not in v1 score)</li>
+        </ul>
+        <div style="font-size:11px;color:var(--dim);margin-top:10px;font-family:'DM Mono',monospace;">Phase 2 — confirm access alongside others</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;">
+      <div class="card" style="border-top:3px solid var(--green);">
+        <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--green);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:6px;">Airtable</div>
+        <div style="font-size:13px;font-weight:700;margin-bottom:8px;">Internal Process Data</div>
+        <ul class="clean" style="font-size:12px;">
+          <li>Pickup history (1st/3rd party, covers)</li>
+          <li>Driver form submissions + dates</li>
+          <li>On-time submission rate</li>
+          <li>Release schedule / cadence</li>
+          <li>OAC + SoundCloud enrollment (new checkboxes)</li>
+        </ul>
+        <div style="font-size:11px;color:var(--green);margin-top:10px;font-family:'DM Mono',monospace;">✓ Ready now — no external dependency</div>
+      </div>
+      <div class="card" style="border-top:3px solid var(--gold);">
+        <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--gold);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:6px;">Still Investigating</div>
+        <div style="font-size:13px;font-weight:700;margin-bottom:8px;">Needs Clarification</div>
+        <ul class="clean" style="font-size:12px;">
+          <li>Amazon Voice Index — Amazon rep or distributor reports</li>
+          <li>Release engagement — Symphonic distributor data from Spotify?</li>
+          <li>Spotify active listener ratio — Songstats may have it</li>
+          <li>Spotify profile completeness — manual checkbox for now</li>
+        </ul>
+        <div style="font-size:11px;color:var(--gold);margin-top:10px;font-family:'DM Mono',monospace;">Ask Michael + Josh before next call</div>
+      </div>
+    </div>
+  </div>
+  <hr class="divider" />
 
   <!-- PILLAR 1: PICKUPS -->
   <div class="card" style="margin-bottom:20px;">
@@ -388,9 +456,9 @@
         <div class="section-label" style="margin-bottom:4px;">Pillar 2</div>
         <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:0.06em;">Audience <span style="color:var(--purple)">0–20 pts</span></div>
       </div>
-      <span class="tag tag-gold">Chartmetric token needed</span>
+      <span class="tag tag-gold">Song Stats API access needed</span>
     </div>
-    <div style="font-size:12px;color:var(--muted);margin-bottom:14px;">Source: Chartmetric API</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:14px;">Source: <strong style="color:var(--cyan)">Songstats API</strong> — streaming stats across 18 DSPs by ISRC or Spotify ID</div>
 
     <div style="margin-bottom:12px;">
       <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Base score — Spotify Monthly Listeners (0–15 pts)</div>
@@ -411,7 +479,7 @@
           </tbody>
         </table>
       </div>
-      <div class="q-note" style="margin-top:8px;">Need to verify: does Chartmetric expose active listener count separately from monthly listeners? If not, drop bonus for v1. Greg's benchmark: 25–30%+ = leaned-in fanbase. Lake Street Dive example: 45% (1.2M / 2.6M).</div>
+      <div class="q-note" style="margin-top:8px;">Need to verify: does Songstats expose active listener count separately from monthly listeners? Songstats covers Spotify data — this may be in their artist stats endpoint. If not available, drop bonus for v1. Greg's benchmark: 25–30%+ = leaned-in fanbase. Lake Street Dive example: 45% (1.2M / 2.6M).</div>
     </div>
   </div>
 
@@ -422,9 +490,9 @@
         <div class="section-label" style="margin-bottom:4px;">Pillar 3</div>
         <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:0.06em;">Social <span style="color:var(--pink)">0–15 pts</span></div>
       </div>
-      <span class="tag tag-gold">Trend detection TBD</span>
+      <span class="tag tag-gold">Socialstats API access needed</span>
     </div>
-    <div style="font-size:12px;color:var(--muted);margin-bottom:14px;">Source: Chartmetric API</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:14px;">Source: <strong style="color:var(--pink)">Socialstats API</strong> — post-level IG, TikTok, YouTube data including daily creates</div>
 
     <div style="margin-bottom:12px;">
       <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Base score — Weighted follower count (0–12 pts)</div>
@@ -445,7 +513,7 @@
           </tbody>
         </table>
       </div>
-      <div class="q-note" style="margin-top:8px;">Logic: pull daily TikTok creates per track from Chartmetric, compare to 7-day rolling average. Spike = trending. Greg's example: Lake Street Dive had 8,000 creates in a day — their team didn't even know yet. Need to verify Chartmetric exposes daily creates per track. SMS product team is also building virality detection — may be able to share signals.</div>
+      <div class="q-note" style="margin-top:8px;">Logic: pull daily TikTok creates per track from <strong>Socialstats API</strong> (post-level data confirmed), compare to 7-day rolling average. Spike = trending. Greg's example: Lake Street Dive had 8,000 creates in a day — their team didn't even know yet. Socialstats is the right tool here — it exposes post-level TikTok data including creates per sound. Need to confirm API access tier with Michael. SMS product team is also building virality detection — may be able to share signals.</div>
     </div>
   </div>
 
@@ -545,12 +613,12 @@
         <th style="text-align:right;padding-bottom:10px;">Source</th>
       </tr></thead>
       <tbody>
-        <tr style="border-top:1px solid var(--border)"><td style="padding:10px 0;font-weight:600">Pickups</td><td style="text-align:center;color:var(--cyan);font-family:'DM Mono',monospace">25</td><td style="text-align:center"><span class="tag tag-cyan">Performance</span></td><td style="text-align:right;font-size:12px;color:var(--muted)">Airtable</td></tr>
-        <tr style="border-top:1px solid var(--border)"><td style="padding:10px 0;font-weight:600">Audience</td><td style="text-align:center;color:var(--purple);font-family:'DM Mono',monospace">20</td><td style="text-align:center"><span class="tag tag-cyan">Performance</span></td><td style="text-align:right;font-size:12px;color:var(--muted)">Chartmetric</td></tr>
-        <tr style="border-top:1px solid var(--border)"><td style="padding:10px 0;font-weight:600">Social</td><td style="text-align:center;color:var(--pink);font-family:'DM Mono',monospace">15</td><td style="text-align:center"><span class="tag tag-cyan">Performance</span></td><td style="text-align:right;font-size:12px;color:var(--muted)">Chartmetric</td></tr>
-        <tr style="border-top:1px solid var(--border)"><td style="padding:10px 0;font-weight:600">Story</td><td style="text-align:center;color:var(--gold);font-family:'DM Mono',monospace">15</td><td style="text-align:center"><span class="tag tag-green">Process</span></td><td style="text-align:right;font-size:12px;color:var(--muted)">Airtable</td></tr>
-        <tr style="border-top:1px solid var(--border)"><td style="padding:10px 0;font-weight:600">Drive</td><td style="text-align:center;color:var(--orange);font-family:'DM Mono',monospace">20</td><td style="text-align:center"><span class="tag tag-green">Process</span></td><td style="text-align:right;font-size:12px;color:var(--muted)">Airtable</td></tr>
-        <tr style="border-top:1px solid var(--border)"><td style="padding:10px 0;font-weight:600">Consistency</td><td style="text-align:center;color:var(--green);font-family:'DM Mono',monospace">10</td><td style="text-align:center"><span class="tag tag-green">Process</span></td><td style="text-align:right;font-size:12px;color:var(--muted)">Airtable</td></tr>
+        <tr style="border-top:1px solid var(--border)"><td style="padding:10px 0;font-weight:600">Pickups</td><td style="text-align:center;color:var(--cyan);font-family:'DM Mono',monospace">25</td><td style="text-align:center"><span class="tag tag-cyan">Performance</span></td><td style="text-align:right;font-size:12px;color:var(--green)">Airtable ✓</td></tr>
+        <tr style="border-top:1px solid var(--border)"><td style="padding:10px 0;font-weight:600">Audience</td><td style="text-align:center;color:var(--purple);font-family:'DM Mono',monospace">20</td><td style="text-align:center"><span class="tag tag-cyan">Performance</span></td><td style="text-align:right;font-size:12px;color:var(--gold)">Songstats API ⚠</td></tr>
+        <tr style="border-top:1px solid var(--border)"><td style="padding:10px 0;font-weight:600">Social</td><td style="text-align:center;color:var(--pink);font-family:'DM Mono',monospace">15</td><td style="text-align:center"><span class="tag tag-cyan">Performance</span></td><td style="text-align:right;font-size:12px;color:var(--gold)">Socialstats API ⚠</td></tr>
+        <tr style="border-top:1px solid var(--border)"><td style="padding:10px 0;font-weight:600">Story</td><td style="text-align:center;color:var(--gold);font-family:'DM Mono',monospace">15</td><td style="text-align:center"><span class="tag tag-green">Process</span></td><td style="text-align:right;font-size:12px;color:var(--green)">Airtable ✓</td></tr>
+        <tr style="border-top:1px solid var(--border)"><td style="padding:10px 0;font-weight:600">Drive</td><td style="text-align:center;color:var(--orange);font-family:'DM Mono',monospace">20</td><td style="text-align:center"><span class="tag tag-green">Process</span></td><td style="text-align:right;font-size:12px;color:var(--green)">Airtable ✓</td></tr>
+        <tr style="border-top:1px solid var(--border)"><td style="padding:10px 0;font-weight:600">Consistency</td><td style="text-align:center;color:var(--green);font-family:'DM Mono',monospace">10</td><td style="text-align:center"><span class="tag tag-green">Process</span></td><td style="text-align:right;font-size:12px;color:var(--green)">Airtable ✓</td></tr>
         <tr style="border-top:2px solid rgba(255,255,255,0.15)"><td style="padding:12px 0;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:0.06em;">Total</td><td style="text-align:center;font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--orange)">105*</td><td colspan="2" style="text-align:right;font-size:12px;color:var(--orange);">*Trim 5pts to reach 100 — decision needed</td></tr>
       </tbody>
     </table>
