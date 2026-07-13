@@ -215,7 +215,7 @@
     <div class="card-title">Three jobs the score needs to do</div>
     <div class="card-sub" style="margin-bottom:16px;">Each "bucket" has a distinct audience and use case:</div>
     <ul class="clean">
-      <li><strong style="color:var(--cyan)">Health Check</strong> — Client managers coaching artists: are they doing what they're supposed to?</li>
+      <li><strong style="color:var(--cyan)">Health Check</strong> — Internal visibility: which artists are completing required steps (on-time submissions, driver forms, platform enrollment) vs. falling behind</li>
       <li><strong style="color:var(--gold)">Pitch Ammunition</strong> — Tailor pitch bullets per DSP using platform-specific metrics (Amazon Voice Index, Spotify ML, growth rates)</li>
       <li><strong style="color:var(--green)">Opportunities</strong> — Identify high-performing artists for relationship building, advances, feature opportunities</li>
     </ul>
@@ -432,7 +432,13 @@
       </div>
       <span class="tag tag-green">Ready to build</span>
     </div>
-    <div style="font-size:12px;color:var(--muted);margin-bottom:14px;">Source: Airtable Pickups table · All DSPs, not just Spotify</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:6px;">Source: Airtable Pickups table · All DSPs, not just Spotify</div>
+    <div style="background:rgba(0,217,255,0.05);border:1px solid rgba(0,217,255,0.15);border-radius:6px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:var(--muted);line-height:1.6;">
+      <span style="color:var(--cyan);font-family:'DM Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;">Data flow</span><br/>
+      <strong style="color:rgba(255,255,255,0.7)">Symphonic pickups</strong> → already in Airtable Pickups table, typed as 1st party / 3rd party / cover<br/>
+      <strong style="color:rgba(255,255,255,0.7)">Organic pickups</strong> → Songstats API called by ISRC per release → returns full playlist history → merged with Airtable records, Symphonic-sourced ones flagged separately<br/>
+      Score engine reads the combined set and counts by type
+    </div>
     <div style="background:var(--surface);border-radius:8px;padding:16px 18px;margin-bottom:14px;">
       <table style="width:100%;border-collapse:collapse;font-size:13px;">
         <thead><tr style="color:var(--dim);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;">
@@ -458,7 +464,12 @@
       </div>
       <span class="tag tag-gold">Song Stats API access needed</span>
     </div>
-    <div style="font-size:12px;color:var(--muted);margin-bottom:14px;">Source: <strong style="color:var(--cyan)">Songstats API</strong> — streaming stats across 18 DSPs by ISRC or Spotify ID</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:6px;">Source: <strong style="color:var(--cyan)">Songstats API</strong> — streaming stats across 18 DSPs by ISRC or Spotify ID</div>
+    <div style="background:rgba(0,217,255,0.05);border:1px solid rgba(0,217,255,0.15);border-radius:6px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:var(--muted);line-height:1.6;">
+      <span style="color:var(--cyan);font-family:'DM Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;">Data flow</span><br/>
+      Cloud Scheduler script runs daily → calls Songstats API for Spotify ML + active listener count → writes values into Airtable columns on the Release Schedule<br/>
+      Score engine reads from Airtable at score time — no direct API call during scoring
+    </div>
 
     <div style="margin-bottom:12px;">
       <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Base score — Spotify Monthly Listeners (0–15 pts)</div>
@@ -492,7 +503,12 @@
       </div>
       <span class="tag tag-gold">Socialstats API access needed</span>
     </div>
-    <div style="font-size:12px;color:var(--muted);margin-bottom:14px;">Source: <strong style="color:var(--pink)">Socialstats API</strong> — post-level IG, TikTok, YouTube data including daily creates</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:6px;">Source: <strong style="color:var(--pink)">Socialstats API</strong> — post-level IG, TikTok, YouTube data including daily creates</div>
+    <div style="background:rgba(0,217,255,0.05);border:1px solid rgba(0,217,255,0.15);border-radius:6px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:var(--muted);line-height:1.6;">
+      <span style="color:var(--cyan);font-family:'DM Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;">Data flow</span><br/>
+      Cloud Scheduler runs daily → calls Socialstats API for IG / TikTok / YouTube follower counts + daily TikTok creates per sound → writes into Airtable columns<br/>
+      Trend bonus: score engine compares today's creates count against the 7-day rolling average stored in Airtable — spike ratio determines bonus tier
+    </div>
 
     <div style="margin-bottom:12px;">
       <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Base score — Weighted follower count (0–12 pts)</div>
@@ -526,7 +542,12 @@
       </div>
       <span class="tag tag-green">Ready to build</span>
     </div>
-    <div style="font-size:12px;color:var(--muted);margin-bottom:14px;">Source: Airtable Drivers table · Pitch completeness — did they fill it out fully?</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:6px;">Source: Airtable Drivers table · Pitch completeness — did they fill it out fully?</div>
+    <div style="background:rgba(0,217,255,0.05);border:1px solid rgba(0,217,255,0.15);border-radius:6px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:var(--muted);line-height:1.6;">
+      <span style="color:var(--cyan);font-family:'DM Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;">Data flow</span><br/>
+      Score engine queries Airtable Drivers table, linked to the release → checks which fields are non-empty (narrative, similar artists, mood tags, song styles, driver entries)<br/>
+      No external API needed — all data comes from what the artist / client manager filled in
+    </div>
     <div style="background:var(--surface);border-radius:8px;padding:16px 18px;">
       <table style="width:100%;border-collapse:collapse;font-size:13px;">
         <tbody>
@@ -550,7 +571,13 @@
       </div>
       <span class="tag tag-gold">OAC/SoundCloud fields needed</span>
     </div>
-    <div style="font-size:12px;color:var(--muted);margin-bottom:6px;">Source: Airtable Drivers table + enrollment checkbox fields</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:6px;">Source: Airtable Drivers table + enrollment status fields</div>
+    <div style="background:rgba(0,217,255,0.05);border:1px solid rgba(0,217,255,0.15);border-radius:6px;padding:10px 14px;margin-bottom:8px;font-size:12px;color:var(--muted);line-height:1.6;">
+      <span style="color:var(--cyan);font-family:'DM Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;">Data flow</span><br/>
+      <strong style="color:rgba(255,255,255,0.7)">On-time rate + driver coverage</strong> → score engine reads submission dates from Airtable Drivers, compares against release dates (≥28 days = on time), calculates rate across last 5 releases<br/>
+      <strong style="color:rgba(255,255,255,0.7)">OAC + SoundCloud status</strong> → daily Cloud Scheduler script checks YouTube Data API (isLinked flag) + SoundCloud API → writes boolean result into Airtable fields → score engine reads those fields<br/>
+      <span style="color:var(--orange);">⚠ Still need to confirm: YouTube Data API may not expose OAC status cleanly — SoundCloud official profile verification may also require scraping. Need to test both APIs before committing to this approach.</span>
+    </div>
     <div style="font-size:12px;color:var(--orange);margin-bottom:14px;font-family:'DM Mono',monospace;">⚠ Bumped from 15 → 20 to reflect process emphasis. Total is 105 — need to trim 5pts elsewhere.</div>
     <div style="background:var(--surface);border-radius:8px;padding:16px 18px;">
       <table style="width:100%;border-collapse:collapse;font-size:13px;">
@@ -586,7 +613,12 @@
       </div>
       <span class="tag tag-green">Ready to build</span>
     </div>
-    <div style="font-size:12px;color:var(--muted);margin-bottom:14px;">Source: Airtable Release Schedule · Rolling 12-month release cadence</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:6px;">Source: Airtable Release Schedule · Rolling 12-month release cadence</div>
+    <div style="background:rgba(0,217,255,0.05);border:1px solid rgba(0,217,255,0.15);border-radius:6px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:var(--muted);line-height:1.6;">
+      <span style="color:var(--cyan);font-family:'DM Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;">Data flow</span><br/>
+      Score engine queries Airtable Release Schedule filtered to the past 12 months → counts releases per artist → maps count to tier<br/>
+      No external API needed — release dates already exist in Airtable
+    </div>
     <div style="background:var(--surface);border-radius:8px;padding:16px 18px;margin-bottom:12px;">
       <table style="width:100%;border-collapse:collapse;font-size:13px;">
         <tbody>
@@ -684,9 +716,9 @@
     <div class="qw-row">
       <div class="qw-num">4</div>
       <div class="qw-body">
-        <div class="qw-title">OAC + SoundCloud enrollment — automated detection <span class="tag tag-cyan">Small lift</span></div>
-        <div class="qw-desc">Rather than manual checkboxes, automate enrollment detection: Chartmetric or Songstats provides the artist's YouTube channel ID and SoundCloud handle → we check YouTube Data API for OAC status (isLinked flag) and SoundCloud API for official profile verification → write result back to Airtable daily. No manual entry needed once wired up.</div>
-        <div class="qw-effort">Effort: 3–4 hours · Cloud Scheduler script · Requires Chartmetric/Songstats token + YouTube + SoundCloud API keys</div>
+        <div class="qw-title">OAC + SoundCloud enrollment — detection method TBD <span class="tag tag-gold">Needs research</span></div>
+        <div class="qw-desc">Goal: automatically know whether an artist is enrolled in OAC (YouTube) and has an official SoundCloud profile — without manual checkboxes. The detection method still needs to be confirmed. YouTube Data API and SoundCloud API may expose this, but we haven't tested it. May require page scraping if no clean API flag exists. Need to spike this before committing to the approach.</div>
+        <div class="qw-effort">Effort: Unknown until researched · First step: test YouTube Data API + SoundCloud API to see what's available</div>
       </div>
     </div>
     <div class="qw-row">
